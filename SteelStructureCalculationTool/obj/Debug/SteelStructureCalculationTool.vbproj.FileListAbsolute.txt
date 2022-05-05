@@ -1,0 +1,13 @@
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Debug\Steel Structure Calculation Tool.exe.config
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Debug\Steel Structure Calculation Tool.exe
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Debug\Steel Structure Calculation Tool.pdb
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Debug\Steel Structure Calculation Tool.xml
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.vbproj.AssemblyReference.cache
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.vbproj.SuggestedBindingRedirects.cache
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.Form_SSCT.resources
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.Resources.resources
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.vbproj.GenerateResource.cache
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.vbproj.CoreCompileInputs.cache
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\Steel Structure Calculation Tool.exe
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\Steel Structure Calculation Tool.xml
+E:\Documents\Visual Studio 2022\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\Steel Structure Calculation Tool.pdb
