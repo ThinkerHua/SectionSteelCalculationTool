@@ -1,5 +1,5 @@
 ﻿Module calculation
-    Public Const _TESTFLAG = 0              '测试代码控制符
+    Public Const _TESTFLAG = 1              '测试代码控制符
 
     Public Const TYPE_AREA = 1              '计算类型：面积
     Public Const TYPE_DEDUCTTOPSURFACE = 2  '计算类型：面积子项，扣除顶面
@@ -102,7 +102,7 @@
         '                "Offset_Columns = " & Offset_Columns & vbCrLf &
         '                "Overwrite = " & Overwrite & vbCrLf)
         'Return MsgBox(t.resault(1))
-        If xlApp IsNot Nothing Then
+        If xlWorkBook IsNot Nothing Then
             starttime = System.DateTime.Now
             xlApp.screenupdating = False
             xlRange = xlApp.range("$O2:$O447")
@@ -126,16 +126,15 @@
         '获取Excel程序、工作薄、工作表、选定区域
         On Error Resume Next
         xlApp = GetObject(, "Excel.Application")
+        '2022-05-05
         'If _TESTFLAG Then If xlApp.Equals(DataApp) Then MsgBox("所有Excel.Application都是同一个对象吗？")
-        '答案并不是
+        '答案是GetObject(, "Excel.Application")获取的对象始终是第一个打开的那个
         If Err.Number <> 0 Then
             Err.Clear()
             MsgBox("Please open an Excel application first!", vbOKOnly + vbExclamation, "Waring")
             Exit Sub
-        ElseIf xlApp.Equals(DataApp) Then
-            xlApp = Nothing
         End If
-        If xlApp IsNot Nothing Then xlWorkBook = xlApp.activeworkbook
+        xlWorkBook = xlApp.activeworkbook
         If xlWorkBook Is Nothing Then
             MsgBox("Please open an Workbook first!", vbOKOnly + vbExclamation, "Waring")
             Exit Sub
