@@ -40,8 +40,8 @@ Public Class Form_SSCT
         Set_Overwrite()
     End Sub
     Private Sub Button_Generate_Click(sender As Object, e As EventArgs) Handles Button_Generate.Click   '执行按钮
-        '_Test()
         Generate()
+        If _TESTFLAG Then _Test()
     End Sub
     Private Sub Form_SSCT_Load(sender As Object, e As EventArgs) Handles Me.Load                        '初始化
         Set_Public_Arguments()

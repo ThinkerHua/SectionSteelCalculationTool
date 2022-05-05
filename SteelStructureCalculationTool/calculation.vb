@@ -48,7 +48,7 @@
             If Err.Number Then
                 Err.Clear()
                 MsgBox("The data file is not found!" & vbCrLf &
-                        "Please make sure that there is an ""steeldata.xls"" file exists in this program directory.",
+                        "Please make sure that there is an ""SteelData.xls"" file exists in this program directory.",
                         vbOKOnly + vbExclamation, "Waring")
                 Return 1
             End If
@@ -76,32 +76,33 @@
         DataFunc = Nothing : DataRange = Nothing : DataSheet = Nothing
     End Sub
     Public Sub CloseDataFile()                                                                                          '关闭数据文件
-        If DataWorkBook IsNot Nothing Then DataWorkBook.close()
-        If DataApp IsNot Nothing Then DataApp.quit()
-        If _TESTFLAG Then
-            If DataWorkBook Is Nothing Then
-                MsgBox("Data Workbook has been closed.")
-            Else
-                MsgBox("Data Workbook has not been closed yet.")
-            End If
-            If DataApp Is Nothing Then
-                MsgBox("Excel Application has been closed.")
-            Else
-                MsgBox("Excel Application has not been closed yet.")
-            End If
-        End If
+        If DataWorkBook IsNot Nothing Then DataWorkBook.close() : DataWorkBook = Nothing
+        If DataApp IsNot Nothing Then DataApp.quit() : DataApp = Nothing
+        '经测试，WorkBooks.close()和Application.quit()后，对象并没有置空，仍然存在，所以添加了赋空值操作
+        'If _TESTFLAG Then
+        '    If DataWorkBook Is Nothing Then
+        '        MsgBox("Data Workbook has been closed.")
+        '    Else
+        '        MsgBox("Data Workbook has not been closed yet.")
+        '    End If
+        '    If DataApp Is Nothing Then
+        '        MsgBox("Excel Application has been closed.")
+        '    Else
+        '        MsgBox("Excel Application has not been closed yet.")
+        '    End If
+        'End If
     End Sub
 
     Public Function _Test() As Double                                                                                '测试用
         'Dim t As New TestClass
         Dim starttime, endtime As System.DateTime
-        If _TESTFLAG Then
-            'Return MsgBox("Calculation Type =" & Calculation_Type & vbCrLf &
-            '                "Method = " & Calculation_Method & vbCrLf &
-            '                "Offset_Rows = " & Offset_Rows & vbCrLf &
-            '                "Offset_Columns = " & Offset_Columns & vbCrLf &
-            '                "Overwrite = " & Overwrite & vbCrLf)
-            'Return MsgBox(t.resault(1))
+        'Return MsgBox("Calculation Type =" & Calculation_Type & vbCrLf &
+        '                "Method = " & Calculation_Method & vbCrLf &
+        '                "Offset_Rows = " & Offset_Rows & vbCrLf &
+        '                "Offset_Columns = " & Offset_Columns & vbCrLf &
+        '                "Overwrite = " & Overwrite & vbCrLf)
+        'Return MsgBox(t.resault(1))
+        If xlApp IsNot Nothing Then
             starttime = System.DateTime.Now
             xlApp.screenupdating = False
             xlRange = xlApp.range("$O2:$O447")
@@ -125,23 +126,25 @@
         '获取Excel程序、工作薄、工作表、选定区域
         On Error Resume Next
         xlApp = GetObject(, "Excel.Application")
+        'If _TESTFLAG Then If xlApp.Equals(DataApp) Then MsgBox("所有Excel.Application都是同一个对象吗？")
+        '答案并不是
         If Err.Number <> 0 Then
             Err.Clear()
             MsgBox("Please open an Excel application first!", vbOKOnly + vbExclamation, "Waring")
             Exit Sub
-        Else
-            xlWorkBook = xlApp.activeworkbook
-            If xlWorkBook Is Nothing Then
-                MsgBox("Please open an Workbook first!", vbOKOnly + vbExclamation, "Waring")
-                Exit Sub
-            Else
-                'xlSheet = xlApp.activesheet
-                xlRange = xlApp.selection
-            End If
+        ElseIf xlApp.Equals(DataApp) Then
+            xlApp = Nothing
         End If
+        If xlApp IsNot Nothing Then xlWorkBook = xlApp.activeworkbook
+        If xlWorkBook Is Nothing Then
+            MsgBox("Please open an Workbook first!", vbOKOnly + vbExclamation, "Waring")
+            Exit Sub
+        End If
+        'xlSheet = xlApp.activesheet
+        xlRange = xlApp.selection
         On Error GoTo 0
 
-        If _TESTFLAG Then starttime = System.DateTime.Now
+        'If _TESTFLAG Then starttime = System.DateTime.Now
         xlApp.screenupdating = False
         For Each xlCell In xlRange
             '不覆写且目标不为空时直接跳过
@@ -221,8 +224,7 @@
             End If
         Next
         xlApp.screenupdating = True
-        If _TESTFLAG Then endtime = System.DateTime.Now : MsgBox("执行持续时间：" & (endtime - starttime).ToString)
-        _Test()
+        'If _TESTFLAG Then endtime = System.DateTime.Now : MsgBox("执行持续时间：" & (endtime - starttime).ToString)
 
         '释放对象内存
         xlCell = Nothing : xlRange = Nothing : xlWorkBook = Nothing : xlApp = Nothing
