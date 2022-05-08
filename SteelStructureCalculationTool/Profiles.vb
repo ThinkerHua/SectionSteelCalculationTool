@@ -6,8 +6,11 @@ Public Class _H
     Public B As Double
     Public tH As Double
     Public tB As Double
-    Protected Overridable Function DataSheetName() As String
-        Return "H"
+    'Protected Overridable Function DataSheetName() As String
+    '    Return "H"
+    'End Function
+    Private Protected Overridable Function DataRef() As GBDataStru()
+        Return GBData_H
     End Function
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
@@ -25,16 +28,21 @@ Public Class _H
     End Sub
     Protected Sub Expand()
         '根据简写进行扩展
-        If PrepareForReadingData(DataSheetName, "$B:$J") Then
-            Release()
-            Exit Sub
+        'If PrepareForReadingData(DataSheetName, "$B:$J") Then
+        '    Release()
+        '    Exit Sub
+        'End If
+        'On Error Resume Next
+        'H = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 2, False), 0)
+        'B = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 3, False), 0)
+        'tH = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 4, False), 0)
+        'tB = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 5, False), 0)
+        'Release()
+        Dim arr As Double()
+        arr = Search_Specification(DataRef, ShortHigh & "×" & ShortWidth)
+        If arr IsNot Nothing Then
+            H = arr(0) : B = arr(1) : tH = arr(2) : tB = arr(3)
         End If
-        On Error Resume Next
-        H = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 2, False), 0)
-        B = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 3, False), 0)
-        tH = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 4, False), 0)
-        tB = DataFunc.ifna(DataFunc.vlookup(ShortHigh & "×" & ShortWidth, DataRange, 5, False), 0)
-        Release()
     End Sub
     Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
         If Calculation_Type And TYPE_AREA Then
@@ -49,14 +57,15 @@ Public Class _H
         Area = ""
         If tB = 0 Then Return Area
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$J") Then
-                Release()
-                Return Area
-            End If
-            'On Error Resume Next
-            Area = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
-            Release()
-            If Area = "0" Then Return ""
+            'If PrepareForReadingData(DataSheetName, "$B:$J") Then
+            '    Release()
+            '    Return Area
+            'End If
+            ''On Error Resume Next
+            'Area = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
+            'Release()
+            Area = Search_AorW(DataRef, {H, B, tH, tB}, 0)
+            If Area = 0 Then Return ""
             If Calculation_Type And TYPE_DEDUCTTOPSURFACE Then Area = Area & "-" & B * 0.001
         Else
             If Calculation_Type And TYPE_DEDUCTTOPSURFACE Then
@@ -72,14 +81,15 @@ Public Class _H
         Weight = ""
         If tB = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$J") Then
-                Release()
-                Return Weight
-            End If
-            'On Error Resume Next
-            Weight = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
-            Release()
-            If Weight = "0" Then Return ""
+            'If PrepareForReadingData(DataSheetName, "$B:$J") Then
+            '    Release()
+            '    Return Weight
+            'End If
+            ''On Error Resume Next
+            'Weight = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
+            'Release()
+            Weight = Search_AorW(DataRef, {H, B, tH, tB}, 1)
+            If Weight = 0 Then Return ""
         Else
             '粗略和精细方式相同
             Weight = "((" & H * 0.001 & "-" & tB * 0.001 & "*2)*" & tH * 0.001 & "+" & B * 0.001 & "*" & tB * 0.001 & "*2)*7850"
@@ -154,8 +164,11 @@ Public Class Profiles_H : Inherits _H
 End Class
 'HT型钢(采用简写形式可能与其他种类H型钢冲突，故独立出来)
 Public Class Profiles_HT : Inherits _H
-    Protected Overrides Function DataSheetName() As String
-        Return "HT"
+    'Protected Overrides Function DataSheetName() As String
+    '    Return "HT"
+    'End Function
+    Private Protected Overrides Function DataRef() As GBDataStru()
+        Return GBData_HT
     End Function
 End Class
 '双拼H型钢，十字交叉
@@ -168,8 +181,11 @@ Public Class Profiles_HI
     Public B2 As Double
     Public tH2 As Double
     Public tB2 As Double
-    Protected Overridable Function DataSheetName() As String
-        Return "H"
+    'Protected Overridable Function DataSheetName() As String
+    '    Return "H"
+    'End Function
+    Private Protected Overridable Function DataRef() As GBDataStru()
+        Return GBData_H
     End Function
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
@@ -206,15 +222,17 @@ Public Class Profiles_HI
         Area = ""
         If tB1 = 0 Then Return Area
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$J") Then
-                Release()
-                Return Area
-            End If
-            'On Error Resume Next
-            area1 = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H1, DataSheet.range("$D:$D"), B1, DataSheet.range("$E:$E"), tH1, DataSheet.range("$F:$F"), tB1)
-            area2 = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H2, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), tH2, DataSheet.range("$F:$F"), tB2)
-            Release()
-            If area1 = "" Or area2 = "" Then
+            'If PrepareForReadingData(DataSheetName, "$B:$J") Then
+            '    Release()
+            '    Return Area
+            'End If
+            ''On Error Resume Next
+            'area1 = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H1, DataSheet.range("$D:$D"), B1, DataSheet.range("$E:$E"), tH1, DataSheet.range("$F:$F"), tB1)
+            'area2 = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H2, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), tH2, DataSheet.range("$F:$F"), tB2)
+            'Release()
+            area1 = Search_AorW(DataRef, {H1, B1, tH1, tB1}, 0)
+            area2 = Search_AorW(DataRef, {H2, B2, tH2, tB2}, 0)
+            If area1 = 0 Or area2 = 0 Then
                 Return ""
             Else
                 Area = area1 & "+" & area2
@@ -246,15 +264,17 @@ Public Class Profiles_HI
         Weight = ""
         If tB1 = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$J") Then
-                Release()
-                Return Weight
-            End If
-            'On Error Resume Next
-            weight1 = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), H1, DataSheet.range("$D:$D"), B1, DataSheet.range("$E:$E"), tH1, DataSheet.range("$F:$F"), tB1)
-            weight2 = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), H2, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), tH2, DataSheet.range("$F:$F"), tB2)
-            Release()
-            If Weight1 = "" Or weight2 = "" Then
+            'If PrepareForReadingData(DataSheetName, "$B:$J") Then
+            '    Release()
+            '    Return Weight
+            'End If
+            ''On Error Resume Next
+            'weight1 = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), H1, DataSheet.range("$D:$D"), B1, DataSheet.range("$E:$E"), tH1, DataSheet.range("$F:$F"), tB1)
+            'weight2 = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), H2, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), tH2, DataSheet.range("$F:$F"), tB2)
+            'Release()
+            weight1 = Search_AorW(DataRef, {H1, B1, tH1, tB1}, 1)
+            weight2 = Search_AorW(DataRef, {H2, B2, tH2, tB2}, 1)
+            If weight1 = 0 Or weight2 = 0 Then
                 Return ""
             Else
                 Weight = weight1 & "+" & weight2
@@ -272,8 +292,11 @@ Public Class Profiles_HI
 End Class
 'T型钢
 Public Class Profiles_T : Inherits _H
-    Protected Overrides Function DataSheetName() As String
-        Return "T"
+    'Protected Overrides Function DataSheetName() As String
+    '    Return "T"
+    'End Function
+    Private Protected Overrides Function DataRef() As GBDataStru()
+        Return GBData_T
     End Function
     Public Overrides Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
@@ -413,8 +436,11 @@ Public Class Profiles_I
     Public B As Double
     Public tH As Double
     Public tB As Double
-    Protected Overridable Function DataSheetName() As String
-        Return "I"
+    'Protected Overridable Function DataSheetName() As String
+    '    Return "I"
+    'End Function
+    Private Protected Overridable Function DataRef() As GBDataStru()
+        Return GBData_I
     End Function
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
@@ -433,21 +459,30 @@ Public Class Profiles_I
     End Sub
     Protected Sub Expand()
         '根据简写进行扩展
-        If PrepareForReadingData(DataSheetName, "$B:$K") Then
-            Release()
-            Exit Sub
-        End If
+        'If PrepareForReadingData(DataSheetName, "$B:$K") Then
+        '    Release()
+        '    Exit Sub
+        'End If
+        'If ShortName <> "" Then
+        '    On Error Resume Next
+        '    H = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 2, False), 0)
+        '    B = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 3, False), 0)
+        '    tH = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 4, False), 0)
+        '    tB = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 5, False), 0)
+        'Else
+        '    tH = DataFunc.sumifs(DataSheet.range("$E:$E"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B)
+        '    tB = DataFunc.sumifs(DataSheet.range("$F:$F"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B)
+        'End If
+        'Release()
+        Dim arr As Double()
         If ShortName <> "" Then
-            On Error Resume Next
-            H = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 2, False), 0)
-            B = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 3, False), 0)
-            tH = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 4, False), 0)
-            tB = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 5, False), 0)
+            arr = Search_Specification(DataRef, ShortName)
         Else
-            tH = DataFunc.sumifs(DataSheet.range("$E:$E"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B)
-            tB = DataFunc.sumifs(DataSheet.range("$F:$F"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B)
+            arr = Search_Specification_ByPartData(DataRef, {H, B})
         End If
-        Release()
+        If arr IsNot Nothing Then
+            H = arr(0) : B = arr(1) : tH = arr(2) : tB = arr(3)
+        End If
     End Sub
     Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
         If Calculation_Type And TYPE_AREA Then
@@ -462,14 +497,15 @@ Public Class Profiles_I
         Area = ""
         If tB = 0 Then Return Area
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$K") Then
-                Release()
-                Return Area
-            End If
-            'On Error Resume Next
-            Area = DataFunc.sumifs(DataSheet.range("$K:$K"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
-            Release()
-            If Area = "0" Then Return ""
+            'If PrepareForReadingData(DataSheetName, "$B:$K") Then
+            '    Release()
+            '    Return Area
+            'End If
+            ''On Error Resume Next
+            'Area = DataFunc.sumifs(DataSheet.range("$K:$K"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
+            'Release()
+            Area = Search_AorW(DataRef, {H, B, tH, tB}, 0)
+            If Area = 0 Then Return ""
             If Calculation_Type And TYPE_DEDUCTTOPSURFACE Then Area = Area & "-" & B * 0.001
         Else
             Area = H * 0.001 & "*2+"
@@ -486,20 +522,24 @@ Public Class Profiles_I
         Weight = ""
         If tB = 0 Then Return Weight
         '无论选择何种方式都按查表方式计算 
-        If PrepareForReadingData(DataSheetName, "$B:$K") Then
-            Release()
-            Return Weight
-        End If
-        'On Error Resume Next
-        Weight = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
-        Release()
-        If Weight = "0" Then Return ""
+        'If PrepareForReadingData(DataSheetName, "$B:$K") Then
+        '    Release()
+        '    Return Weight
+        'End If
+        ''On Error Resume Next
+        'Weight = DataFunc.sumifs(DataSheet.range("$J:$J"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), tH, DataSheet.range("$F:$F"), tB)
+        'Release()
+        Weight = Search_AorW(DataRef, {H, B, tH, tB}, 1)
+        If Weight = 0 Then Return ""
     End Function
 End Class
 '槽钢
 Public Class Profiles_Chan : Inherits Profiles_I
-    Protected Overrides Function DataSheetName() As String
-        Return "Channel"
+    'Protected Overrides Function DataSheetName() As String
+    '    Return "Channel"
+    'End Function
+    Private Protected Overrides Function DataRef() As GBDataStru()
+        Return GBData_Chan
     End Function
 End Class
 '双拼槽钢，口对口
@@ -564,8 +604,11 @@ Public Class Profiles_L
     Public B1 As Double
     Public B2 As Double
     Public t As Double
-    Protected Overridable Function DataSheetName() As String
-        Return "L"
+    'Protected Overridable Function DataSheetName() As String
+    '    Return "L"
+    'End Function
+    Private Protected Overridable Function DataRef() As GBDataStru()
+        Return GBData_L
     End Function
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
@@ -583,15 +626,20 @@ Public Class Profiles_L
     End Sub
     Protected Sub Expand()
         '根据简写进行扩展
-        If PrepareForReadingData(DataSheetName, "$B:$I") Then
-            Release()
-            Exit Sub
+        'If PrepareForReadingData(DataSheetName, "$B:$I") Then
+        '    Release()
+        '    Exit Sub
+        'End If
+        'On Error Resume Next
+        'B1 = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 2, False), 0)
+        'B2 = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 3, False), 0)
+        't = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 4, False), 0)
+        'Release()
+        Dim arr As Double()
+        arr = Search_Specification(DataRef, ShortName)
+        If arr IsNot Nothing Then
+            B1 = arr(0) : B2 = arr(1) : t = arr(2)
         End If
-        On Error Resume Next
-        B1 = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 2, False), 0)
-        B2 = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 3, False), 0)
-        t = DataFunc.ifna(DataFunc.vlookup(ShortName, DataRange, 4, False), 0)
-        Release()
     End Sub
     Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
         If Calculation_Type And TYPE_AREA Then
@@ -606,14 +654,15 @@ Public Class Profiles_L
         Area = ""
         If t = 0 Then Return Area
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$I") Then
-                Release()
-                Return Area
-            End If
-            'On Error Resume Next
-            Area = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), B1, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), t)
-            Release()
-            If Area = "0" Then Return ""
+            'If PrepareForReadingData(DataSheetName, "$B:$I") Then
+            '    Release()
+            '    Return Area
+            'End If
+            ''On Error Resume Next
+            'Area = DataFunc.sumifs(DataSheet.range("$I:$I"), DataSheet.range("$C:$C"), B1, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), t)
+            'Release()
+            Area = Search_AorW(DataRef, {B1, B2, t}, 0)
+            If Area = 0 Then Return ""
             If Calculation_Type And TYPE_DEDUCTTOPSURFACE Then Area = Area & "-" & B2 * 0.001
         Else
             '粗略和精细方式相同
@@ -633,14 +682,15 @@ Public Class Profiles_L
         Weight = ""
         If t = 0 Then Return Weight
         '无论选择何种方式都按查表方式计算
-        If PrepareForReadingData(DataSheetName, "$B:$I") Then
-            Release()
-            Return Weight
-        End If
-        'On Error Resume Next
-        Weight = DataFunc.sumifs(DataSheet.range("$H:$H"), DataSheet.range("$C:$C"), B1, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), t)
-        Release()
-        If Weight = "0" Then Return ""
+        'If PrepareForReadingData(DataSheetName, "$B:$I") Then
+        '    Release()
+        '    Return Weight
+        'End If
+        ''On Error Resume Next
+        'Weight = DataFunc.sumifs(DataSheet.range("$H:$H"), DataSheet.range("$C:$C"), B1, DataSheet.range("$D:$D"), B2, DataSheet.range("$E:$E"), t)
+        'Release()
+        Weight = Search_AorW(DataRef, {B1, B2, t}, 1)
+        If Weight = 0 Then Return ""
     End Function
 End Class
 '双拼角钢，背对背
@@ -687,8 +737,11 @@ Public Class Profiles_C
     Public B As Double
     Public C As Double
     Public t As Double
-    Protected Overridable Function DataSheetName() As String
-        Return "C"
+    'Protected Overridable Function DataSheetName() As String
+    '    Return "C"
+    'End Function
+    Private Protected Overridable Function DataRef() As GBDataStru()
+        Return GBData_C
     End Function
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
@@ -723,14 +776,15 @@ Public Class Profiles_C
         Weight = ""
         If t = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
-            If PrepareForReadingData(DataSheetName, "$B:$H") Then
-                Release()
-                Return Weight
-            End If
-            'On Error Resume Next
-            Weight = DataFunc.sumifs(DataSheet.range("$G:$G"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), C, DataSheet.range("$F:$F"), t)
-            Release()
-            If Weight = "0" Then Return ""
+            'If PrepareForReadingData(DataSheetName, "$B:$H") Then
+            '    Release()
+            '    Return Weight
+            'End If
+            ''On Error Resume Next
+            'Weight = DataFunc.sumifs(DataSheet.range("$G:$G"), DataSheet.range("$C:$C"), H, DataSheet.range("$D:$D"), B, DataSheet.range("$E:$E"), C, DataSheet.range("$F:$F"), t)
+            'Release()
+            Weight = Search_AorW(DataRef, {H, B, C, t}, 1)
+            If Weight = 0 Then Return ""
         Else
             Weight = "(" & H * 0.001 & "+(" & B * 0.001 & "-" & t * 0.001 & "*2)*2+" & C * 0.001 & "*2)*" & t * 0.001 & "*7850"
         End If
@@ -759,8 +813,11 @@ Public Class Profiles_2C : Inherits Profiles_C
 End Class
 'Z型钢
 Public Class Profiles_Z : Inherits Profiles_C
-    Protected Overrides Function DataSheetName() As String
-        Return "Z"
+    'Protected Overrides Function DataSheetName() As String
+    '    Return "Z"
+    'End Function
+    Private Protected Overrides Function DataRef() As GBDataStru()
+        Return GBData_Z
     End Function
 End Class
 '矩形板件(基类，不直接使用)

@@ -27,8 +27,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>Steel Structure Calculation Tool</ProductName>
     <PublisherName>Thinker Hua</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -103,6 +103,7 @@
     <Compile Include="Form_SSCT.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="GBData.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

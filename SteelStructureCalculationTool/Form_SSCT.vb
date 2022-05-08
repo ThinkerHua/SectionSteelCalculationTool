@@ -47,12 +47,12 @@ Public Class Form_SSCT
         Set_Public_Arguments()
         '程序开始运行就直接打开数据文件，不再等第一次查表操作才打开，加快第一次查表时的执行速度
         '2022-05-05 由于GetObject函数的特性，数据文件必须晚于工作文件打开
-        PrepareForReadingData("", "")
+        'PrepareForReadingData("", "")
     End Sub
 
     Private Sub Form_SSCT_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing            '关闭前解除占用、释放内存
-        Release()
-        CloseDataFile()
+        'Release()
+        'CloseDataFile()
     End Sub
     Private Sub Set_Public_Arguments()                                                                  '设置公用参数
         Set_Calculation_Type()

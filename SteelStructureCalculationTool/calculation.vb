@@ -1,5 +1,5 @@
 ﻿Module calculation
-    Public Const _TESTFLAG = 1              '测试代码控制符
+    Public Const _TESTFLAG = 0              '测试代码控制符
 
     Public Const TYPE_AREA = 1              '计算类型：面积
     Public Const TYPE_DEDUCTTOPSURFACE = 2  '计算类型：面积子项，扣除顶面
@@ -21,77 +21,77 @@
     Private xlRange As Object               '单元格区域
     Private xlCell As Object                '单元格
 
-    '源数据对象
-    Public DataApp As Object
-    Public DataWorkBook As Object
-    Public DataSheet As Object
-    Public DataRange As Object
-    Public DataFunc As Object
-    ReadOnly Property DataPath As String = Application.StartupPath & "\SteelData.xls"
+    ''源数据对象
+    'Public DataApp As Object
+    'Public DataWorkBook As Object
+    'Public DataSheet As Object
+    'Public DataRange As Object
+    'Public DataFunc As Object
+    'ReadOnly Property DataPath As String = Application.StartupPath & "\SteelData.xls"
 
     '受支持的型材类型列表
     Private ReadOnly SpeTypeArr() As String = {"H", "HT", "HI", "T", "J", "D", "I", "[", "[]", "2[", "L", "2L", "C", "2C", "Z", "PL", "PLT", "PLD"}
     ''对应型材类型所需参数数量
     'Private ReadOnly NumOfData() As Integer = {4, 4, 8, 4, 4, 2, 4, 4, 4, 4, 3, 3, 4, 4, 4, 3, 3, 1}
-    Public Function PrepareForReadingData(ByVal SheetName As String, ByVal Range As String) As Integer                  '为查表做准备
-        On Error Resume Next
-        If DataApp Is Nothing Then
-            DataApp = CreateObject("Excel.Application")
-            If Err.Number Then
-                Err.Clear()
-                MsgBox("There is no ""Excel Application"" exists", vbOKOnly + vbExclamation, "Waring")
-                Return 1
-            End If
-        End If
-        If DataWorkBook Is Nothing Then
-            DataWorkBook = DataApp.workbooks.open(DataPath, vbReadOnly)
-            If Err.Number Then
-                Err.Clear()
-                MsgBox("The data file is not found!" & vbCrLf &
-                        "Please make sure that there is an ""SteelData.xls"" file exists in this program directory.",
-                        vbOKOnly + vbExclamation, "Waring")
-                Return 1
-            End If
-        End If
-        If SheetName <> "" Then
-            DataSheet = DataWorkBook.worksheets(SheetName)
-            If Err.Number Then
-                Err.Clear()
-                MsgBox("The sheet """ & SheetName & """ is not found!", vbOKOnly + vbExclamation, "Waring")
-                Return 1
-            End If
-        End If
-        If Range <> "" Then
-            DataRange = DataSheet.range(Range)
-            If Err.Number Then
-                Err.Clear()
-                MsgBox("Wrong range!", vbOKOnly + vbExclamation, "Waring")
-                Return 1
-            End If
-        End If
-        DataFunc = DataApp.worksheetfunction
-        Return 0
-    End Function
-    Public Sub Release()                                                                                                '查表完成释放空间
-        DataFunc = Nothing : DataRange = Nothing : DataSheet = Nothing
-    End Sub
-    Public Sub CloseDataFile()                                                                                          '关闭数据文件
-        If DataWorkBook IsNot Nothing Then DataWorkBook.close() : DataWorkBook = Nothing
-        If DataApp IsNot Nothing Then DataApp.quit() : DataApp = Nothing
-        '经测试，WorkBooks.close()和Application.quit()后，对象并没有置空，仍然存在，所以添加了赋空值操作
-        'If _TESTFLAG Then
-        '    If DataWorkBook Is Nothing Then
-        '        MsgBox("Data Workbook has been closed.")
-        '    Else
-        '        MsgBox("Data Workbook has not been closed yet.")
-        '    End If
-        '    If DataApp Is Nothing Then
-        '        MsgBox("Excel Application has been closed.")
-        '    Else
-        '        MsgBox("Excel Application has not been closed yet.")
-        '    End If
-        'End If
-    End Sub
+    'Public Function PrepareForReadingData(ByVal SheetName As String, ByVal Range As String) As Integer                  '为查表做准备
+    '    On Error Resume Next
+    '    If DataApp Is Nothing Then
+    '        DataApp = CreateObject("Excel.Application")
+    '        If Err.Number Then
+    '            Err.Clear()
+    '            MsgBox("There is no ""Excel Application"" exists", vbOKOnly + vbExclamation, "Waring")
+    '            Return 1
+    '        End If
+    '    End If
+    '    If DataWorkBook Is Nothing Then
+    '        DataWorkBook = DataApp.workbooks.open(DataPath, vbReadOnly)
+    '        If Err.Number Then
+    '            Err.Clear()
+    '            MsgBox("The data file is not found!" & vbCrLf &
+    '                    "Please make sure that there is an ""SteelData.xls"" file exists in this program directory.",
+    '                    vbOKOnly + vbExclamation, "Waring")
+    '            Return 1
+    '        End If
+    '    End If
+    '    If SheetName <> "" Then
+    '        DataSheet = DataWorkBook.worksheets(SheetName)
+    '        If Err.Number Then
+    '            Err.Clear()
+    '            MsgBox("The sheet """ & SheetName & """ is not found!", vbOKOnly + vbExclamation, "Waring")
+    '            Return 1
+    '        End If
+    '    End If
+    '    If Range <> "" Then
+    '        DataRange = DataSheet.range(Range)
+    '        If Err.Number Then
+    '            Err.Clear()
+    '            MsgBox("Wrong range!", vbOKOnly + vbExclamation, "Waring")
+    '            Return 1
+    '        End If
+    '    End If
+    '    DataFunc = DataApp.worksheetfunction
+    '    Return 0
+    'End Function
+    'Public Sub Release()                                                                                                '查表完成释放空间
+    '    DataFunc = Nothing : DataRange = Nothing : DataSheet = Nothing
+    'End Sub
+    'Public Sub CloseDataFile()                                                                                          '关闭数据文件
+    '    If DataWorkBook IsNot Nothing Then DataWorkBook.close() : DataWorkBook = Nothing
+    '    If DataApp IsNot Nothing Then DataApp.quit() : DataApp = Nothing
+    '    '经测试，WorkBooks.close()和Application.quit()后，对象并没有置空，仍然存在，所以添加了赋空值操作
+    '    'If _TESTFLAG Then
+    '    '    If DataWorkBook Is Nothing Then
+    '    '        MsgBox("Data Workbook has been closed.")
+    '    '    Else
+    '    '        MsgBox("Data Workbook has not been closed yet.")
+    '    '    End If
+    '    '    If DataApp Is Nothing Then
+    '    '        MsgBox("Excel Application has been closed.")
+    '    '    Else
+    '    '        MsgBox("Excel Application has not been closed yet.")
+    '    '    End If
+    '    'End If
+    'End Sub
 
     Public Function _Test() As Double                                                                                '测试用
         'Dim t As New TestClass
@@ -102,6 +102,8 @@
         '                "Offset_Columns = " & Offset_Columns & vbCrLf &
         '                "Overwrite = " & Overwrite & vbCrLf)
         'Return MsgBox(t.resault(1))
+        'Dim d As Double = Nothing
+        'If String.Compare(Str(d), "0") Then MsgBox("Equals")
         If xlWorkBook IsNot Nothing Then
             starttime = System.DateTime.Now
             xlApp.screenupdating = False
@@ -143,7 +145,7 @@
         xlRange = xlApp.selection
         On Error GoTo 0
 
-        'If _TESTFLAG Then starttime = System.DateTime.Now
+        If _TESTFLAG Then starttime = System.DateTime.Now
         xlApp.screenupdating = False
         For Each xlCell In xlRange
             '不覆写且目标不为空时直接跳过
@@ -223,7 +225,7 @@
             End If
         Next
         xlApp.screenupdating = True
-        'If _TESTFLAG Then endtime = System.DateTime.Now : MsgBox("执行持续时间：" & (endtime - starttime).ToString)
+        If _TESTFLAG Then endtime = System.DateTime.Now : MsgBox("执行持续时间：" & (endtime - starttime).ToString)
 
         '释放对象内存
         xlCell = Nothing : xlRange = Nothing : xlWorkBook = Nothing : xlApp = Nothing

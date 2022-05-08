@@ -256,7 +256,7 @@ Partial Class Form_SSCT
         Me.MaximizeBox = False
         Me.Name = "Form_SSCT"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "SSCT - Ver1.1.1"
+        Me.Text = "SSCT - Ver1.2"
         Me.TabControl_SteelStructureCalculationTool.ResumeLayout(False)
         Me.TabPage_Generate_Unit_Area_or_Weight.ResumeLayout(False)
         Me.GBox_Offset.ResumeLayout(False)
