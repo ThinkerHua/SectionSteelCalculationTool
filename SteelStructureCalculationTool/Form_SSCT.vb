@@ -1,5 +1,5 @@
 ﻿'Imports Microsoft.Office.Interop.Excel
-Imports System.ComponentModel   '窗体关闭事件需引用的命名空间
+'Imports System.ComponentModel   '窗体关闭事件需引用的命名空间
 
 Public Class Form_SSCT
     Private Sub RBut_UnitArea_Click(sender As Object, e As EventArgs) Handles RBut_UnitArea.Click
@@ -51,10 +51,10 @@ Public Class Form_SSCT
         'PrepareForReadingData("", "")
     End Sub
 
-    Private Sub Form_SSCT_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing            '关闭前解除占用、释放内存
-        'Release()
-        'CloseDataFile()
-    End Sub
+    'Private Sub Form_SSCT_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing            '关闭前解除占用、释放内存
+    '    'Release()
+    '    'CloseDataFile()
+    'End Sub
     Private Sub Set_Public_Arguments()                                                                  '设置公用参数
         Set_Calculation_Type()
         Set_Calculation_Method()

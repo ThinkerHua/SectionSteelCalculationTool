@@ -1055,3 +1055,12 @@ End Class
 '        Return "B1"
 '    End Function
 'End Class
+Module Profiles_Func
+    Public Function StrAverage(ByVal str As String, ByVal c As Char) As Double
+        If str.IndexOf(c) < 0 Then
+            Return Val(str)
+        Else
+            Return (Val(str.Split(c)(0)) + Val(str.Split(c)(1))) / 2
+        End If
+    End Function
+End Module

@@ -14,12 +14,10 @@
     Public Offset_Columns As Integer        '目标列偏移参数
     Public Overwrite As Integer             '目标已有数据是否覆盖参数
 
-    '工作对象
-    Private xlApp As Object                 'Excel对象
-    Private xlWorkBook As Object            '工作薄对象
-    'Private xlSheet As Object               '工作表对象
-    Private xlRange As Object               '单元格区域
-    Private xlCell As Object                '单元格
+    '受支持的型材类型列表
+    Private ReadOnly SpeTypeArr() As String = {"H", "HT", "HI", "T", "J", "D", "I", "[", "[]", "2[", "L", "2L", "C", "2C", "Z", "PL", "PLT", "PLD"}
+    ''对应型材类型所需参数数量
+    'Private ReadOnly NumOfData() As Integer = {4, 4, 8, 4, 4, 2, 4, 4, 4, 4, 3, 3, 4, 4, 4, 3, 3, 1}
 
     ''源数据对象
     'Public DataApp As Object
@@ -28,11 +26,6 @@
     'Public DataRange As Object
     'Public DataFunc As Object
     'ReadOnly Property DataPath As String = Application.StartupPath & "\SteelData.xls"
-
-    '受支持的型材类型列表
-    Private ReadOnly SpeTypeArr() As String = {"H", "HT", "HI", "T", "J", "D", "I", "[", "[]", "2[", "L", "2L", "C", "2C", "Z", "PL", "PLT", "PLD"}
-    ''对应型材类型所需参数数量
-    'Private ReadOnly NumOfData() As Integer = {4, 4, 8, 4, 4, 2, 4, 4, 4, 4, 3, 3, 4, 4, 4, 3, 3, 1}
     'Public Function PrepareForReadingData(ByVal SheetName As String, ByVal Range As String) As Integer                  '为查表做准备
     '    On Error Resume Next
     '    If DataApp Is Nothing Then
@@ -95,7 +88,7 @@
 
     Public Function _Test() As Double                                                                                '测试用
         'Dim t As New TestClass
-        Dim starttime, endtime As System.DateTime
+        'Dim starttime, endtime As System.DateTime
         'Return MsgBox("Calculation Type =" & Calculation_Type & vbCrLf &
         '                "Method = " & Calculation_Method & vbCrLf &
         '                "Offset_Rows = " & Offset_Rows & vbCrLf &
@@ -104,25 +97,34 @@
         'Return MsgBox(t.resault(1))
         'Dim d As Double = Nothing
         'If String.Compare(Str(d), "0") Then MsgBox("Equals")
-        If xlWorkBook IsNot Nothing Then
-            starttime = System.DateTime.Now
-            xlApp.screenupdating = False
-            xlRange = xlApp.range("$O2:$O447")
-            For Each xlCell In xlRange
-                xlCell.value = "test"
-            Next
-            xlApp.screenupdating = True
-            endtime = System.DateTime.Now
-            MsgBox("测试持续时间：" & (endtime - starttime).ToString)
-        End If
+        'If xlWorkBook IsNot Nothing Then
+        '    starttime = System.DateTime.Now
+        '    xlApp.screenupdating = False
+        '    xlRange = xlApp.range("$O2:$O447")
+        '    For Each xlCell In xlRange
+        '        xlCell.value = "test"
+        '    Next
+        '    xlApp.screenupdating = True
+        '    endtime = System.DateTime.Now
+        '    MsgBox("测试持续时间：" & (endtime - starttime).ToString)
+        'End If
         Return 0
     End Function
     Public Sub Generate()                                                                                           '执行主体函数
+        '工作对象
+        Dim xlApp As Object                 'Excel对象
+        Dim xlWorkBook As Object            '工作薄对象
+        'Dim xlSheet As Object               '工作表对象
+        Dim xlRange As Object               '单元格区域
+        Dim xlCell As Object                '单元格
+
         Dim Specification_Text As String
         Dim Specification_Type As String
         'Dim Specification_Data() As Double
         Dim sResault As String
         Dim Profiles As Object
+
+        '测试执行效率用
         Dim starttime, endtime As System.DateTime
 
         '获取Excel程序、工作薄、工作表、选定区域
@@ -386,13 +388,6 @@
     '    Return Data
     'End Function
     '------------------------------
-    Public Function StrAverage(ByVal str As String, ByVal c As Char) As Double
-        If str.IndexOf(c) < 0 Then
-            Return Val(str)
-        Else
-            Return (Val(str.Split(c)(0)) + Val(str.Split(c)(1))) / 2
-        End If
-    End Function
     'Private Function Get_Area(ByVal type As String, ByVal data As Double()) As String                               '计算面积
     '    Dim Area As String = "Area"
 
