@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 '查看程序集特性的值
 
-<Assembly: AssemblyTitle("SteelStructureCalculationTool")>
+<Assembly: AssemblyTitle("Steel Structure Calculation Tool")>
 <Assembly: AssemblyDescription("Programming by ThinkerHua@hotmail.com")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("SteelStructureCalculationTool")>
+<Assembly: AssemblyProduct("SSCT")>
 <Assembly: AssemblyCopyright("Copyright ©  2022")>
 <Assembly: AssemblyTrademark("")>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 '通过使用 "*"，如下所示:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("1.3.0.0")>
+<Assembly: AssemblyFileVersion("1.3.0.0")>

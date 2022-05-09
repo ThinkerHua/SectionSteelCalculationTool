@@ -15,7 +15,6 @@ E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStruc
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Release\Steel Structure Calculation Tool.exe
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Release\Steel Structure Calculation Tool.pdb
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Release\Steel Structure Calculation Tool.xml
-E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.vbproj.AssemblyReference.cache
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.Form_SSCT.resources
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.Resources.resources
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.vbproj.GenerateResource.cache
@@ -23,3 +22,4 @@ E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStruc
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.exe
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.xml
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.pdb
+E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.vbproj.AssemblyReference.cache

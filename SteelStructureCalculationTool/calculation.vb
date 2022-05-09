@@ -244,6 +244,8 @@
         sText = sText.Replace(")", "")
         sText = sText.Replace("（", "")
         sText = sText.Replace("）", "")
+        sText = sText.Replace("?", "")
+        sText = sText.Replace("？", "")
         sText = sText.Replace("~", "～")
         sText = sText.Replace("*", "×")
         sText = sText.Replace("＊", "×")

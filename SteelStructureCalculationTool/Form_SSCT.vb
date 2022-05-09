@@ -44,6 +44,7 @@ Public Class Form_SSCT
         If _TESTFLAG Then _Test()
     End Sub
     Private Sub Form_SSCT_Load(sender As Object, e As EventArgs) Handles Me.Load                        '初始化
+        Me.Text = Application.ProductName & " - Ver" & Application.ProductVersion
         Set_Public_Arguments()
         '程序开始运行就直接打开数据文件，不再等第一次查表操作才打开，加快第一次查表时的执行速度
         '2022-05-05 由于GetObject函数的特性，数据文件必须晚于工作文件打开

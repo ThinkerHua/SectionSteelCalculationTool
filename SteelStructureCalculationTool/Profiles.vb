@@ -379,10 +379,10 @@ Public Class Profiles_Rect
         If tB = 0 Then Return Area
         '三种计算方式相同
         If Calculation_Type And TYPE_DEDUCTTOPSURFACE Then
-                MultipleOfWidth = 1
-            Else
-                MultipleOfWidth = 2
-            End If
+            MultipleOfWidth = 1
+        Else
+            MultipleOfWidth = 2
+        End If
         Area = H * 0.001 & "*2+" & B * 0.001 & "*" & MultipleOfWidth
     End Function
     Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
@@ -827,7 +827,7 @@ Public Class _Profiles_PL
     Public t As Double
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
-        DataStr = DataStr.Remove(0, TypeStr.Length)
+        DataStr = DataStr.Remove(0, DataStr.IndexOf(TypeStr) + TypeStr.Length)
         strArr = DataStr.Split("×")
         Select Case strArr.Length
             Case 2
@@ -873,25 +873,37 @@ Public Class Profiles_PL : Inherits _Profiles_PL
     Public PLD_Arr() As Profiles_PLD
     Public Overrides Sub GetData(DataStr As String, TypeStr As String)
         Dim str, strArr() As String
-        Dim i, j, k As Integer
+        Dim i, j, k, n As Integer
         i = 0 : j = 0 : k = 0
         strArr = DataStr.Split("-")
         For Each str In strArr
-            If str.IndexOf("PLD") = 0 Then
-                ReDim Preserve PLD_Arr(k)
-                PLD_Arr(k) = New Profiles_PLD
-                PLD_Arr(k).GetData(str, "PLD")
-                k += 1
-            ElseIf str.IndexOf("PLT") = 0 Then
-                ReDim Preserve PLT_Arr(j)
-                PLT_Arr(j) = New Profiles_PLT
-                PLT_Arr(j).GetData(str, "PLT")
-                j += 1
-            ElseIf str.IndexOf("PL") = 0 Then
-                ReDim Preserve PL_Arr(i)
-                PL_Arr(i) = New _Profiles_PL
-                PL_Arr(i).GetData(str, "PL")
-                i += 1
+            If str.IndexOf("PLD") >= 0 Then
+                n = Val(str) : If n = 0 Then n = 1
+                Do While (n > 0)
+                    ReDim Preserve PLD_Arr(k)
+                    PLD_Arr(k) = New Profiles_PLD
+                    PLD_Arr(k).GetData(str, "PLD")
+                    k += 1
+                    n -= 1
+                Loop
+            ElseIf str.IndexOf("PLT") >= 0 Then
+                n = Val(str) : If n = 0 Then n = 1
+                Do While (n > 0)
+                    ReDim Preserve PLT_Arr(j)
+                    PLT_Arr(j) = New Profiles_PLT
+                    PLT_Arr(j).GetData(str, "PLT")
+                    j += 1
+                    n -= 1
+                Loop
+            ElseIf str.IndexOf("PL") >= 0 Then
+                n = Val(str) : If n = 0 Then n = 1
+                Do While (n > 0)
+                    ReDim Preserve PL_Arr(i)
+                    PL_Arr(i) = New _Profiles_PL
+                    PL_Arr(i).GetData(str, "PL")
+                    i += 1
+                    n -= 1
+                Loop
             End If
         Next
     End Sub
@@ -926,7 +938,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
                 Next
             End If
         End If
-            If Area.EndsWith("-") Then Area = Area.Remove(Area.Length - 1)
+        If Area.EndsWith("-") Then Area = Area.Remove(Area.Length - 1)
         'obj = Nothing
     End Function
     Protected Overrides Function Weight(Calculation_Method As Integer) As String
@@ -992,7 +1004,7 @@ Public Class Profiles_PLD
     Public t As Double
     Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
         Dim strArr() As String
-        DataStr = DataStr.Remove(0, TypeStr.Length)
+        DataStr = DataStr.Remove(0, DataStr.IndexOf(TypeStr) + TypeStr.Length)
         strArr = DataStr.Split("×")
         If strArr.Length = 2 Then
             D = Val(strArr(0)) : t = Val(strArr(1))
