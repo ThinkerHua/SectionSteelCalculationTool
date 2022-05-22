@@ -232,14 +232,15 @@
         '释放对象内存
         xlCell = Nothing : xlRange = Nothing : xlWorkBook = Nothing : xlApp = Nothing
     End Sub
-    Private Function Get_Specification_Text(ByVal xlCell As Object) As String                                       '获取截面规格文本（单元格内容）
+    Private Function Get_Specification_Text(ByRef xlCell As Object) As String                                       '获取截面规格文本（单元格内容）
         Dim sText As String
         sText = xlCell.value
         If sText = "" Then Return ""
-        sText = Text_Formatting(sText)
+        'sText = Text_Formatting(sText)
+        Text_Formatting(sText)
         Return sText
     End Function
-    Private Function Text_Formatting(ByVal sText As String) As String                                               '文本格式化
+    Private Sub Text_Formatting(ByRef sText As String)                                                              '文本格式化
         sText = sText.Trim
         sText = sText.Replace(" ", "")
         sText = sText.Replace("(", "")
@@ -265,9 +266,9 @@
         sText = sText.Replace("F", "J")
         sText = sText.Replace("][", "2[")
 
-        Return sText
-    End Function
-    Private Function Get_Specification_Type(ByVal text As String) As String                                         '获取截面规格类型
+        'Return sText
+    End Sub
+    Private Function Get_Specification_Type(ByRef text As String) As String                                         '获取截面规格类型
         Dim _SpeTypeArr() As String
         Dim i, iLen As Integer
 
@@ -305,7 +306,7 @@
         QSort(sArray, Last + 1, Right)
 
     End Sub
-    Private Function _StrCompare(ByVal s1 As String, ByVal s2 As String) As Integer                                   '字符串大小比较
+    Private Function _StrCompare(ByRef s1 As String, ByRef s2 As String) As Integer                                   '字符串大小比较
         Dim i, len1, len2 As Integer
         len1 = s1.Length : len2 = s2.Length
         If len1 > len2 Then

@@ -40,7 +40,8 @@ Partial Class Form_SSCT
         Me.RBut_UnitWeight = New System.Windows.Forms.RadioButton()
         Me.CBox_DeductTopSurface = New System.Windows.Forms.CheckBox()
         Me.RBut_UnitArea = New System.Windows.Forms.RadioButton()
-        Me.TabPage_ToDo = New System.Windows.Forms.TabPage()
+        Me.TabPage_Export_table = New System.Windows.Forms.TabPage()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.TabControl_SteelStructureCalculationTool.SuspendLayout()
         Me.TabPage_Generate_Unit_Area_or_Weight.SuspendLayout()
         Me.GBox_Offset.SuspendLayout()
@@ -48,12 +49,13 @@ Partial Class Form_SSCT
         CType(Me.NumUD_Rows, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GBox_CalculationMethod.SuspendLayout()
         Me.GBox_CalculationType.SuspendLayout()
+        Me.TabPage_Export_table.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl_SteelStructureCalculationTool
         '
         Me.TabControl_SteelStructureCalculationTool.Controls.Add(Me.TabPage_Generate_Unit_Area_or_Weight)
-        Me.TabControl_SteelStructureCalculationTool.Controls.Add(Me.TabPage_ToDo)
+        Me.TabControl_SteelStructureCalculationTool.Controls.Add(Me.TabPage_Export_table)
         Me.TabControl_SteelStructureCalculationTool.Location = New System.Drawing.Point(6, 6)
         Me.TabControl_SteelStructureCalculationTool.Name = "TabControl_SteelStructureCalculationTool"
         Me.TabControl_SteelStructureCalculationTool.SelectedIndex = 0
@@ -232,15 +234,25 @@ Partial Class Form_SSCT
         Me.RBut_UnitArea.Text = "Unit &Area"
         Me.RBut_UnitArea.UseVisualStyleBackColor = True
         '
-        'TabPage_ToDo
+        'TabPage_Export_table
         '
-        Me.TabPage_ToDo.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage_ToDo.Name = "TabPage_ToDo"
-        Me.TabPage_ToDo.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_ToDo.Size = New System.Drawing.Size(308, 218)
-        Me.TabPage_ToDo.TabIndex = 1
-        Me.TabPage_ToDo.Text = "ToDo"
-        Me.TabPage_ToDo.UseVisualStyleBackColor = True
+        Me.TabPage_Export_table.Controls.Add(Me.Label1)
+        Me.TabPage_Export_table.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage_Export_table.Name = "TabPage_Export_table"
+        Me.TabPage_Export_table.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage_Export_table.Size = New System.Drawing.Size(308, 218)
+        Me.TabPage_Export_table.TabIndex = 1
+        Me.TabPage_Export_table.Text = "Export table"
+        Me.TabPage_Export_table.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(131, 83)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(35, 12)
+        Me.Label1.TabIndex = 0
+        Me.Label1.Text = "To Do"
         '
         'Form_SSCT
         '
@@ -267,6 +279,8 @@ Partial Class Form_SSCT
         Me.GBox_CalculationMethod.PerformLayout()
         Me.GBox_CalculationType.ResumeLayout(False)
         Me.GBox_CalculationType.PerformLayout()
+        Me.TabPage_Export_table.ResumeLayout(False)
+        Me.TabPage_Export_table.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -288,5 +302,6 @@ Partial Class Form_SSCT
     Friend WithEvents RBut_UnitWeight As RadioButton
     Friend WithEvents CBox_DeductTopSurface As CheckBox
     Friend WithEvents RBut_UnitArea As RadioButton
-    Friend WithEvents TabPage_ToDo As TabPage
+    Friend WithEvents TabPage_Export_table As TabPage
+    Friend WithEvents Label1 As Label
 End Class

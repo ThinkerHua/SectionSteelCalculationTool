@@ -4,7 +4,7 @@
         Public ReadOnly Property Specification As Double()
         Public ReadOnly Property UnitWeight As Double
         Public ReadOnly Property UnitArea As Double
-        Public Sub New(ShortName As String, Specification As Double(), UnitWeight As Double, UnitArea As Double)
+        Public Sub New(ByRef ShortName As String, ByRef Specification As Double(), ByRef UnitWeight As Double, ByRef UnitArea As Double)
             Me.New
             Me.ShortName = ShortName
             Me.Specification = Specification

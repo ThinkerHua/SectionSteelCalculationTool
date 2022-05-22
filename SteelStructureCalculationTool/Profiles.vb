@@ -1,5 +1,21 @@
-﻿'H型钢(基类，不直接使用，不支持不等宽翼缘)
-Public Class _H
+﻿'所有型材的基类
+Public Class _BaseProfile
+    Public Overridable Function Get_Resault(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
+        If Calculation_Type And TYPE_AREA Then
+            Return Area(Calculation_Type, Calculation_Method)
+        Else
+            Return Weight(Calculation_Method)
+        End If
+    End Function
+    Protected Overridable Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
+        Return ""
+    End Function
+    Protected Overridable Function Weight(ByRef Calculation_Method As Integer) As String
+        Return ""
+    End Function
+End Class
+'H型钢(基类，不直接使用，不支持不等宽翼缘)
+Public Class _H : Inherits _BaseProfile
     Public ShortHigh As Double
     Public ShortWidth As Double
     Public H As Double
@@ -12,7 +28,7 @@ Public Class _H
     Private Protected Overridable Function DataRef() As GBDataStru()
         Return GBData_H
     End Function
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -40,18 +56,14 @@ Public Class _H
         'Release()
         Dim arr As Double()
         arr = Search_Specification(DataRef, ShortHigh & "×" & ShortWidth)
+        If arr Is Nothing Then
+            arr = Search_Specification_ByPartData(DataRef, {ShortHigh, ShortWidth})
+        End If
         If arr IsNot Nothing Then
             H = arr(0) : B = arr(1) : tH = arr(2) : tB = arr(3)
         End If
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleOfWidth As Integer
 
         Area = ""
@@ -77,7 +89,7 @@ Public Class _H
             If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001 & "*2"
         End If
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
@@ -100,7 +112,7 @@ End Class
 Public Class Profiles_H : Inherits _H
     Public B2 As Double
     Public tB2 As Double
-    Public Overrides Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overrides Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -124,7 +136,7 @@ Public Class Profiles_H : Inherits _H
                 End If
         End Select
     End Sub
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleOfWidth As Integer
 
         Area = ""
@@ -146,7 +158,7 @@ Public Class Profiles_H : Inherits _H
             If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001 & "*2"
         End If
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
@@ -172,7 +184,7 @@ Public Class Profiles_HT : Inherits _H
     End Function
 End Class
 '双拼H型钢，十字交叉
-Public Class Profiles_HI
+Public Class Profiles_HI : Inherits _BaseProfile
     Public H1 As Double
     Public B1 As Double
     Public tH1 As Double
@@ -187,7 +199,7 @@ Public Class Profiles_HI
     Private Protected Overridable Function DataRef() As GBDataStru()
         Return GBData_H
     End Function
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -208,14 +220,7 @@ Public Class Profiles_HI
                 tB2 = Val(strArr(6))
         End Select
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleOfWidth As Integer
         Dim area1, area2 As String
 
@@ -258,7 +263,7 @@ Public Class Profiles_HI
             End If
         End If
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Dim weight1, weight2 As String
 
         Weight = ""
@@ -298,7 +303,7 @@ Public Class Profiles_T : Inherits _H
     Private Protected Overrides Function DataRef() As GBDataStru()
         Return GBData_T
     End Function
-    Public Overrides Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overrides Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -312,7 +317,7 @@ Public Class Profiles_T : Inherits _H
                 tH = Val(strArr(2)) : tB = Val(strArr(3))
         End Select
     End Sub
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleOfWidth As Integer
 
         Area = ""
@@ -329,7 +334,7 @@ Public Class Profiles_T : Inherits _H
             If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001
         End If
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
@@ -341,12 +346,12 @@ Public Class Profiles_T : Inherits _H
     End Function
 End Class
 '矩形管
-Public Class Profiles_Rect
+Public Class Profiles_Rect : Inherits _BaseProfile
     Public H As Double
     Public B As Double
     Public tH As Double
     Public tB As Double
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -365,14 +370,7 @@ Public Class Profiles_Rect
                 End If
         End Select
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleOfWidth As Integer
 
         Area = ""
@@ -385,7 +383,7 @@ Public Class Profiles_Rect
         End If
         Area = H * 0.001 & "*2+" & B * 0.001 & "*" & MultipleOfWidth
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         '三种计算方式相同
@@ -393,10 +391,10 @@ Public Class Profiles_Rect
     End Function
 End Class
 '圆管
-Public Class Profiles_Cir
+Public Class Profiles_Cir : Inherits _BaseProfile
     Public D As Double
     Public t As Double
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -407,19 +405,12 @@ Public Class Profiles_Cir
                 D = Val(strArr(0)) : t = Val(strArr(1))
         End Select
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         If D = 0 Then Return ""
         '三种计算方式相同
         Area = "PI()*" & D * 0.001
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         If D = 0 Then Return ""
         '三种计算方式相同
         If t = 0 Then
@@ -430,7 +421,7 @@ Public Class Profiles_Cir
     End Function
 End Class
 '工字钢
-Public Class Profiles_I
+Public Class Profiles_I : Inherits _BaseProfile
     Public ShortName As String
     Public H As Double
     Public B As Double
@@ -442,7 +433,7 @@ Public Class Profiles_I
     Private Protected Overridable Function DataRef() As GBDataStru()
         Return GBData_I
     End Function
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -484,14 +475,7 @@ Public Class Profiles_I
             H = arr(0) : B = arr(1) : tH = arr(2) : tB = arr(3)
         End If
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleOfWidth As Integer
 
         Area = ""
@@ -518,7 +502,7 @@ Public Class Profiles_I
             If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001 & "*2"
         End If
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         '无论选择何种方式都按查表方式计算 
@@ -544,7 +528,7 @@ Public Class Profiles_Chan : Inherits Profiles_I
 End Class
 '双拼槽钢，口对口
 Public Class Profiles_Chan_MtM : Inherits Profiles_Chan
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleofWidth As Integer
 
         Area = ""
@@ -557,7 +541,7 @@ Public Class Profiles_Chan_MtM : Inherits Profiles_Chan
         End If
         Area = H * 0.001 & "*2+" & B * 0.001 & "*" & MultipleofWidth
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         Weight = MyBase.Weight(Calculation_Method)
@@ -567,7 +551,7 @@ Public Class Profiles_Chan_MtM : Inherits Profiles_Chan
 End Class
 '双拼槽钢，背对背
 Public Class Profiles_Chan_BtB : Inherits Profiles_Chan
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleofWidth As Integer
 
         Area = ""
@@ -590,7 +574,7 @@ Public Class Profiles_Chan_BtB : Inherits Profiles_Chan
             If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001 & "*4"
         End If
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If tB = 0 Then Return Weight
         Weight = MyBase.Weight(Calculation_Method)
@@ -599,7 +583,7 @@ Public Class Profiles_Chan_BtB : Inherits Profiles_Chan
     End Function
 End Class
 '角钢
-Public Class Profiles_L
+Public Class Profiles_L : Inherits _BaseProfile
     Public ShortName As String
     Public B1 As Double
     Public B2 As Double
@@ -610,7 +594,7 @@ Public Class Profiles_L
     Private Protected Overridable Function DataRef() As GBDataStru()
         Return GBData_L
     End Function
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -641,14 +625,7 @@ Public Class Profiles_L
             B1 = arr(0) : B2 = arr(1) : t = arr(2)
         End If
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleofWidth As Integer
 
         Area = ""
@@ -678,7 +655,7 @@ Public Class Profiles_L
             End If
         End If
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If t = 0 Then Return Weight
         '无论选择何种方式都按查表方式计算
@@ -696,7 +673,7 @@ End Class
 '双拼角钢，背对背
 Public Class Profiles_2L : Inherits Profiles_L
 
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipeofWidth As Integer
 
         Area = ""
@@ -723,7 +700,7 @@ Public Class Profiles_2L : Inherits Profiles_L
             End If
         End If
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If t = 0 Then Return Weight
         Weight = MyBase.Weight(Calculation_Method)
@@ -732,7 +709,7 @@ Public Class Profiles_2L : Inherits Profiles_L
     End Function
 End Class
 'C型钢
-Public Class Profiles_C
+Public Class Profiles_C : Inherits _BaseProfile
     Public H As Double
     Public B As Double
     Public C As Double
@@ -743,7 +720,7 @@ Public Class Profiles_C
     Private Protected Overridable Function DataRef() As GBDataStru()
         Return GBData_C
     End Function
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -751,14 +728,7 @@ Public Class Profiles_C
             H = Val(strArr(0)) : B = Val(strArr(1)) : C = Val(strArr(2)) : t = Val(strArr(3))
         End If
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipeofWidth As Integer
 
         Area = ""
@@ -772,7 +742,7 @@ Public Class Profiles_C
         Area = H * 0.001 & "*2+" & B * 0.001 & "*" & MultipeofWidth & "+" & C * 0.001 & "*4"
         If (Calculation_Method And METHOD_ROUGHLY) = 0 Then Area = Area & "-" & t * 0.001 & "*6"
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If t = 0 Then Return Weight
         If Calculation_Method And METHOD_LOOKUPINTABLE Then
@@ -792,7 +762,7 @@ Public Class Profiles_C
 End Class
 'C型钢，口对口
 Public Class Profiles_2C : Inherits Profiles_C
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipeofWidth As Integer
 
         Area = ""
@@ -805,7 +775,7 @@ Public Class Profiles_2C : Inherits Profiles_C
         End If
         Area = H * 0.001 & "*2+" & B * 0.001 & "*" & MultipeofWidth
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = MyBase.Weight(Calculation_Method)
         If Weight = "" Then Return Weight
         Weight &= "*2"
@@ -821,11 +791,11 @@ Public Class Profiles_Z : Inherits Profiles_C
     End Function
 End Class
 '矩形板件(基类，不直接使用)
-Public Class _Profiles_PL
+Public Class _Profiles_PL : Inherits _BaseProfile
     Public L As Double
     Public B As Double
     Public t As Double
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, DataStr.IndexOf(TypeStr) + TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -839,14 +809,7 @@ Public Class _Profiles_PL
                 t = Val(strArr(2))
         End Select
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Area = ""
         If L = 0 Then Return Area
         '三种计算方式相同
@@ -854,7 +817,7 @@ Public Class _Profiles_PL
         If (Calculation_Type And TYPE_DEDUCTTOPSURFACE) = 0 Then Area &= "*2"
         If B <> 0 Then Area = Area & "*" & B * 0.001
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If L = 0 Then Return Weight
         '三种计算方式相同
@@ -871,7 +834,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
     Public PL_Arr() As _Profiles_PL
     Public PLT_Arr() As Profiles_PLT
     Public PLD_Arr() As Profiles_PLD
-    Public Overrides Sub GetData(DataStr As String, TypeStr As String)
+    Public Overrides Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim str, strArr() As String
         Dim i, j, k, n As Integer
         i = 0 : j = 0 : k = 0
@@ -907,7 +870,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
             End If
         Next
     End Sub
-    Protected Overrides Function Area(Calculation_Type As Integer, Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim _area As String
         Dim i, j, k As Integer
         Dim obj As Object
@@ -941,7 +904,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
         If Area.EndsWith("-") Then Area = Area.Remove(Area.Length - 1)
         'obj = Nothing
     End Function
-    Protected Overrides Function Weight(Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Dim _weight As String
         Dim i, j, k As Integer
         Dim obj As Object
@@ -978,7 +941,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
 End Class
 '直角三角形板件
 Public Class Profiles_PLT : Inherits _Profiles_PL
-    Protected Overrides Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Area = ""
         If L = 0 Then Return Area
         '三种计算方式相同
@@ -986,7 +949,7 @@ Public Class Profiles_PLT : Inherits _Profiles_PL
         If (Calculation_Type And TYPE_DEDUCTTOPSURFACE) = 0 Then Area &= "*2"
         If B <> 0 Then Area = Area & "*" & B * 0.001
     End Function
-    Protected Overrides Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If L = 0 Then Return Weight
         '三种计算方式相同
@@ -999,10 +962,10 @@ Public Class Profiles_PLT : Inherits _Profiles_PL
     End Function
 End Class
 '圆形板件
-Public Class Profiles_PLD
+Public Class Profiles_PLD : Inherits _BaseProfile
     Public D As Double
     Public t As Double
-    Public Overridable Sub GetData(ByVal DataStr As String, ByVal TypeStr As String)
+    Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim strArr() As String
         DataStr = DataStr.Remove(0, DataStr.IndexOf(TypeStr) + TypeStr.Length)
         strArr = DataStr.Split("×")
@@ -1010,21 +973,14 @@ Public Class Profiles_PLD
             D = Val(strArr(0)) : t = Val(strArr(1))
         End If
     End Sub
-    Public Function Get_Resault(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
-        If Calculation_Type And TYPE_AREA Then
-            Return Area(Calculation_Type, Calculation_Method)
-        Else
-            Return Weight(Calculation_Method)
-        End If
-    End Function
-    Protected Overridable Function Area(ByVal Calculation_Type As Integer, ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Area = ""
         If D = 0 Then Return Area
         '三种计算方式相同
         Area = "PI()*" & D * 0.001 * 0.5 & "^2"
         If (Calculation_Type And TYPE_DEDUCTTOPSURFACE) = 0 Then Area &= "*2"
     End Function
-    Protected Overridable Function Weight(ByVal Calculation_Method As Integer) As String
+    Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String
         Weight = ""
         If D = 0 Then Return Weight
         '三种计算方式相同
@@ -1056,7 +1012,7 @@ End Class
 '    End Function
 'End Class
 Module Profiles_Func
-    Public Function StrAverage(ByVal str As String, ByVal c As Char) As Double
+    Public Function StrAverage(ByRef str As String, ByRef c As Char) As Double
         If str.IndexOf(c) < 0 Then
             Return Val(str)
         Else
