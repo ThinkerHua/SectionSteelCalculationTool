@@ -122,7 +122,7 @@
         Dim Specification_Type As String
         'Dim Specification_Data() As Double
         Dim sResault As String
-        Dim Profiles As Object
+        Dim SectionSteel As Object
 
         '测试执行效率用
         Dim starttime, endtime As System.DateTime
@@ -160,41 +160,41 @@
                 Specification_Type = Get_Specification_Type(Specification_Text)
                 Select Case Specification_Type
                     Case "H"
-                        Profiles = New Profiles_H
+                        SectionSteel = New SectionSteel_H
                     Case "HT"
-                        Profiles = New Profiles_HT
+                        SectionSteel = New SectionSteel_HT
                     Case "HI"
-                        Profiles = New Profiles_HI
+                        SectionSteel = New SectionSteel_HI
                     Case "T"
-                        Profiles = New Profiles_T
+                        SectionSteel = New SectionSteel_T
                     Case "J"
-                        Profiles = New Profiles_Rect
+                        SectionSteel = New SectionSteel_Rect
                     Case "D"
-                        Profiles = New Profiles_Cir
+                        SectionSteel = New SectionSteel_Cir
                     Case "I"
-                        Profiles = New Profiles_I
+                        SectionSteel = New SectionSteel_I
                     Case "["
-                        Profiles = New Profiles_Chan
+                        SectionSteel = New SectionSteel_Chan
                     Case "[]"
-                        Profiles = New Profiles_Chan_MtM
+                        SectionSteel = New SectionSteel_Chan_MtM
                     Case "2["
-                        Profiles = New Profiles_Chan_BtB
+                        SectionSteel = New SectionSteel_Chan_BtB
                     Case "L"
-                        Profiles = New Profiles_L
+                        SectionSteel = New SectionSteel_L
                     Case "2L"
-                        Profiles = New Profiles_2L
+                        SectionSteel = New SectionSteel_2L
                     Case "C"
-                        Profiles = New Profiles_C
+                        SectionSteel = New SectionSteel_C
                     Case "2C"
-                        Profiles = New Profiles_2C
+                        SectionSteel = New SectionSteel_2C
                     Case "Z"
-                        Profiles = New Profiles_Z
+                        SectionSteel = New SectionSteel_Z
                     Case "PL"
-                        Profiles = New Profiles_PL
+                        SectionSteel = New SectionSteel_PL
                     Case "PLT"
-                        Profiles = New Profiles_PLT
+                        SectionSteel = New SectionSteel_PLT
                     Case "PLD"
-                        Profiles = New Profiles_PLD
+                        SectionSteel = New SectionSteel_PLD
                     Case Else
                         '不受支持的型材规格，直接跳过
                         Continue For
@@ -217,8 +217,8 @@
             'End If
             '------------------------------
 
-            Profiles.GetData(Specification_Text, Specification_Type)
-            sResault = Profiles.Get_Resault(Calculation_Type, Calculation_Method)
+            SectionSteel.GetData(Specification_Text, Specification_Type)
+            sResault = SectionSteel.Get_Resault(Calculation_Type, Calculation_Method)
             '输出到Excel
             If sResault <> "" Then
                 xlCell.offset(Offset_Rows, Offset_Columns).value = "=" & sResault
@@ -399,7 +399,7 @@
 
     '    Return Weight
     'End Function
-    'Private Function LookupInTable(ByVal Profiles_Type As String, ByVal data As Double()) As String                          '在表格中查找
+    'Private Function LookupInTable(ByVal SectionSteel_Type As String, ByVal data As Double()) As String                          '在表格中查找
     '    Dim Val As String = ""
 
     '    Return Val

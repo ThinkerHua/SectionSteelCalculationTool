@@ -22,7 +22,6 @@ E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStruc
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.exe
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.xml
 E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.pdb
-E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.vbproj.AssemblyReference.cache
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Release\Steel Structure Calculation Tool.exe.config
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Release\Steel Structure Calculation Tool.exe
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\bin\Release\Steel Structure Calculation Tool.pdb

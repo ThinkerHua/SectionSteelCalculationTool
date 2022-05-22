@@ -120,7 +120,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Profiles.vb" />
+    <Compile Include="SectionSteel.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form_SSCT.resx">

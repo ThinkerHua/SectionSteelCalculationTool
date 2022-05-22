@@ -1,5 +1,5 @@
 ﻿'所有型材的基类
-Public Class _BaseProfile
+Public Class _BaseSectionSteel
     Public Overridable Function Get_Resault(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         If Calculation_Type And TYPE_AREA Then
             Return Area(Calculation_Type, Calculation_Method)
@@ -15,7 +15,7 @@ Public Class _BaseProfile
     End Function
 End Class
 'H型钢(基类，不直接使用，不支持不等宽翼缘)
-Public Class _H : Inherits _BaseProfile
+Public Class _SectionSteel_H : Inherits _BaseSectionSteel
     Public ShortHigh As Double
     Public ShortWidth As Double
     Public H As Double
@@ -109,7 +109,7 @@ Public Class _H : Inherits _BaseProfile
     End Function
 End Class
 'H型钢(实际使用的类，支持不等宽翼缘）
-Public Class Profiles_H : Inherits _H
+Public Class SectionSteel_H : Inherits _SectionSteel_H
     Public B2 As Double
     Public tB2 As Double
     Public Overrides Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
@@ -175,7 +175,7 @@ Public Class Profiles_H : Inherits _H
     End Function
 End Class
 'HT型钢(采用简写形式可能与其他种类H型钢冲突，故独立出来)
-Public Class Profiles_HT : Inherits _H
+Public Class SectionSteel_HT : Inherits _SectionSteel_H
     'Protected Overrides Function DataSheetName() As String
     '    Return "HT"
     'End Function
@@ -184,7 +184,7 @@ Public Class Profiles_HT : Inherits _H
     End Function
 End Class
 '双拼H型钢，十字交叉
-Public Class Profiles_HI : Inherits _BaseProfile
+Public Class SectionSteel_HI : Inherits _BaseSectionSteel
     Public H1 As Double
     Public B1 As Double
     Public tH1 As Double
@@ -296,7 +296,7 @@ Public Class Profiles_HI : Inherits _BaseProfile
     End Function
 End Class
 'T型钢
-Public Class Profiles_T : Inherits _H
+Public Class SectionSteel_T : Inherits _SectionSteel_H
     'Protected Overrides Function DataSheetName() As String
     '    Return "T"
     'End Function
@@ -346,7 +346,7 @@ Public Class Profiles_T : Inherits _H
     End Function
 End Class
 '矩形管
-Public Class Profiles_Rect : Inherits _BaseProfile
+Public Class SectionSteel_Rect : Inherits _BaseSectionSteel
     Public H As Double
     Public B As Double
     Public tH As Double
@@ -391,7 +391,7 @@ Public Class Profiles_Rect : Inherits _BaseProfile
     End Function
 End Class
 '圆管
-Public Class Profiles_Cir : Inherits _BaseProfile
+Public Class SectionSteel_Cir : Inherits _BaseSectionSteel
     Public D As Double
     Public t As Double
     Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
@@ -421,7 +421,7 @@ Public Class Profiles_Cir : Inherits _BaseProfile
     End Function
 End Class
 '工字钢
-Public Class Profiles_I : Inherits _BaseProfile
+Public Class SectionSteel_I : Inherits _BaseSectionSteel
     Public ShortName As String
     Public H As Double
     Public B As Double
@@ -518,7 +518,7 @@ Public Class Profiles_I : Inherits _BaseProfile
     End Function
 End Class
 '槽钢
-Public Class Profiles_Chan : Inherits Profiles_I
+Public Class SectionSteel_Chan : Inherits SectionSteel_I
     'Protected Overrides Function DataSheetName() As String
     '    Return "Channel"
     'End Function
@@ -527,7 +527,7 @@ Public Class Profiles_Chan : Inherits Profiles_I
     End Function
 End Class
 '双拼槽钢，口对口
-Public Class Profiles_Chan_MtM : Inherits Profiles_Chan
+Public Class SectionSteel_Chan_MtM : Inherits SectionSteel_Chan
     Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleofWidth As Integer
 
@@ -550,7 +550,7 @@ Public Class Profiles_Chan_MtM : Inherits Profiles_Chan
     End Function
 End Class
 '双拼槽钢，背对背
-Public Class Profiles_Chan_BtB : Inherits Profiles_Chan
+Public Class SectionSteel_Chan_BtB : Inherits SectionSteel_Chan
     Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipleofWidth As Integer
 
@@ -583,7 +583,7 @@ Public Class Profiles_Chan_BtB : Inherits Profiles_Chan
     End Function
 End Class
 '角钢
-Public Class Profiles_L : Inherits _BaseProfile
+Public Class SectionSteel_L : Inherits _BaseSectionSteel
     Public ShortName As String
     Public B1 As Double
     Public B2 As Double
@@ -671,7 +671,7 @@ Public Class Profiles_L : Inherits _BaseProfile
     End Function
 End Class
 '双拼角钢，背对背
-Public Class Profiles_2L : Inherits Profiles_L
+Public Class SectionSteel_2L : Inherits SectionSteel_L
 
     Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipeofWidth As Integer
@@ -709,7 +709,7 @@ Public Class Profiles_2L : Inherits Profiles_L
     End Function
 End Class
 'C型钢
-Public Class Profiles_C : Inherits _BaseProfile
+Public Class SectionSteel_C : Inherits _BaseSectionSteel
     Public H As Double
     Public B As Double
     Public C As Double
@@ -761,7 +761,7 @@ Public Class Profiles_C : Inherits _BaseProfile
     End Function
 End Class
 'C型钢，口对口
-Public Class Profiles_2C : Inherits Profiles_C
+Public Class SectionSteel_2C : Inherits SectionSteel_C
     Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Dim MultipeofWidth As Integer
 
@@ -782,7 +782,7 @@ Public Class Profiles_2C : Inherits Profiles_C
     End Function
 End Class
 'Z型钢
-Public Class Profiles_Z : Inherits Profiles_C
+Public Class SectionSteel_Z : Inherits SectionSteel_C
     'Protected Overrides Function DataSheetName() As String
     '    Return "Z"
     'End Function
@@ -791,7 +791,7 @@ Public Class Profiles_Z : Inherits Profiles_C
     End Function
 End Class
 '矩形板件(基类，不直接使用)
-Public Class _Profiles_PL : Inherits _BaseProfile
+Public Class _SectionSteel_PL : Inherits _BaseSectionSteel
     Public L As Double
     Public B As Double
     Public t As Double
@@ -830,10 +830,10 @@ Public Class _Profiles_PL : Inherits _BaseProfile
     End Function
 End Class
 '矩形板件(实际使用的类)
-Public Class Profiles_PL : Inherits _Profiles_PL
-    Public PL_Arr() As _Profiles_PL
-    Public PLT_Arr() As Profiles_PLT
-    Public PLD_Arr() As Profiles_PLD
+Public Class SectionSteel_PL : Inherits _SectionSteel_PL
+    Public PL_Arr() As _SectionSteel_PL
+    Public PLT_Arr() As SectionSteel_PLT
+    Public PLD_Arr() As SectionSteel_PLD
     Public Overrides Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
         Dim str, strArr() As String
         Dim i, j, k, n As Integer
@@ -844,7 +844,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
                 n = Val(str) : If n = 0 Then n = 1
                 Do While (n > 0)
                     ReDim Preserve PLD_Arr(k)
-                    PLD_Arr(k) = New Profiles_PLD
+                    PLD_Arr(k) = New SectionSteel_PLD
                     PLD_Arr(k).GetData(str, "PLD")
                     k += 1
                     n -= 1
@@ -853,7 +853,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
                 n = Val(str) : If n = 0 Then n = 1
                 Do While (n > 0)
                     ReDim Preserve PLT_Arr(j)
-                    PLT_Arr(j) = New Profiles_PLT
+                    PLT_Arr(j) = New SectionSteel_PLT
                     PLT_Arr(j).GetData(str, "PLT")
                     j += 1
                     n -= 1
@@ -862,7 +862,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
                 n = Val(str) : If n = 0 Then n = 1
                 Do While (n > 0)
                     ReDim Preserve PL_Arr(i)
-                    PL_Arr(i) = New _Profiles_PL
+                    PL_Arr(i) = New _SectionSteel_PL
                     PL_Arr(i).GetData(str, "PL")
                     i += 1
                     n -= 1
@@ -940,7 +940,7 @@ Public Class Profiles_PL : Inherits _Profiles_PL
     End Function
 End Class
 '直角三角形板件
-Public Class Profiles_PLT : Inherits _Profiles_PL
+Public Class SectionSteel_PLT : Inherits _SectionSteel_PL
     Protected Overrides Function Area(ByRef Calculation_Type As Integer, ByRef Calculation_Method As Integer) As String
         Area = ""
         If L = 0 Then Return Area
@@ -962,7 +962,7 @@ Public Class Profiles_PLT : Inherits _Profiles_PL
     End Function
 End Class
 '圆形板件
-Public Class Profiles_PLD : Inherits _BaseProfile
+Public Class SectionSteel_PLD : Inherits _BaseSectionSteel
     Public D As Double
     Public t As Double
     Public Overridable Sub GetData(ByRef DataStr As String, ByRef TypeStr As String)
@@ -1011,7 +1011,7 @@ End Class
 '        Return "B1"
 '    End Function
 'End Class
-Module Profiles_Func
+Module SectionSteel_Func
     Public Function StrAverage(ByRef str As String, ByRef c As Char) As Double
         If str.IndexOf(c) < 0 Then
             Return Val(str)
