@@ -387,7 +387,7 @@ Public Class SectionSteel_Rect : Inherits _BaseSectionSteel
         Weight = ""
         If tB = 0 Then Return Weight
         '三种计算方式相同
-        Weight = "(" & H * 0.001 & "*" & tH * 0.001 & "+" & B * 0.001 & "*" & tB * 0.001 & ")*2*7850"
+        Weight = "(" & H * 0.001 & "*" & tH * 0.001 & "+(" & B * 0.001 & "-" & tH * 0.001 & "*2)*" & tB * 0.001 & ")*2*7850"
     End Function
 End Class
 '圆管
