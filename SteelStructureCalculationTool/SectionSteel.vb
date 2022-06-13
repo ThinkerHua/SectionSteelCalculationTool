@@ -331,7 +331,7 @@ Public Class SectionSteel_T : Inherits _SectionSteel_H
                 MultipleOfWidth = 2
             End If
             Area = H * 0.001 & "*2+" & B * 0.001 & "*" & MultipleOfWidth
-            If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001
+            'If Calculation_Method And METHOD_PRECISELY Then Area = Area & "-" & tH * 0.001
         End If
     End Function
     Protected Overrides Function Weight(ByRef Calculation_Method As Integer) As String

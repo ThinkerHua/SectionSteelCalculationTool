@@ -33,4 +33,3 @@ E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.exe
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.xml
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\Steel Structure Calculation Tool.pdb
-E:\Documents\Visual Studio 2019\Project\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Release\SteelStructureCalculationTool.vbproj.AssemblyReference.cache
