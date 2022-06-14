@@ -126,7 +126,7 @@ Public Class SectionSteel_H : Inherits _SectionSteel_H
                 If strArr(1).IndexOf("/") < 0 Then
                     B = StrAverage(strArr(1), "～") : B2 = B
                 Else
-                    B = StrAverage(strArr(1).Split("/")(0), "～") : B2 = B = StrAverage(strArr(1).Split("/")(1), "～")
+                    B = StrAverage(strArr(1).Split("/")(0), "～") : B2 = StrAverage(strArr(1).Split("/")(1), "～")
                 End If
                 tH = Val(strArr(2))
                 If strArr(3).IndexOf("/") < 0 Then
