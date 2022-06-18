@@ -28,7 +28,7 @@
     <ProductName>Steel Structure Calculation Tool</ProductName>
     <PublisherName>Thinker Hua</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.4.3.%2a</ApplicationVersion>
+    <ApplicationVersion>2.0.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -96,14 +96,13 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="calculation.vb" />
+    <Compile Include="SectionSteelAW.vb" />
     <Compile Include="Form_SSCT.Designer.vb">
       <DependentUpon>Form_SSCT.vb</DependentUpon>
     </Compile>
     <Compile Include="Form_SSCT.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GBData.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -120,7 +119,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SectionSteel.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form_SSCT.resx">

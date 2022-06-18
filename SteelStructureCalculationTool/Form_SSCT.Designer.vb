@@ -38,7 +38,7 @@ Partial Class Form_SSCT
         Me.RBut_Roughly = New System.Windows.Forms.RadioButton()
         Me.GBox_CalculationType = New System.Windows.Forms.GroupBox()
         Me.RBut_UnitWeight = New System.Windows.Forms.RadioButton()
-        Me.CBox_DeductTopSurface = New System.Windows.Forms.CheckBox()
+        Me.CBox_ExcludeTopSurface = New System.Windows.Forms.CheckBox()
         Me.RBut_UnitArea = New System.Windows.Forms.RadioButton()
         Me.TabPage_Export_table = New System.Windows.Forms.TabPage()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -193,7 +193,7 @@ Partial Class Form_SSCT
         'GBox_CalculationType
         '
         Me.GBox_CalculationType.Controls.Add(Me.RBut_UnitWeight)
-        Me.GBox_CalculationType.Controls.Add(Me.CBox_DeductTopSurface)
+        Me.GBox_CalculationType.Controls.Add(Me.CBox_ExcludeTopSurface)
         Me.GBox_CalculationType.Controls.Add(Me.RBut_UnitArea)
         Me.GBox_CalculationType.Location = New System.Drawing.Point(6, 6)
         Me.GBox_CalculationType.Name = "GBox_CalculationType"
@@ -212,15 +212,15 @@ Partial Class Form_SSCT
         Me.RBut_UnitWeight.Text = "Unit &Weight"
         Me.RBut_UnitWeight.UseVisualStyleBackColor = True
         '
-        'CBox_DeductTopSurface
+        'CBox_ExcludeTopSurface
         '
-        Me.CBox_DeductTopSurface.AutoSize = True
-        Me.CBox_DeductTopSurface.Location = New System.Drawing.Point(6, 42)
-        Me.CBox_DeductTopSurface.Name = "CBox_DeductTopSurface"
-        Me.CBox_DeductTopSurface.Size = New System.Drawing.Size(156, 16)
-        Me.CBox_DeductTopSurface.TabIndex = 1
-        Me.CBox_DeductTopSurface.Text = "&Deduct The Top Surface"
-        Me.CBox_DeductTopSurface.UseVisualStyleBackColor = True
+        Me.CBox_ExcludeTopSurface.AutoSize = True
+        Me.CBox_ExcludeTopSurface.Location = New System.Drawing.Point(6, 42)
+        Me.CBox_ExcludeTopSurface.Name = "CBox_ExcludeTopSurface"
+        Me.CBox_ExcludeTopSurface.Size = New System.Drawing.Size(162, 16)
+        Me.CBox_ExcludeTopSurface.TabIndex = 1
+        Me.CBox_ExcludeTopSurface.Text = "Exclude the &Top Surface"
+        Me.CBox_ExcludeTopSurface.UseVisualStyleBackColor = True
         '
         'RBut_UnitArea
         '
@@ -300,7 +300,7 @@ Partial Class Form_SSCT
     Friend WithEvents RBut_Roughly As RadioButton
     Friend WithEvents GBox_CalculationType As GroupBox
     Friend WithEvents RBut_UnitWeight As RadioButton
-    Friend WithEvents CBox_DeductTopSurface As CheckBox
+    Friend WithEvents CBox_ExcludeTopSurface As CheckBox
     Friend WithEvents RBut_UnitArea As RadioButton
     Friend WithEvents TabPage_Export_table As TabPage
     Friend WithEvents Label1 As Label
