@@ -1,4 +1,5 @@
-﻿Module SectionSteelAW
+﻿Imports System.Runtime.InteropServices
+Module SectionSteelAW
     Public Const _TESTFLAG = 0                  '测试代码控制符
 
     Public Const TYPE_AREA = 1                  '计算类型：面积
@@ -13,7 +14,8 @@
     Public Offset_Columns As Integer = 1        '目标列偏移参数
     Public Overwrite As Integer = 0             '目标已有数据是否覆盖参数
 
-    Public Declare Function SectionSteelAW Lib "SectionSteelAW.dll" (ByVal RawText As String, ByVal CtrlCode As UInteger) As String
+    Public Declare Function SectionSteelAW Lib "SectionSteelAW.dll" (ByVal RawText As IntPtr, ByVal CtrlCode As UInteger) As IntPtr
+    Public Declare Sub free_dallocstr Lib "SectionSteelAW.dll" (ByVal str As IntPtr)
 
     Public Sub Generate()
         Dim xlApp As Object = Nothing       'Excel对象
@@ -22,8 +24,8 @@
         Dim xlRange As Object = Nothing     '单元格区域
         Dim xlCell As Object = Nothing      '单元格
 
-        Dim sRawText As String = Nothing
-        Dim sResault As String = Nothing
+        Dim sRawText As IntPtr = Nothing
+        Dim sResault As IntPtr = Nothing
 
         Dim starttime As Date
         Dim endtime As Date
@@ -50,11 +52,18 @@
             '不覆写且目标不为空时直接跳过
             If (Overwrite = 0) And (xlCell.offset(Offset_Rows, Offset_Columns).value IsNot Nothing) Then Continue For
 
-            sRawText = xlCell.Value
+            sRawText = Marshal.StringToHGlobalAnsi(xlCell.Value)
+            'Debug.WriteLine("before:" & Marshal.PtrToStringAnsi(sRawText))
             sResault = SectionSteelAW(sRawText, CTRLCODE)
+            'Debug.WriteLine(" after:" & Marshal.PtrToStringAnsi(sRawText))
             '输出到Excel
-            If sResault <> "" Then
-                xlCell.offset(Offset_Rows, Offset_Columns).Value = "=" & sResault
+            If sResault <> Nothing Then
+                xlCell.offset(Offset_Rows, Offset_Columns).Value = "=" & Marshal.PtrToStringAnsi(sResault)
+                'Debug.WriteLine("before:" & Marshal.PtrToStringAnsi(sResault))
+                free_dallocstr(sResault)
+                'Debug.WriteLine(" after:" & Marshal.PtrToStringAnsi(sResault))
+                'Debug.WriteLine("")
+                sResault = Nothing
             Else
                 xlCell.offset(Offset_Rows, Offset_Columns).Value = Nothing
             End If
