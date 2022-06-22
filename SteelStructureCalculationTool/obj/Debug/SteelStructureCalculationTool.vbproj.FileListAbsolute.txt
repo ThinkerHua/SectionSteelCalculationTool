@@ -34,3 +34,4 @@ E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\Steel Structure Calculation Tool.exe
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\Steel Structure Calculation Tool.xml
 E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\Steel Structure Calculation Tool.pdb
+E:\Documents\GitHub\SteelStructureCalculationTool\SteelStructureCalculationTool\obj\Debug\SteelStructureCalculationTool.vbproj.AssemblyReference.cache
