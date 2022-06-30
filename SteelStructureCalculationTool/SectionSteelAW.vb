@@ -8,6 +8,7 @@ Module SectionSteelAW
     Public Const METHOD_ROUGHLY = 8             '计算模式：粗略
     Public Const METHOD_PRECISELY = 16          '计算模式：精细
     Public Const METHOD_LOOKUPINTABLE = 32      '计算模式：查表
+    Public Const PI_STYLE = 64                  'PI的写法（置0为PI()，置1为3.14）
 
     Public CTRLCODE As Integer = 0              '控制码
     Public Offset_Rows As Integer = 0           '目标行偏移参数

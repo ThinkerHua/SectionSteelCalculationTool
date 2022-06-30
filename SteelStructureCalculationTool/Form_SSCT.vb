@@ -36,12 +36,21 @@
     Private Sub CBox_Overwrite_Click(sender As Object, e As EventArgs) Handles CBox_Overwrite.Click
         Set_Public_Arguments()
     End Sub
+
+    Private Sub RBut_PI_FUN_Click(sender As Object, e As EventArgs) Handles RBut_PI_FUN.Click
+        Set_Public_Arguments()
+    End Sub
+
+    Private Sub RBut_PI_NUM_Click(sender As Object, e As EventArgs) Handles RBut_PI_NUM.Click
+        Set_Public_Arguments()
+    End Sub
     Private Sub Button_Generate_Click(sender As Object, e As EventArgs) Handles Button_Generate.Click
         Generate()
     End Sub
     Private Sub Form_SSCT_Load(sender As Object, e As EventArgs) Handles Me.Load
         Me.Text = Application.ProductName & " - Ver" & Application.ProductVersion
         Set_Public_Arguments()
+        Me.ActiveControl = Button_Generate
     End Sub
     Private Sub Set_Public_Arguments()
         If RBut_UnitArea.Checked Then
@@ -74,8 +83,19 @@
         Else
             CTRLCODE = CTRLCODE And Not METHOD_LOOKUPINTABLE
         End If
+        If RBut_PI_FUN.Checked Then
+            CTRLCODE = CTRLCODE And Not PI_STYLE
+        Else
+            CTRLCODE = CTRLCODE Or PI_STYLE
+        End If
         Offset_Rows = NumUD_Rows.Value
         Offset_Columns = NumUD_Columns.Value
         Overwrite = CBox_Overwrite.Checked
+    End Sub
+
+    Private Sub TabControl_SteelStructureCalculationTool_SelectedIndexChanged(sender As Object, e As EventArgs) Handles TabControl_SteelStructureCalculationTool.SelectedIndexChanged
+        If TabControl_SteelStructureCalculationTool.SelectedIndex = 0 Then
+            Button_Generate.Focus()
+        End If
     End Sub
 End Class
