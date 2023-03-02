@@ -1,7 +1,8 @@
 ﻿Imports System.Runtime.InteropServices
-Module SectionSteelAW
-    Public Const _TESTFLAG = 0                  '测试代码控制符
+Module SectionSteelAreaWeight
+    Public Const _TESTFLAG = 1                  '测试代码控制符
 
+    '面积、重量功能相关
     Public Const TYPE_AREA = 1                  '计算类型：面积
     Public Const TYPE_EXCLUDE_TOPSURFACE = 2    '计算类型：面积子项，扣除顶面
     Public Const TYPE_WEIGHT = 4                '计算类型：重量
@@ -10,26 +11,47 @@ Module SectionSteelAW
     Public Const METHOD_LOOKUPINTABLE = 32      '计算模式：查表
     Public Const PI_STYLE = 64                  'PI的写法（置0为PI()，置1为3.14）
 
-    Public CTRLCODE As Integer = 0              '控制码
-    Public Offset_Rows As Integer = 0           '目标行偏移参数
-    Public Offset_Columns As Integer = 1        '目标列偏移参数
-    Public Overwrite As Integer = 0             '目标已有数据是否覆盖参数
+    Public AW_CTRLCODE As Integer = 0           '控制码
+    Public AW_Offset_Rows As Integer = 0        '目标行偏移参数
+    Public AW_Offset_Columns As Integer = 1     '目标列偏移参数
+    Public AW_Overwrite As Integer = 0          '目标已有数据是否覆盖参数
 
-    Public Declare Function SectionSteelAW Lib "SectionSteelAW.dll" (ByVal RawText As IntPtr, ByVal CtrlCode As UInteger) As IntPtr
-    Public Declare Sub free_dallocstr Lib "SectionSteelAW.dll" (ByVal str As IntPtr)
+    '加劲肋功能相关
+    Public Const TRUNCATE = 1                   '截尾取整
 
-    Public Sub Generate()
+    Public STIF_CTRLCODE As Integer = 0         '控制码
+    Public Stif_Offset_Rows As Integer = 1      '目标行偏移参数
+    Public Stif_Offset_Columns As Integer = 0   '目标列偏移参数
+    Public Stif_Overwrite As Integer = 0        '目标已有数据是否覆盖参数
+
+    Public Declare Function SectionSteel_Area_Weight Lib "SectionSteelAreaWeight.dll" (ByVal RawText As IntPtr, ByVal CtrlCode As UInteger) As IntPtr
+    Public Declare Function Stiffener_Specification Lib "SectionSteelAreaWeight.dll" (ByVal RawText As IntPtr, ByVal CtrlCode As UInteger) As IntPtr
+    Public Declare Sub free_dallocstr Lib "SectionSteelAreaWeight.dll" (ByVal str As IntPtr)
+
+    Public Sub Generate(func_option As Integer)
+        'func_option = 0    SectionSteel_Area_Weight
+        'func_option = 1    Stiffener_Specification
+
         Dim xlApp As Object = Nothing       'Excel对象
         Dim xlWorkbook As Object = Nothing  '工作薄对象
         'Dim xlSheet As Object = Nothing     '工作表对象
         Dim xlRange As Object = Nothing     '单元格区域
         Dim xlCell As Object = Nothing      '单元格
 
+        Dim offsetRow As Integer = 0        '目标偏移行数
+        Dim offsetCol As Integer = 0        '目标偏移列数
+        Dim overwrite As Integer = 0        '目标是否覆写
+        Dim targetCell As Object = Nothing  '目标单元格
+
         Dim sRawText As IntPtr = Nothing
         Dim sResault As IntPtr = Nothing
 
+        '测试用变更
         Dim starttime As Date
         Dim endtime As Date
+
+        '目前只提供0或1两个选项，先校验以减少后面的判断及操作
+        If (func_option <> 0 And func_option <> 1) Then Exit Sub
 
         '获取Excel程序、工作薄、工作表、选定区域
         On Error Resume Next
@@ -37,42 +59,73 @@ Module SectionSteelAW
         If Err.Number <> 0 Then
             Err.Clear()
             MsgBox("Please open an Excel application first!", vbOKOnly + vbExclamation, "Waring")
-            Exit Sub
+            GoTo clean
         End If
         xlWorkbook = xlApp.ActiveWorkbook
         If xlWorkbook Is Nothing Then
             MsgBox("Please open an Workbook first!", vbOKOnly + vbExclamation, "Waring")
-            Exit Sub
+            GoTo clean
         End If
         xlRange = xlApp.Selection
         On Error GoTo 0
 
+        '测试用
+        If _TESTFLAG Then MsgBox("AW_CTRLCODE = " & AW_CTRLCODE & vbCrLf &
+                                 "STIF_CTRLCODE = " & STIF_CTRLCODE, vbOKOnly + vbExclamation, "Testing")
         If _TESTFLAG Then starttime = System.DateTime.Now
+
+        '正式开始
         xlApp.screenupdating = False
+        Select Case func_option
+            Case 0
+                offsetRow = AW_Offset_Rows
+                offsetCol = AW_Offset_Columns
+                overwrite = AW_Overwrite
+            Case 1
+                offsetRow = Stif_Offset_Rows
+                offsetCol = Stif_Offset_Columns
+                overwrite = Stif_Overwrite
+        End Select
         For Each xlCell In xlRange
+            targetCell = xlCell.offset(offsetRow, offsetCol)
             '不覆写且目标不为空时直接跳过
-            If (Overwrite = 0) And (xlCell.offset(Offset_Rows, Offset_Columns).value IsNot Nothing) Then Continue For
+            If (overwrite = 0) And (targetCell.value IsNot Nothing) Then Continue For
 
             sRawText = Marshal.StringToHGlobalAnsi(xlCell.Value)
             'Debug.WriteLine("before:" & Marshal.PtrToStringAnsi(sRawText))
-            sResault = SectionSteelAW(sRawText, CTRLCODE)
-            'Debug.WriteLine(" after:" & Marshal.PtrToStringAnsi(sRawText))
+            Select Case func_option
+                Case 0
+                    sResault = SectionSteel_Area_Weight(sRawText, AW_CTRLCODE)
+                    'Debug.WriteLine(" after:" & Marshal.PtrToStringAnsi(sRawText))
+                Case 1
+                    sResault = Stiffener_Specification(sRawText, STIF_CTRLCODE)
+                    'Debug.WriteLine(" after:" & Marshal.PtrToStringAnsi(sRawText))
+            End Select
+
             '输出到Excel
             If sResault <> Nothing Then
-                xlCell.offset(Offset_Rows, Offset_Columns).Value = "=" & Marshal.PtrToStringAnsi(sResault)
+                Select Case func_option
+                    Case 0
+                        targetCell.Value = "=" & Marshal.PtrToStringAnsi(sResault)
+                    Case 1
+                        targetCell.value = Marshal.PtrToStringAnsi(sResault)
+                End Select
                 'Debug.WriteLine("before:" & Marshal.PtrToStringAnsi(sResault))
                 free_dallocstr(sResault)
                 'Debug.WriteLine(" after:" & Marshal.PtrToStringAnsi(sResault))
                 'Debug.WriteLine("")
                 sResault = Nothing
             Else
-                xlCell.offset(Offset_Rows, Offset_Columns).Value = Nothing
+                targetCell.Value = Nothing
             End If
         Next
         xlApp.screenupdating = True
+
+        '测试用
         If _TESTFLAG Then endtime = System.DateTime.Now : MsgBox("执行持续时间：" & (endtime - starttime).ToString)
 
+clean:
         '释放对象内存
-        xlCell = Nothing : xlRange = Nothing : xlWorkbook = Nothing : xlApp = Nothing
+        targetCell = Nothing : xlCell = Nothing : xlRange = Nothing : xlWorkbook = Nothing : xlApp = Nothing : System.GC.Collect()
     End Sub
 End Module
