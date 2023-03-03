@@ -46,12 +46,23 @@ Module SectionSteelAreaWeight
         Dim sRawText As IntPtr = Nothing
         Dim sResault As IntPtr = Nothing
 
-        '测试用变更
+        '测试用变量
         Dim starttime As Date
         Dim endtime As Date
 
         '目前只提供0或1两个选项，先校验以减少后面的判断及操作
-        If (func_option <> 0 And func_option <> 1) Then Exit Sub
+        Select Case func_option
+            Case 0
+                offsetRow = AW_Offset_Rows
+                offsetCol = AW_Offset_Columns
+                overwrite = AW_Overwrite
+            Case 1
+                offsetRow = Stif_Offset_Rows
+                offsetCol = Stif_Offset_Columns
+                overwrite = Stif_Overwrite
+            Case Else
+                Exit Sub
+        End Select
 
         '获取Excel程序、工作薄、工作表、选定区域
         On Error Resume Next
@@ -76,16 +87,6 @@ Module SectionSteelAreaWeight
 
         '正式开始
         xlApp.screenupdating = False
-        Select Case func_option
-            Case 0
-                offsetRow = AW_Offset_Rows
-                offsetCol = AW_Offset_Columns
-                overwrite = AW_Overwrite
-            Case 1
-                offsetRow = Stif_Offset_Rows
-                offsetCol = Stif_Offset_Columns
-                overwrite = Stif_Overwrite
-        End Select
         For Each xlCell In xlRange
             targetCell = xlCell.offset(offsetRow, offsetCol)
             '不覆写且目标不为空时直接跳过

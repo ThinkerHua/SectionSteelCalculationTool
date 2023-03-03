@@ -39,7 +39,7 @@
         AW_Offset_Columns = NumUD_AW_Columns.Value
         AW_Overwrite = CBox_AW_Overwrite.Checked
 
-        STIF_CTRLCODE = -CInt(CBox_Trunc.Checked) * TRUNCATE
+        STIF_CTRLCODE = -CBox_Trunc.Checked * TRUNCATE
         Stif_Offset_Rows = NumUD_Stif_Rows.Value
         Stif_Offset_Columns = NumUD_Stif_Columns.Value
         Stif_Overwrite = CBox_Stif_Overwrite.Checked
