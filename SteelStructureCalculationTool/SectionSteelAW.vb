@@ -1,6 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
 Module SectionSteelAreaWeight
-    Public Const _TESTFLAG = 1                  '测试代码控制符
+    Public Const _TESTFLAG = 0                  '测试代码控制符
 
     '面积、重量功能相关
     Public Const TYPE_AREA = 1                  '计算类型：面积
