@@ -36,6 +36,7 @@ Module SectionSteelAreaWeight
         Dim xlWorkbook As Object = Nothing  '工作薄对象
         'Dim xlSheet As Object = Nothing     '工作表对象
         Dim xlRange As Object = Nothing     '单元格区域
+        Dim newRange As Object = Nothing    '数据筛选后的新单元格区域
         Dim xlCell As Object = Nothing      '单元格
 
         Dim offsetRow As Integer = 0        '目标偏移行数
@@ -78,6 +79,10 @@ Module SectionSteelAreaWeight
             GoTo clean
         End If
         xlRange = xlApp.Selection
+        '只处理可见的、常量且数据为文本的单元格
+        '不能用xlRange.Count = xlRange.Cells.SpecialCells(12).SpecialCells(2,2).Count来判断
+        newRange = xlRange.Cells.SpecialCells(12).SpecialCells(2, 2)
+        If newRange Is Nothing Then GoTo clean
         On Error GoTo 0
 
         '测试用
@@ -86,9 +91,9 @@ Module SectionSteelAreaWeight
         If _TESTFLAG Then starttime = System.DateTime.Now
 
         '正式开始
-        xlApp.screenupdating = False
-        For Each xlCell In xlRange
-            targetCell = xlCell.offset(offsetRow, offsetCol)
+        xlApp.ScreenUpdating = False
+        For Each xlCell In newRange
+            targetCell = xlCell.Offset(offsetRow, offsetCol)
             '不覆写且目标不为空时直接跳过
             If (overwrite = 0) And (targetCell.value IsNot Nothing) Then Continue For
 
@@ -127,6 +132,6 @@ Module SectionSteelAreaWeight
 
 clean:
         '释放对象内存
-        targetCell = Nothing : xlCell = Nothing : xlRange = Nothing : xlWorkbook = Nothing : xlApp = Nothing
+        targetCell = Nothing : xlCell = Nothing : newRange = Nothing : xlRange = Nothing : xlWorkbook = Nothing : xlApp = Nothing
     End Sub
 End Module
