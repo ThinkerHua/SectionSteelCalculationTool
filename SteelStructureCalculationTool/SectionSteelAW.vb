@@ -81,8 +81,12 @@ Module SectionSteelAreaWeight
         xlRange = xlApp.Selection
         '只处理可见的、常量且数据为文本的单元格
         '不能用xlRange.Count = xlRange.Cells.SpecialCells(12).SpecialCells(2,2).Count来判断
-        newRange = xlRange.Cells.SpecialCells(12).SpecialCells(2, 2)
-        If newRange Is Nothing Then GoTo clean
+        If xlRange.count > 1 Then '当xlRange.Count = 1时，SpecialCells会在整个工作表中进行搜索
+            newRange = xlRange.Cells.SpecialCells(12).SpecialCells(2, 2)
+            If newRange Is Nothing Then GoTo clean
+        Else
+            newRange = xlRange
+        End If
         On Error GoTo 0
 
         '测试用
@@ -133,5 +137,6 @@ Module SectionSteelAreaWeight
 clean:
         '释放对象内存
         targetCell = Nothing : xlCell = Nothing : newRange = Nothing : xlRange = Nothing : xlWorkbook = Nothing : xlApp = Nothing
+        'GC.Collect()
     End Sub
 End Module
