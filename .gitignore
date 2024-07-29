@@ -396,3 +396,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.vs/SteelStructureCalculationTool/v16/.suo
+.vs/slnx.sqlite
+.vs/SteelStructureCalculationTool/v16/.suo
+.vs/SteelStructureCalculationTool/v17/.suo
+*.sqlite
+*.sqlite
+.vs/SteelStructureCalculationTool/v17/.suo
