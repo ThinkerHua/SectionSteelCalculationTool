@@ -1,3 +1,6 @@
+2024-07-30 SectionSteel.dll Ver2.0.1
+修复了一处BUG。
+==================================================
 2024-07-29 主程序Ver2.4.0; SectionSteel.dll Ver2.0.0;
 项目名称更改为"SectionSteelCalculationTool"，比原先的"SteelStructureCalculationTool"更符合功能。
 主程序和引用的dll文件均用C#重构，原先dll文件是单独的项目，现在做为子项目合并在同一下解决方案下。
