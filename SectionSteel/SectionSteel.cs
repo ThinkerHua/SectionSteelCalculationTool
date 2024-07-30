@@ -4080,11 +4080,11 @@ namespace SectionSteel {
 
                     break;
                 }
+
+                realSectionSteel.PIStyle = this.PIStyle;
             } catch(MismatchedProfileTextException) {
                 realSectionSteel = null;
             }
-
-            realSectionSteel.PIStyle = this.PIStyle;
         }
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             if(realSectionSteel == null)
