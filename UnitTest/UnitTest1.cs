@@ -39,6 +39,8 @@ namespace UnitTest {
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "HM244*175";
             ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "I_VAR_A600-300*300-300*12*14";
+            ShowInfo(sectionSteel);
         }
         [TestMethod]
         public void Test_HH() {

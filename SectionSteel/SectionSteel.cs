@@ -111,6 +111,10 @@ namespace SectionSteel {
         /// </summary>
         public static string H_6 => @"^B_WLD_H(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<b2>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t1>\d+\.?\d*)\*(?<t2>\d+\.?\d*)$";
         /// <summary>
+        /// 前置标识符为 I_VAR_A，后续参数形式为 h1-h2*b1-b2*s*t1。
+        /// </summary>
+        public static string H_7 => @"^I_VAR_A(?<h1>\d+\.?\d*)-(?<h2>\d+\.?\d*)\*(?<b1>\d+\.?\d*)-(?<b2>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t1>\d+\.?\d*)$";
+        /// <summary>
         /// 前置标识符为 HH，后续参数形式为 h1*b1*s1*t1[+h2*b2*s2*t2]。
         /// </summary>
         public static string HH_1 => @"^HH(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s1>\d+\.?\d*)\*(?<t1>\d+\.?\d*)"
@@ -334,7 +338,7 @@ namespace SectionSteel {
         /// 匹配任意标识符。
         /// </summary>
         public static string Classifier => @"^(?<classifier>"
-            + @"(B_WLD_A)|(B_WLD_H)|(B_WLD_K)|(H)|(HI)|(HM)|(HN)|(HP)|(HT)|(HW)|(PHI)|(WH)|(WI)|"
+            + @"(B_WLD_A)|(B_WLD_H)|(B_WLD_K)|(H)|(HI)|(HM)|(HN)|(HP)|(HT)|(HW)|(PHI)|(WH)|(WI)|(I_VAR_A)|"
             + @"(B_WLD_O)|(HH)|(T)|(TW)|(TM)|(TN)|(B_WLD_E)|(I)|(\[)|(C)|(\[\])|(\]\[)|(2\[)|(2C)|(∠)|(L)|(2∠)|(2L)|"
             + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RHSC)|"
             + @"(Y)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
@@ -345,6 +349,10 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.H_1"/></para>
     /// <para><see cref="Pattern_Collection.H_2"/></para>
     /// <para><see cref="Pattern_Collection.H_3"/></para>
+    /// <para><see cref="Pattern_Collection.H_4"/></para>
+    /// <para><see cref="Pattern_Collection.H_5"/></para>
+    /// <para><see cref="Pattern_Collection.H_6"/></para>
+    /// <para><see cref="Pattern_Collection.H_7"/></para>
     /// <para>当匹配到H3模式时，在国标截面特性表格中查找，同一型号名下有多项时按以下规则进行匹配：</para>
     /// <list type="number">
     ///     <item>
@@ -396,6 +404,8 @@ namespace SectionSteel {
                     match = Regex.Match(ProfileText, Pattern_Collection.H_5);
                 if(!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.H_6);
+                if(!match.Success)
+                    match = Regex.Match(ProfileText, Pattern_Collection.H_7);
                 if(match.Success) {
                     double.TryParse(match.Groups["h1"].Value, out h1);
                     double.TryParse(match.Groups["h2"].Value, out h2);
@@ -3926,7 +3936,7 @@ namespace SectionSteel {
         private PIStyleEnum _PIStyle;
         private ISectionSteel realSectionSteel;
         protected static Dictionary<string, string[]> classifierTable = new Dictionary<string, string[]> {
-            {"H", new string[] {"B_WLD_A","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI"}},
+            {"H", new string[] {"B_WLD_A","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI","I_VAR_A"}},
             {"HH", new string[] {"B_WLD_O","HH"}},
             {"T", new string[] {"T","TW","TM","TN","B_WLD_E"}},
             {"I", new string[] {"I"}},
