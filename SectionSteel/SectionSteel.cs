@@ -190,9 +190,9 @@ namespace SectionSteel {
         /// </summary>
         public static string L_BtB_1 => @"^2[∠L](?<h>\d+\.?\d*)(\*(?<b>\d+\.?\d*))?\*(?<t>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 2∠ 或 2L，后续参数形式为 h/b，以cm为单位。
+        /// 前置标识符为 2∠ 或 2L，后续参数形式为 h[/b]，以cm为单位。
         /// </summary>
-        public static string L_BtB_2 => @"^2[∠L](?<h>\d+\.?\d*)/(?<b>\d+\.?\d*)$";
+        public static string L_BtB_2 => @"^2[∠L](?<h>\d+\.?\d*)(/(?<b>\d+\.?\d*))?$";
         /// <summary>
         /// 前置标识符为 F 或 J 或 P 或 TUB 或 RHS 或 SHS 或 CFRHS，后续参数形式为 h1*t。
         /// </summary>
@@ -283,18 +283,26 @@ namespace SectionSteel {
         /// </summary>
         public static string CFO_ZJ_2 => @"^ZZ(?<h>\d+\.?\d*)-(?<t>\d+\.?\d*)-(?<c1>\d+\.?\d*)-(?<b1>\d+\.?\d*)(-(?<c2>\d+\.?\d*)-(?<b2>\d+\.?\d*))?$";
         /// <summary>
-        /// 前置标识符为 PL，后续参数形式为 t*b[*l]，可以使用"~"符号表示尺寸渐变（不应使用在厚度值上）。
-        /// <para>实际使用中，t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
+        /// 前置标识符为 PL，后续参数形式为 t*b[*l]。
+        /// <para>具体实现中 t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
+        /// <para>
+        ///     可以使用 '~' 符号表示尺寸渐变（只可以使用在 b, l 其中之一上）。
+        ///     虽然此匹配模式字符串对三个参数均可匹配到 '~' 符号，但在具体实现中将对不符合规则的行为进行屏蔽。
+        /// </para>
         /// </summary>
         public static string PL_1 => @"^PL(?<t>\d+\.?\d*(~\d+\.?\d*)?)\*(?<b>\d+\.?\d*(~\d+\.?\d*)?)(\*(?<l>\d+\.?\d*(~\d+\.?\d*)?))?$";
         /// <summary>
-        /// 前置标识符为 PLT，后续参数形式为 t*b*l，可以使用"~"符号表示尺寸渐变（不应使用在厚度值上）。
-        /// <para>实际使用中，t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
+        /// 前置标识符为 PLT，后续参数形式为 t*b*l。
+        /// <para>具体实现中 t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
+        /// <para>
+        ///     可以使用 '~' 符号表示尺寸渐变（只可以使用在 b, l 其中之一上）。
+        ///     虽然此匹配模式字符串对三个参数均可匹配到 '~' 符号，但在具体实现中将对不符合规则的行为进行屏蔽。
+        /// </para>
         /// </summary>
         public static string PL_T_1 => @"^PLT(?<t>\d+\.?\d*(~\d+\.?\d*)?)\*(?<b>\d+\.?\d*(~\d+\.?\d*)?)\*(?<l>\d+\.?\d*(~\d+\.?\d*)?)$";
         /// <summary>
         /// 前置标识符为 PLD 或 PLO，后续参数形式为 t*d。
-        /// <para>实际使用中，t、d 顺序无关，以其中较小值为 t，较大值为 d。</para>
+        /// <para>具体实现中，t、d 顺序无关，以其中较小值为 t，较大值为 d。</para>
         /// </summary>
         public static string PL_O_1 => @"^PL[DO](?<t>\d+\.?\d*)\*(?<d>\d+\.?\d*)";
         /// <summary>
@@ -421,11 +429,9 @@ namespace SectionSteel {
                     double.TryParse(match.Groups["t1"].Value, out t1);
                     double.TryParse(match.Groups["t2"].Value, out t2);
 
-                    if (h2 != 0 && h2 != h1
+                    if (!(h2 != 0 && h2 != h1
                         || b2 != 0 && b2 != b1
-                        || t2 != 0 && t2 != t1)
-                        ;
-                    else
+                        || t2 != 0 && t2 != t1))
                         data = GetGBData(new double[] { h1, b1, s, t1 });
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.H_3);
@@ -1916,8 +1922,7 @@ namespace SectionSteel {
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["t"].Value, out t);
 
-                    if (b == 0)
-                        b = h;
+                    if (b == 0) b = h;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b, t });
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.L_BtB_2);
@@ -1926,6 +1931,7 @@ namespace SectionSteel {
 
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
+                    if (b == 0) b = h;
                     h *= 10; b *= 10;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b });
                     if (data == null)
@@ -1960,19 +1966,34 @@ namespace SectionSteel {
             switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                formula = $"{h}*2";
-                if (exclude_topSurface)
-                    formula += $"+{b}*2";
-                else
-                    formula += $"+{b}*4";
+                if (b != h) {
+                    formula = $"{h}*2";
+                    if (exclude_topSurface)
+                        formula += $"+{b}*2";
+                    else
+                        formula += $"+{b}*4";
+                } else {
+                    if (exclude_topSurface)
+                        formula += $"{h}*4";
+                    else
+                        formula += $"{h}*6";
+                }
                 break;
             case FormulaAccuracyEnum.GBDATA:
                 if (data == null)
                     return formula;
 
                 formula = $"{data.Area}*2";
-                if (exclude_topSurface)
-                    formula += $"-{b}*2";
+                if (b != h) {
+                    formula += $"-{h}*2";
+                    if (exclude_topSurface)
+                        formula += $"-{b}*2";
+                } else {
+                    if (exclude_topSurface)
+                        formula += $"-{h}*4";
+                    else
+                        formula += $"-{h}*2";
+                }
                 break;
             default:
                 break;
@@ -3310,10 +3331,9 @@ namespace SectionSteel {
                 }
 
 
-                //  不应全部使用"~"符号，也不应对厚度值使用"~"符号
+                //  不应对 t 使用 '~' 符号，且 b 和 l 中只可以有一个使用 '~' 符号
+                //  虽然可以实现对全部参数使用 '~' 符号的支持，但没什么意义，禁止这样操作以免后续产生意想不到的情况
                 //  附带完成t, b, l的赋值
-                if (isVariable[0] == true && isVariable[1] == true && isVariable[2] == true)
-                    throw new MismatchedProfileTextException();
                 int minParameterIndex;
                 if (parameters[2] == 0) {
                     minParameterIndex = parameters.IndexOf(Math.Min(parameters[0], parameters[1]));
@@ -3326,8 +3346,16 @@ namespace SectionSteel {
                     parameters.Sort();
                     t = parameters[0]; b = parameters[1]; l = parameters[2];
                 }
-                if (isVariable[minParameterIndex])
+
+                if (isVariable[minParameterIndex]) {
+                    //  t 使用了 '~' 符号
                     throw new MismatchedProfileTextException();
+                } else {
+                    isVariable[minParameterIndex] = true;
+                    //  b, l 同时使用了 '~' 符号
+                    if (isVariable[0] && isVariable[1] && isVariable[2])
+                        throw new MismatchedProfileTextException();
+                }
 
 
                 t *= 0.001; b *= 0.001; l *= 0.001;
@@ -3481,10 +3509,9 @@ namespace SectionSteel {
                 }
 
 
-                //  不应全部使用"~"符号，也不应对厚度值使用"~"符号
+                //  不应对 t 使用 '~' 符号，且 b 和 l 中只可以有一个使用 '~' 符号
+                //  虽然可以实现对全部参数使用 '~' 符号的支持，但没什么意义，禁止这样操作以免后续产生意想不到的情况
                 //  附带完成t, b, l的赋值
-                if (isVariable[0] == true && isVariable[1] == true && isVariable[2] == true)
-                    throw new MismatchedProfileTextException();
                 int minParameterIndex;
                 if (parameters[2] == 0) {
                     minParameterIndex = parameters.IndexOf(Math.Min(parameters[0], parameters[1]));
@@ -3497,8 +3524,16 @@ namespace SectionSteel {
                     parameters.Sort();
                     t = parameters[0]; b = parameters[1]; l = parameters[2];
                 }
-                if (isVariable[minParameterIndex])
+
+                if (isVariable[minParameterIndex]) {
+                    //  t 使用了 '~' 符号
                     throw new MismatchedProfileTextException();
+                } else {
+                    isVariable[minParameterIndex] = true;
+                    //  b, l 同时使用了 '~' 符号
+                    if (isVariable[0] && isVariable[1] && isVariable[2])
+                        throw new MismatchedProfileTextException();
+                }
 
                 t *= 0.001; b *= 0.001; l *= 0.001;
             } catch (MismatchedProfileTextException) {
@@ -3608,11 +3643,7 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["t"].Value, out t);
                 double.TryParse(match.Groups["d"].Value, out d);
 
-                if (d < t) {
-                    double temp = d;
-                    d = t;
-                    t = temp;
-                }
+                if (d < t) { (t, d) = (d, t); }
 
                 t *= 0.001; d *= 0.001;
             } catch (MismatchedProfileTextException) {
@@ -3700,7 +3731,7 @@ namespace SectionSteel {
             public double num;//数量
             public ISectionSteel plate;//子板件
         }
-        private List<SubPlate> subPlates = new List<SubPlate>();
+        private readonly List<SubPlate> subPlates = new List<SubPlate>();
         public string ProfileText {
             get => _profileText;
             set {
@@ -3796,8 +3827,8 @@ namespace SectionSteel {
             string formula = string.Empty;
             if (subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
 
-            foreach(var subplate in subPlates) {
-                if(subplate.num == -1)
+            foreach (var subplate in subPlates) {
+                if (subplate.num == -1)
                     formula += $"-{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
                 else if (subplate.num < 0)
                     formula += $"{subplate.num}*{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
@@ -3879,7 +3910,7 @@ namespace SectionSteel {
                 var item = weights[i];
                 weights[i] = item.Remove(item.Length - value.Length, value.Length);
             }
-            for(i = 0; i < subPlates.Count; i++) {
+            for (i = 0; i < subPlates.Count; i++) {
                 if (subPlates[i].num == -1)
                     formula += $"-{weights[i]}";
                 else if (subPlates[i].num < 0)
@@ -3895,8 +3926,8 @@ namespace SectionSteel {
             return formula;
 
         NoIdenticalItems:
-            foreach(var subplate in subPlates) {
-                if(subplate.num == -1)
+            foreach (var subplate in subPlates) {
+                if (subplate.num == -1)
                     formula += $"-{subplate.plate.GetWeightFormula(accuracy)}";
                 if (subplate.num < 0)
                     formula += $"{subplate.num}*{subplate.plate.GetWeightFormula(accuracy)}";
