@@ -3796,10 +3796,8 @@ namespace SectionSteel {
             string formula = string.Empty;
             if (subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
 
-            foreach (var subplate in subPlates) {
-                if (subplate.num == -1)
-                    formula += $"-{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
-                else if (subplate.num < 0)
+            foreach(var subplate in subPlates) {
+                if(subplate.num < 0)
                     formula += $"{subplate.num}*{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
                 else if (subplate.num == 1)
                     formula += $"+{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
@@ -3879,10 +3877,8 @@ namespace SectionSteel {
                 var item = weights[i];
                 weights[i] = item.Remove(item.Length - value.Length, value.Length);
             }
-            for (i = 0; i < subPlates.Count; i++) {
-                if (subPlates[i].num == -1)
-                    formula += $"-{weights[i]}";
-                else if (subPlates[i].num < 0)
+            for(i = 0; i < subPlates.Count; i++) {
+                if(subPlates[i].num < 0)
                     formula += $"{subPlates[i].num}*{weights[i]}";
                 else if (subPlates[i].num == 1)
                     formula += $"+{weights[i]}";
@@ -3895,10 +3891,8 @@ namespace SectionSteel {
             return formula;
 
         NoIdenticalItems:
-            foreach (var subplate in subPlates) {
-                if (subplate.num == -1)
-                    formula += $"-{subplate.plate.GetWeightFormula(accuracy)}";
-                else if (subplate.num < 0)
+            foreach(var subplate in subPlates) {
+                if(subplate.num < 0)
                     formula += $"{subplate.num}*{subplate.plate.GetWeightFormula(accuracy)}";
                 else if (subplate.num == 1)
                     formula += $"+{subplate.plate.GetWeightFormula(accuracy)}";
