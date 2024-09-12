@@ -62,8 +62,9 @@ namespace SectionSteelCalculationTool {
             if (xlRange_new == null) return;
 
             option = GatheringInformation(sender);
-            sectionSteel = new SectionSteel.SectionSteel();
-            sectionSteel.PIStyle = option.PIStyle;
+            sectionSteel = new SectionSteel.SectionSteel {
+                PIStyle = option.PIStyle
+            };
 
             xlApp.ScreenUpdating = false;
             foreach (Range xlCell in xlRange_new) {
@@ -144,7 +145,7 @@ namespace SectionSteelCalculationTool {
             return option;
         }
 
-        private void cBox_AlwaysOnTop_CheckedChanged(object sender, EventArgs e) {
+        private void CBox_AlwaysOnTop_CheckedChanged(object sender, EventArgs e) {
             switch (cBox_AlwaysOnTop.Checked) {
             case true:
                 this.TopMost = true;
@@ -161,13 +162,13 @@ namespace SectionSteelCalculationTool {
             this.Text = System.Windows.Forms.Application.ProductName + " - Ver" + System.Windows.Forms.Application.ProductVersion;
         }
 
-        private void button_AW_Generate_Click(object sender, EventArgs e) {
+        private void Button_AW_Generate_Click(object sender, EventArgs e) {
             this.button_AW_Generate.Enabled = false;
             Generate(sender, e);
             this.button_AW_Generate.Enabled = true;
         }
 
-        private void button_STIF_Generate_Click(object sender, EventArgs e) {
+        private void Button_STIF_Generate_Click(object sender, EventArgs e) {
             this.button_STIF_Generate.Enabled = false;
             Generate(sender, e);
             this.button_STIF_Generate.Enabled = true;

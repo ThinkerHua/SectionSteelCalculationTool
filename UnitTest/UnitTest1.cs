@@ -185,6 +185,8 @@ namespace UnitTest {
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "PL14*400*500";
             ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "PL18*575*560-PLT18*50*280-PL18*50~382*280";
+            ShowInfo(sectionSteel);
         }
         [TestMethod]
         public void Test_SectionSteel() {
@@ -317,6 +319,8 @@ namespace UnitTest {
             sectionSteel.ProfileText = "2PL14*400*500-1.5PLT14*100.5*115+3PLO14*250";
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "PL14*400*500";
+            ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "PL18*575*560-PLT18*50*280-PL18*50~382*280";
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "SPHERE1000";
             sectionSteel.PIStyle = PIStyleEnum.NUM;

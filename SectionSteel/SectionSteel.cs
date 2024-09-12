@@ -9,7 +9,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 
 namespace SectionSteel {
-    public class MismatchedProfileTextException: Exception {
+    public class MismatchedProfileTextException : Exception {
 
     }
     public enum FormulaAccuracyEnum {
@@ -283,15 +283,15 @@ namespace SectionSteel {
         /// </summary>
         public static string CFO_ZJ_2 => @"^ZZ(?<h>\d+\.?\d*)-(?<t>\d+\.?\d*)-(?<c1>\d+\.?\d*)-(?<b1>\d+\.?\d*)(-(?<c2>\d+\.?\d*)-(?<b2>\d+\.?\d*))?$";
         /// <summary>
-        /// 前置标识符为 PL，后续参数形式为 t*b[*l]。
+        /// 前置标识符为 PL，后续参数形式为 t*b[*l]，可以使用"~"符号表示尺寸渐变（不应使用在厚度值上）。
         /// <para>实际使用中，t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
         /// </summary>
-        public static string PL_1 => @"^PL(?<t>\d+\.?\d*)\*(?<b>\d+\.?\d*)(\*(?<l>\d+\.?\d*))?$";
+        public static string PL_1 => @"^PL(?<t>\d+\.?\d*(~\d+\.?\d*)?)\*(?<b>\d+\.?\d*(~\d+\.?\d*)?)(\*(?<l>\d+\.?\d*(~\d+\.?\d*)?))?$";
         /// <summary>
-        /// 前置标识符为 PLT，后续参数形式为 t*b*l。
+        /// 前置标识符为 PLT，后续参数形式为 t*b*l，可以使用"~"符号表示尺寸渐变（不应使用在厚度值上）。
         /// <para>实际使用中，t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
         /// </summary>
-        public static string PL_T_1 => @"^PLT(?<t>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<l>\d+\.?\d*)$";
+        public static string PL_T_1 => @"^PLT(?<t>\d+\.?\d*(~\d+\.?\d*)?)\*(?<b>\d+\.?\d*(~\d+\.?\d*)?)\*(?<l>\d+\.?\d*(~\d+\.?\d*)?)$";
         /// <summary>
         /// 前置标识符为 PLD 或 PLO，后续参数形式为 t*d。
         /// <para>实际使用中，t、d 顺序无关，以其中较小值为 t，较大值为 d。</para>
@@ -304,8 +304,10 @@ namespace SectionSteel {
         /// <para>实际使用中，应保持各项参数中的 t 一致。</para>
         /// <para>例如：2PL14*400*500-1.5PLT14*100.5*115+3PLO14*250。</para>
         /// </summary>
-        public static string PL_CMP_1 => @"^(\d+\.?\d*)?((PLT?(\d+\.?\d*)\*(\d+\.?\d*)\*(\d+\.?\d*))|(PL[DO](\d+\.?\d*)\*(\d+\.?\d*)))"
-                                    + @"([+-](\d+\.?\d*)?((PLT?(\d+\.?\d*)\*(\d+\.?\d*)\*(\d+\.?\d*))|(PL[DO](\d+\.?\d*)\*(\d+\.?\d*))))*$";
+        public static string PL_CMP_1 => @"^(\d+\.?\d*)?((PLT?(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?))"
+                                        + @"|(PL[DO](\d+\.?\d*)\*(\d+\.?\d*)))"
+                                        + @"([+-](\d+\.?\d*)?((PLT?(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?))"
+                                        + @"|(PL[DO](\d+\.?\d*)\*(\d+\.?\d*))))*$";
         /// <summary>
         /// <see cref="Pattern_Collection.PL_CMP_1"/>的子项。由两个分组合成：
         /// <list type="bullet">
@@ -313,7 +315,7 @@ namespace SectionSteel {
         ///     <item><b>main: </b>PLt*b*l。参见<see cref="Pattern_Collection.PL_1"/>。</item>
         /// </list>
         /// </summary>
-        public static string PL_CMP_SUB_PL => @"^(?<num>-?(\d+\.?\d*)?)(?<main>PL\d+\.?\d*\*\d+\.?\d*\*\d+\.?\d*)$";
+        public static string PL_CMP_SUB_PL => @"^(?<num>-?(\d+\.?\d*)?)(?<main>PL\d+\.?\d*(~\d+\.?\d*)?\*\d+\.?\d*(~\d+\.?\d*)?\*\d+\.?\d*(~\d+\.?\d*)?)$";
         /// <summary>
         /// <see cref="Pattern_Collection.PL_CMP_1"/>的子项。由两个分组合成：
         /// <list type="bullet">
@@ -321,7 +323,7 @@ namespace SectionSteel {
         ///     <item><b>main: </b>PLTt*b*l。参见<see cref="Pattern_Collection.PL_T_1"/>。</item>
         /// </list>
         /// </summary>
-        public static string PL_CMP_SUB_PLT => @"^(?<num>-?(\d+\.?\d*)?)(?<main>PLT\d+\.?\d*\*\d+\.?\d*\*\d+\.?\d*)$";
+        public static string PL_CMP_SUB_PLT => @"^(?<num>-?(\d+\.?\d*)?)(?<main>PLT\d+\.?\d*(~\d+\.?\d*)?\*\d+\.?\d*(~\d+\.?\d*)?\*\d+\.?\d*(~\d+\.?\d*)?)$";
         /// <summary>
         /// <see cref="Pattern_Collection.PL_CMP_1"/>的子项。由两个分组合成：
         /// <list type="bullet">
@@ -343,6 +345,10 @@ namespace SectionSteel {
             + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RHSC)|"
             + @"(Y)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
             + @"(-?(\d+\.?\d*)?PL)|(-?(\d+\.?\d*)?PLD)|(-?(\d+\.?\d*)?PLO)|(-?(\d+\.?\d*)?PLT)|(SPHERE))\d";
+        /// <summary>
+        /// 变截面，形式为 v1~v2，表示尺寸从v1变化到v2。
+        /// </summary>
+        public static string VariableCrossSection => @"^(?<v1>-?\d+\.?\d*)~(?<v2>-?\d+\.?\d*)$";
     }
     /// <summary>
     /// <para>H型钢。在以下模式中尝试匹配：</para>
@@ -369,7 +375,7 @@ namespace SectionSteel {
     ///     </item>
     /// </list>
     /// </summary>
-    public class SectionSteel_H: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_H : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private string type;
         private double h1, h2, b1, b2, s, t1, t2;
@@ -392,21 +398,21 @@ namespace SectionSteel {
             h1 = h2 = b1 = b2 = s = t1 = t2 = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.H_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.H_2);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.H_4);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.H_5);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.H_6);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.H_7);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h1"].Value, out h1);
                     double.TryParse(match.Groups["h2"].Value, out h2);
                     double.TryParse(match.Groups["b1"].Value, out b1);
@@ -415,24 +421,26 @@ namespace SectionSteel {
                     double.TryParse(match.Groups["t1"].Value, out t1);
                     double.TryParse(match.Groups["t2"].Value, out t2);
 
-                    if(h2 != 0 && h2 != h1 || b2 != 0 && b2 != b1 || t2 != 0 && t2 != t1)
+                    if (h2 != 0 && h2 != h1
+                        || b2 != 0 && b2 != b1
+                        || t2 != 0 && t2 != t1)
                         ;
                     else
                         data = GetGBData(new double[] { h1, b1, s, t1 });
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.H_3);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
                     type = match.Groups["TYPE"].Value;
                     string name = match.Groups["H"] + "*" + match.Groups["B"];
                     data = GetGBData(name);
-                    if(data == null) {
+                    if (data == null) {
                         double.TryParse(match.Groups["H"].Value, out double H);
                         double.TryParse(match.Groups["B"].Value, out double B);
                         data = GetGBData(new double[] { H, B });
                     }
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h1 = data.Parameters[0];
@@ -441,12 +449,12 @@ namespace SectionSteel {
                     t1 = data.Parameters[3];
                 }
 
-                if(h2 == 0) h2 = h1;
-                if(b2 == 0) b2 = b1;
-                if(t2 == 0) t2 = t1;
+                if (h2 == 0) h2 = h1;
+                if (b2 == 0) b2 = b1;
+                if (t2 == 0) t2 = t1;
 
                 h1 *= 0.001; h2 *= 0.001; b1 *= 0.001; b2 *= 0.001; s *= 0.001; t1 *= 0.001; t2 *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 type = null;
                 h1 = h2 = b1 = b2 = s = t1 = t2 = 0;
                 data = null;
@@ -464,9 +472,9 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public virtual string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
                 //byte key = 0b0000;
                 //if (h2 != 0 && h2 != h1)
@@ -504,19 +512,19 @@ namespace SectionSteel {
                 //default:
                 //    break;
                 //}
-                if(h2 != h1) {
+                if (h2 != h1) {
                     formula = h1 + "+" + h2;
                 } else {
                     formula = h1 + "*2";
                 }
-                if(b2 != b1) {
-                    if(exclude_topSurface) {
+                if (b2 != b1) {
+                    if (exclude_topSurface) {
                         formula += "+" + b1 + "+" + b2 + "*2";
                     } else {
                         formula += "+" + b1 + "*2+" + b2 + "*2";
                     }
                 } else {
-                    if(exclude_topSurface) {
+                    if (exclude_topSurface) {
                         formula += "+" + b1 + "*3";
                     } else {
                         formula += "+" + b1 + "*4";
@@ -528,10 +536,10 @@ namespace SectionSteel {
                 formula += $"-{s}*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data == null)
+                if (data == null)
                     break;
                 formula = $"{data.Area}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b1}";
                 break;
             default:
@@ -550,9 +558,9 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public virtual string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 //byte key = 0b0000;
@@ -591,25 +599,25 @@ namespace SectionSteel {
                 //default:
                 //    break;
                 //}
-                if(h2 != h1) {
+                if (h2 != h1) {
                     formula = "((" + (h1 + h2) / 2;
                 } else {
                     formula = "((" + h1;
                 }
-                if(t2 != t1) {
+                if (t2 != t1) {
                     formula += "-" + t1 + "-" + t2;
                 } else {
                     formula += "-" + t1 + "*2";
                 }
                 formula += ")*" + s;
-                if(b2 != b1) {
-                    if(t2 != t1) {
+                if (b2 != b1) {
+                    if (t2 != t1) {
                         formula += "+" + b1 + "*" + t1 + "+" + b2 + "*" + t2 + ")";
                     } else {
                         formula += "+(" + b1 + "+" + b2 + ")*" + t1 + ")";
                     }
                 } else {
-                    if(t2 != t1) {
+                    if (t2 != t1) {
                         formula += "+" + b1 + "*(" + t1 + "+" + t2 + "))";
                     } else {
                         formula += "+" + b1 + "*" + t1 + "*2)";
@@ -618,7 +626,7 @@ namespace SectionSteel {
                 formula += "*" + GBData.DENSITY;
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}";
                 break;
             default:
@@ -630,14 +638,14 @@ namespace SectionSteel {
 
         public virtual string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h1 == 0) return stifProfileText;
+            if (h1 == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = ((b1 + b2) * 0.5 - s) * 0.5;
             l = (h1 + h2) * 0.5 - t1 - t2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -648,7 +656,7 @@ namespace SectionSteel {
         }
         private GBDataBase GetGBData(string byName) {
             GBDataBase data;
-            switch(type) {
+            switch (type) {
             case "HW":
                 data = GBData.SearchGBData(GBData.HW, byName);
                 break;
@@ -664,11 +672,11 @@ namespace SectionSteel {
             case "H":
             default:
                 data = GBData.SearchGBData(GBData.HW, byName);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.HM, byName);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.HN, byName);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.HT, byName);
                 break;
             }
@@ -676,7 +684,7 @@ namespace SectionSteel {
         }
         private GBDataBase GetGBData(double[] byParameters) {
             GBDataBase data;
-            switch(type) {
+            switch (type) {
             case "HW":
                 data = GBData.SearchGBData(GBData.HW, byParameters);
                 break;
@@ -692,11 +700,11 @@ namespace SectionSteel {
             case "H":
             default:
                 data = GBData.SearchGBData(GBData.HW, byParameters);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.HM, byParameters);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.HN, byParameters);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.HT, byParameters);
                 break;
             }
@@ -708,7 +716,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.HH_1"/></para>
     /// <para><see cref="Pattern_Collection.HH_2"/></para>
     /// </summary>
-    public class SectionSteel_HH: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_HH : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h1, h2, b1, b2, s1, s2, t1, t2;
         private GBDataBase data1, data2;
@@ -730,13 +738,13 @@ namespace SectionSteel {
             h1 = h2 = b1 = b2 = s1 = s2 = t1 = t2 = 0;
             data1 = data2 = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.HH_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.HH_2);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
                 double.TryParse(match.Groups["h1"].Value, out h1);
                 double.TryParse(match.Groups["b1"].Value, out b1);
@@ -749,10 +757,10 @@ namespace SectionSteel {
 
                 double[] parameters1 = { h1, b1, s1, t1 };
                 data1 = GetGBData(parameters1);
-                if(h2 == 0 && b2 == 0 && s2 == 0 && t2 == 0) {
+                if (h2 == 0 && b2 == 0 && s2 == 0 && t2 == 0) {
                     h2 = h1; b2 = b1; s2 = s1; t2 = t1;
                 }
-                if(h2 == h1 && b2 == b1 && s2 == s1 && t2 == t1)
+                if (h2 == h1 && b2 == b1 && s2 == s1 && t2 == t1)
                     data2 = data1;
                 else {
                     double[] parameters2 = { h2, b2, s2, t2 };
@@ -761,7 +769,7 @@ namespace SectionSteel {
 
                 h1 *= 0.001; b1 *= 0.001; s1 *= 0.001; t1 *= 0.001;
                 h2 *= 0.001; b2 *= 0.001; s2 *= 0.001; t2 *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h1 = h2 = b1 = b2 = s1 = s2 = t1 = t2 = 0;
                 //data1 = data2 = null;
             }
@@ -778,23 +786,23 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
-                if(h2 != h1) {
+                if (h2 != h1) {
                     formula = h1 + "*2+" + h2 + "*2+";
                 } else {
                     formula = h1 + "*4+";
                 }
-                if(b2 != b1) {
-                    if(exclude_topSurface) {
+                if (b2 != b1) {
+                    if (exclude_topSurface) {
                         formula += b1 + "*3+" + b2 + "*4";
                     } else {
                         formula += "(" + b1 + b2 + ")*4";
                     }
                 } else {
-                    if(exclude_topSurface) {
+                    if (exclude_topSurface) {
                         formula += b1 + "*7";
                     } else {
                         formula += b1 + "*8";
@@ -803,26 +811,26 @@ namespace SectionSteel {
                 break;
             case FormulaAccuracyEnum.PRECISELY:
                 formula = this.GetAreaFormula(FormulaAccuracyEnum.ROUGHLY, exclude_topSurface);
-                if(s2 != s1) {
+                if (s2 != s1) {
                     formula += "-" + s1 + "*4-" + s2 + "*4";
                 } else {
                     formula += "-" + s1 + "*8";
                 }
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data2 == null || data1 == null)
+                if (data2 == null || data1 == null)
                     break;
-                if(data2.Equals(data1)) {
+                if (data2.Equals(data1)) {
                     formula = data1.Area + "*2";
                 } else {
                     formula = data1.Area + "+" + data2.Area;
                 }
-                if(s2 != s1) {
+                if (s2 != s1) {
                     formula += "-" + s1 + "*2-" + s2 + "*2";
                 } else {
                     formula += "-" + s1 + "*4";
                 }
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += "-" + b1;
                 break;
             default:
@@ -834,14 +842,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h1 == 0) return stifProfileText;
+            if (h1 == 0) return stifProfileText;
 
             double t, b, l;
             t = Math.Max(s1, s2);
             b = (h2 - t2 * 2 - s1) * 0.5;
             l = (h1 - t1 * 2 - s2) * 0.5;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -860,16 +868,16 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 != h1) {
-                    if(s2 != s1) {
+                if (h2 != h1) {
+                    if (s2 != s1) {
                         formula = "((" + h1 + "-" + t1 + "*2)*" + s1 + "+(" + h2 + "-" + t2 + "*2)*" + s2;
                     } else {
-                        if(t2 != t1) {
+                        if (t2 != t1) {
                             formula = "((" + h1 + "-" + t1 + "*2+" + h2 + "-" + t2 + "*2)*" + s1;
                         } else {
                             formula = "((" + h1 + "+" + h2 + "-" + t1 + "*4)*" + s1;
@@ -877,35 +885,35 @@ namespace SectionSteel {
                     }
                 } else {
                     formula = "((" + h1;
-                    if(t2 != t1) {
+                    if (t2 != t1) {
                         formula += "-" + t1 + "-" + t2 + ")*";
-                        if(s2 != s1) {
+                        if (s2 != s1) {
                             formula += "(" + s1 + "+" + s2 + ")";
                         } else {
                             formula += s1 + "*2";
                         }
                     } else {
                         formula += "-" + t1 + "*2)*";
-                        if(s2 != s1) {
+                        if (s2 != s1) {
                             formula += "(" + s1 + "+" + s2 + ")";
                         } else {
                             formula += s1 + "*2";
                         }
                     }
                 }
-                if(s2 != s1) {
+                if (s2 != s1) {
                     formula += "-" + s1 + "*" + s2;
                 } else {
                     formula += "-" + s1 + "*" + s1;
                 }
-                if(b2 != b1) {
-                    if(t2 != t1) {
+                if (b2 != b1) {
+                    if (t2 != t1) {
                         formula += "+(" + b1 + "*" + t1 + "+" + b2 + "*" + t2 + ")*2)";
                     } else {
                         formula += "+(" + b1 + "+" + b2 + ")*" + t1 + "*2)";
                     }
                 } else {
-                    if(t2 != t1) {
+                    if (t2 != t1) {
                         formula += "+" + b1 + "*(" + t1 + "+" + t2 + ")*2)";
                     } else {
                         formula += "+" + b1 + "*" + t1 + "*4)";
@@ -914,14 +922,14 @@ namespace SectionSteel {
                 formula += "*" + GBData.DENSITY;
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data2 == null || data1 == null)
+                if (data2 == null || data1 == null)
                     break;
-                if(data2.Equals(data1)) {
+                if (data2.Equals(data1)) {
                     formula = data1.Weight + "*2";
                 } else {
                     formula = data1.Weight + "+" + data2.Weight;
                 }
-                if(s2 != s1) {
+                if (s2 != s1) {
                     formula += "-" + s1 + "*" + s2 + "*" + GBData.DENSITY;
                 } else {
                     formula += "-" + s1 + "*" + s1 + "*" + GBData.DENSITY;
@@ -935,11 +943,11 @@ namespace SectionSteel {
         private GBDataBase GetGBData(double[] byParameters) {
             GBDataBase data;
             data = GBData.SearchGBData(GBData.HW, byParameters);
-            if(data == null)
+            if (data == null)
                 data = GBData.SearchGBData(GBData.HM, byParameters);
-            if(data == null)
+            if (data == null)
                 data = GBData.SearchGBData(GBData.HN, byParameters);
-            if(data == null)
+            if (data == null)
                 data = GBData.SearchGBData(GBData.HT, byParameters);
             return data;
         }
@@ -951,7 +959,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.T_3"/></para>
     /// <para>当匹配到T3模式时，在国标截面特性表格中查找，同一型号名下有多项时按最接近项匹配。</para>
     /// </summary>
-    public class SectionSteel_T: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_T : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private string type;
         private double h1, h2, b, s, t;
@@ -975,39 +983,39 @@ namespace SectionSteel {
             h1 = h2 = b = s = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.T_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.T_2);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.T_4);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h1"].Value, out h1);
                     double.TryParse(match.Groups["h2"].Value, out h2);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["s"].Value, out s);
                     double.TryParse(match.Groups["t"].Value, out t);
 
-                    if(h2 == 0 || h2 == h1) {
+                    if (h2 == 0 || h2 == h1) {
                         double[] parameters = { h1, b, s, t };
                         data = GetGBData(parameters);
                     }
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.T_3);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
                     type = match.Groups["TYPE"].Value;
                     string name = match.Groups["H"].Value + "*" + match.Groups["B"].Value;
                     data = GetGBData(name);
-                    if(data == null) {
+                    if (data == null) {
                         double.TryParse(match.Groups["H"].Value, out double H);
                         double.TryParse(match.Groups["B"].Value, out double B);
                         data = GetGBData(new double[] { H, B });
                     }
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h1 = data.Parameters[0];
@@ -1016,9 +1024,9 @@ namespace SectionSteel {
                     t = data.Parameters[3];
                 }
 
-                if(h2 == 0) h2 = h1;
+                if (h2 == 0) h2 = h1;
                 h1 *= 0.001; h2 *= 0.001; b *= 0.001; s *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 type = null;
                 h1 = h2 = b = s = t = 0;
                 data = null;
@@ -1037,25 +1045,25 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 != h1) {
+                if (h2 != h1) {
                     formula = $"{(h1 + h2) * 0.5}";
                 } else {
                     formula = $"{h1}";
                 }
                 formula += $"*2+{b}";
-                if(!exclude_topSurface)
+                if (!exclude_topSurface)
                     formula += $"*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data == null)
+                if (data == null)
                     break;
                 formula = $"{data.Area}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b}";
                 break;
             default:
@@ -1067,14 +1075,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h1 == 0) return stifProfileText;
+            if (h1 == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = (this.b - s) * 0.5;
             l = (h1 + h2) * 0.5 - this.t;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -1090,19 +1098,19 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 != h1) {
+                if (h2 != h1) {
                     formula = $"(({(h1 + h2) * 0.5}-{t})*{s}+{b}*{t})*{GBData.DENSITY}";
                 } else {
                     formula = $"(({h1}-{t})*{s}+{b}*{t})*{GBData.DENSITY}";
                 }
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}";
                 break;
             default:
@@ -1113,7 +1121,7 @@ namespace SectionSteel {
         }
         private GBDataBase GetGBData(string byName) {
             GBDataBase data;
-            switch(type) {
+            switch (type) {
             case "TW":
                 data = GBData.SearchGBData(GBData.TW, byName);
                 break;
@@ -1126,9 +1134,9 @@ namespace SectionSteel {
             case "T":
             default:
                 data = GBData.SearchGBData(GBData.TW, byName);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.TM, byName);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.TN, byName);
                 break;
             }
@@ -1136,7 +1144,7 @@ namespace SectionSteel {
         }
         private GBDataBase GetGBData(double[] byParameters) {
             GBDataBase data;
-            switch(type) {
+            switch (type) {
             case "TW":
                 data = GBData.SearchGBData(GBData.TW, byParameters);
                 break;
@@ -1149,9 +1157,9 @@ namespace SectionSteel {
             case "T":
             default:
                 data = GBData.SearchGBData(GBData.TW, byParameters);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.TM, byParameters);
-                if(data == null)
+                if (data == null)
                     data = GBData.SearchGBData(GBData.TN, byParameters);
                 break;
             }
@@ -1165,7 +1173,7 @@ namespace SectionSteel {
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>I2模式下，当型号大于等于20号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
-    public class SectionSteel_I: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_I : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b, s, t;
         private GBDataBase data;
@@ -1187,34 +1195,33 @@ namespace SectionSteel {
             h = b = s = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.I_1);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["s"].Value, out s);
                     double[] parameters = { h, b, s };
                     data = GBData.SearchGBData(GBData.I, parameters);
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     t = data.Parameters[3];
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.I_2);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
-                    double code;
                     string name, suffix;
-                    double.TryParse(match.Groups["CODE"].Value, out code);
+                    double.TryParse(match.Groups["CODE"].Value, out double code);
                     suffix = match.Groups["SUFFIX"].Value;
                     name = match.Groups["NAME"].Value;
-                    if(code >= 20 && string.IsNullOrEmpty(suffix))
+                    if (code >= 20 && string.IsNullOrEmpty(suffix))
                         name += "a";
                     data = GBData.SearchGBData(GBData.I, name);
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h = data.Parameters[0];
@@ -1224,7 +1231,7 @@ namespace SectionSteel {
                 }
 
                 h *= 0.001; b *= 0.001; s *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = s = b = t = 0;
                 data = null;
             }
@@ -1241,12 +1248,12 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
                 formula = $"{h}*2+{b}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"*3";
                 else
                     formula += $"*4";
@@ -1258,7 +1265,7 @@ namespace SectionSteel {
             case FormulaAccuracyEnum.GBDATA:
                 //构造成功必定给data字段分配值
                 formula = $"{data.Area}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b}";
                 break;
             default:
@@ -1270,14 +1277,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h == 0) return stifProfileText;
+            if (h == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = (this.b - s) * 0.5;
             l = h - this.t * 2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -1297,7 +1304,7 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(data != null)
+            if (data != null)
                 formula = $"{data.Weight}";
 
             return formula;
@@ -1310,7 +1317,7 @@ namespace SectionSteel {
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>CHAN_2模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
-    public class SectionSteel_CHAN: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CHAN : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b, s, t;
         private GBDataBase data;
@@ -1332,35 +1339,34 @@ namespace SectionSteel {
             h = b = s = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CHAN_1);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["s"].Value, out s);
                     double[] parameters = { h, b, s };
                     data = GBData.SearchGBData(GBData.CHAN, parameters);
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     t = data.Parameters[3];
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.CHAN_2);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
-                    double code;
                     string name, suffix;
-                    double.TryParse(match.Groups["CODE"].Value, out code);
+                    double.TryParse(match.Groups["CODE"].Value, out double code);
                     suffix = match.Groups["SUFFIX"].Value;
                     name = match.Groups["NAME"].Value;
-                    if(code >= 14 && string.IsNullOrEmpty(suffix))
+                    if (code >= 14 && string.IsNullOrEmpty(suffix))
                         name += "a";
 
                     data = GBData.SearchGBData(GBData.CHAN, name);
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h = data.Parameters[0];
@@ -1370,7 +1376,7 @@ namespace SectionSteel {
                 }
 
                 h *= 0.001; b *= 0.001; s *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b = s = t = 0;
             }
         }
@@ -1386,12 +1392,12 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
                 formula = $"{h}*2+{b}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += "*3";
                 else
                     formula += "*4";
@@ -1401,11 +1407,11 @@ namespace SectionSteel {
                 formula += $"-{s}*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data == null)
+                if (data == null)
                     return formula;
 
                 formula = $"{data.Area}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b}";
                 break;
             default:
@@ -1417,14 +1423,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h == 0) return stifProfileText;
+            if (h == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = this.b - s;
             l = h - this.t * 2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -1444,7 +1450,7 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(data != null)
+            if (data != null)
                 formula = $"{data.Weight}";
 
             return formula;
@@ -1457,7 +1463,7 @@ namespace SectionSteel {
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>CHAN_MtM_2模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
-    public class SectionSteel_CHAN_MtM: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CHAN_MtM : SectionSteelBase, ISectionSteel {
         private string _profileText;
         double h, b, s, t;
         GBDataBase data;
@@ -1479,36 +1485,35 @@ namespace SectionSteel {
             h = b = s = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CHAN_MtM_1);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["s"].Value, out s);
 
                     data = GBData.SearchGBData(GBData.CHAN, new double[] { h, b, s });
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     t = data.Parameters[3];
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.CHAN_MtM_2);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
-                    double code;
                     string name, suffix;
-                    double.TryParse(match.Groups["CODE"].Value, out code);
+                    double.TryParse(match.Groups["CODE"].Value, out double code);
                     suffix = match.Groups["SUFFIX"].Value;
                     name = match.Groups["NAME"].Value;
 
-                    if(code >= 14 && string.IsNullOrEmpty(suffix))
+                    if (code >= 14 && string.IsNullOrEmpty(suffix))
                         name += "a";
 
                     data = GBData.SearchGBData(GBData.CHAN, name);
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h = data.Parameters[0];
@@ -1518,7 +1523,7 @@ namespace SectionSteel {
                 }
 
                 h *= 0.001; b *= 0.001; s *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b = t = 0;
                 data = null;
             }
@@ -1536,10 +1541,10 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
             formula = $"{h}*2+{b}";
-            if(exclude_topSurface)
+            if (exclude_topSurface)
                 formula += "*2";
             else
                 formula += "*4";
@@ -1549,14 +1554,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h == 0) return stifProfileText;
+            if (h == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = (this.b - s) * 2;
             l = h - this.t * 2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -1577,7 +1582,7 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(data != null)
+            if (data != null)
                 formula = $"{data.Weight}*2";
 
             return formula;
@@ -1590,7 +1595,7 @@ namespace SectionSteel {
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>CHAN_BtB_2模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
-    public class SectionSteel_CHAN_BtB: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CHAN_BtB : SectionSteelBase, ISectionSteel {
         private string _profileText;
         double h, b, s, t;
         GBDataBase data;
@@ -1612,36 +1617,35 @@ namespace SectionSteel {
             h = b = s = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CHAN_BtB_1);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["s"].Value, out s);
 
                     data = GBData.SearchGBData(GBData.CHAN, new double[] { h, b, s });
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     t = data.Parameters[3];
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.CHAN_BtB_2);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
-                    double code;
                     string name, suffix;
-                    double.TryParse(match.Groups["CODE"].Value, out code);
+                    double.TryParse(match.Groups["CODE"].Value, out double code);
                     name = match.Groups["NAME"].Value;
                     suffix = match.Groups["SUFFIX"].Value;
 
-                    if(code >= 14 && string.IsNullOrEmpty(suffix))
+                    if (code >= 14 && string.IsNullOrEmpty(suffix))
                         name += "a";
 
                     data = GBData.SearchGBData(GBData.CHAN, name);
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h = data.Parameters[0];
@@ -1651,7 +1655,7 @@ namespace SectionSteel {
                 }
 
                 h *= 0.001; b *= 0.001; s *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b = s = t = 0;
                 data = null;
             }
@@ -1668,12 +1672,12 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
                 formula = $"{h}*2+{b}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += "*6";
                 else
                     formula += "*8";
@@ -1683,10 +1687,10 @@ namespace SectionSteel {
                 formula += $"-{s}*4";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data == null)
+                if (data == null)
                     break;
                 formula = $"{data.Area}*2-{h}*2";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b}*2";
                 break;
             default:
@@ -1698,14 +1702,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h == 0) return stifProfileText;
+            if (h == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = this.b - s;
             l = h - this.t * 2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -1726,7 +1730,7 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(data != null)
+            if (data != null)
                 formula = $"{data.Weight}*2";
 
             return formula;
@@ -1738,7 +1742,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.L_2"/></para>
     /// <para>当匹配到L2模式时，在国标截面特性表格中查找，同一型号名下按第一个进行匹配。</para>
     /// </summary>
-    public class SectionSteel_L: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_L : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b, t;
         private GBDataBase data;
@@ -1760,28 +1764,28 @@ namespace SectionSteel {
             h = b = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.L_1);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["t"].Value, out t);
 
-                    if(b == 0)
+                    if (b == 0)
                         b = h;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b, t });
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.L_2);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     h *= 10; b *= 10;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b });
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h = data.Parameters[0];
@@ -1790,7 +1794,7 @@ namespace SectionSteel {
                 }
 
                 h *= 0.001; b *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b = t = 0;
                 data = null;
             }
@@ -1808,29 +1812,29 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(b != h) {
+                if (b != h) {
                     formula = $"{h}*2+{b}";
-                    if(!exclude_topSurface)
+                    if (!exclude_topSurface)
                         formula += $"*2";
                 } else {
                     formula = $"{h}";
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += $"*3";
                     else
                         formula += $"*4";
                 }
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data == null)
+                if (data == null)
                     return formula;
 
                 formula = $"{data.Area}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b}";
                 break;
             default:
@@ -1842,14 +1846,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h == 0) return stifProfileText;
+            if (h == 0) return stifProfileText;
 
             double t, b, l;
             t = this.t;
             b = this.b - this.t;
             l = h - this.t;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -1869,7 +1873,7 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(data != null)
+            if (data != null)
                 formula = $"{data.Weight}";
 
             return formula;
@@ -1881,7 +1885,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.L_BtB_2"/></para>
     /// <para>当匹配到L_BtB_2模式时，在国标截面特性表格中查找，同一型号名下按第一个进行匹配。</para>
     /// </summary>
-    public class SectionSteel_L_BtB: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_L_BtB : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b, t;
         private GBDataBase data;
@@ -1903,28 +1907,28 @@ namespace SectionSteel {
             h = b = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.L_BtB_1);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     double.TryParse(match.Groups["t"].Value, out t);
 
-                    if(b == 0)
+                    if (b == 0)
                         b = h;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b, t });
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.L_BtB_2);
-                    if(!match.Success)
+                    if (!match.Success)
                         throw new MismatchedProfileTextException();
 
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
                     h *= 10; b *= 10;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b });
-                    if(data == null)
+                    if (data == null)
                         throw new MismatchedProfileTextException();
 
                     h = data.Parameters[0];
@@ -1933,7 +1937,7 @@ namespace SectionSteel {
                 }
 
                 h *= 0.001; b *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b = t = 0;
                 data = null;
             }
@@ -1951,23 +1955,23 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 formula = $"{h}*2";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"+{b}*2";
                 else
                     formula += $"+{b}*4";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data == null)
+                if (data == null)
                     return formula;
 
                 formula = $"{data.Area}*2";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"-{b}*2";
                 break;
             default:
@@ -1979,14 +1983,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h == 0) return stifProfileText;
+            if (h == 0) return stifProfileText;
 
             double t, b, l;
             t = this.t;
             b = this.b - this.t;
             l = h - this.t;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -2006,7 +2010,7 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(data != null)
+            if (data != null)
                 formula = $"{data.Weight}*2";
 
             return formula;
@@ -2018,7 +2022,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.CFH_J_2"/></para>
     /// <para><see cref="Pattern_Collection.CFH_J_3"/></para>
     /// </summary>
-    public class SectionSteel_CFH_J: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CFH_J : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h1, b1, h2, b2, t;
         GBDataBase data;
@@ -2040,15 +2044,15 @@ namespace SectionSteel {
             h1 = b1 = h2 = b2 = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CFH_J_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CFH_J_2);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CFH_J_3);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["h1"].Value, out h1);
@@ -2057,15 +2061,15 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["b2"].Value, out b2);
                 double.TryParse(match.Groups["t"].Value, out t);
 
-                if(b1 == 0) b1 = h1;
-                if(h2 == 0) h2 = h1;
-                if(b2 == 0) b2 = b1;
+                if (b1 == 0) b1 = h1;
+                if (h2 == 0) h2 = h1;
+                if (b2 == 0) b2 = b1;
 
-                if(h2 == h1 && b2 == b1)
+                if (h2 == h1 && b2 == b1)
                     data = GBData.SearchGBData(GBData.CFH_J, new double[] { h1, b1, t });
 
                 h1 *= 0.001; b1 *= 0.001; h2 *= 0.001; b2 *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h1 = b1 = h2 = b2 = t = 0;
                 data = null;
             }
@@ -2083,23 +2087,23 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 != h1)
+                if (h2 != h1)
                     formula = $"{h1}+{h2}";
                 else
                     formula = $"{h1}*2";
 
-                if(b2 != b1) {
-                    if(exclude_topSurface)
+                if (b2 != b1) {
+                    if (exclude_topSurface)
                         formula += $"+{(b1 + b2) * 0.5}";
                     else
                         formula += $"+{b1}+{b2}";
                 } else {
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += $"+{b1}";
                     else
                         formula += $"+{b1}*2";
@@ -2116,14 +2120,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h1 == 0) return stifProfileText;
+            if (h1 == 0) return stifProfileText;
 
             double t, b, l;
             t = this.t;
             b = (b1 + b2) * 0.5 - this.t * 2;
             l = (h1 + h2) * 0.5 - this.t * 2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -2142,20 +2146,20 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 == h1 && b2 == b1 && b1 == h1)
+                if (h2 == h1 && b2 == b1 && b1 == h1)
                     formula = $"({h1}*4";
                 else {
-                    if(h2 != h1)
+                    if (h2 != h1)
                         formula = $"({h1}+{h2}";
                     else
                         formula = $"({h1}*2";
 
-                    if(b2 != b1)
+                    if (b2 != b1)
                         formula += $"+{b1}+{b2}";
                     else
                         formula += $"+{b1}*2";
@@ -2164,7 +2168,7 @@ namespace SectionSteel {
                 formula += $"-{t}*4)*{t}*{GBData.DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}";
                 break;
             default:
@@ -2183,7 +2187,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.RECT_5"/></para>
     /// <para><see cref="Pattern_Collection.RECT_6"/></para>
     /// </summary>
-    public class SectionSteel_RECT: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_RECT : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h1, h2, b1, b2, s, t;
         public string ProfileText {
@@ -2203,17 +2207,17 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             h1 = h2 = b1 = b2 = s = t = 0;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.RECT_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.RECT_2);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.RECT_3);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.RECT_4);
-                if(match.Success) {
+                if (match.Success) {
                     double.TryParse(match.Groups["h1"].Value, out h1);
                     double.TryParse(match.Groups["h2"].Value, out h2);
                     double.TryParse(match.Groups["b1"].Value, out b1);
@@ -2222,7 +2226,7 @@ namespace SectionSteel {
                     double.TryParse(match.Groups["t"].Value, out t);
                 } else {
                     match = Regex.Match(ProfileText, Pattern_Collection.RECT_5);
-                    if(match.Success) {
+                    if (match.Success) {
                         double.TryParse(match.Groups["h1"].Value, out h1);
                         double.TryParse(match.Groups["h2"].Value, out h2);
                         double.TryParse(match.Groups["s"].Value, out s);
@@ -2230,7 +2234,7 @@ namespace SectionSteel {
                         b1 = h1; b2 = h2;
                     } else {
                         match = Regex.Match(ProfileText, Pattern_Collection.RECT_6);
-                        if(!match.Success)
+                        if (!match.Success)
                             throw new MismatchedProfileTextException();
 
                         double.TryParse(match.Groups["H1"].Value, out double H1);
@@ -2245,13 +2249,13 @@ namespace SectionSteel {
                     }
                 }
 
-                if(b1 == 0) b1 = h1;
-                if(h2 == 0) h2 = h1;
-                if(b2 == 0) b2 = b1;
-                if(t == 0) t = s;
+                if (b1 == 0) b1 = h1;
+                if (h2 == 0) h2 = h1;
+                if (b2 == 0) b2 = b1;
+                if (t == 0) t = s;
 
                 h1 *= 0.001; h2 *= 0.001; b1 *= 0.001; b2 *= 0.001; s *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h1 = h2 = b1 = b2 = s = t = 0;
             }
         }
@@ -2268,23 +2272,23 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 != h1)
+                if (h2 != h1)
                     formula = $"{h1}+{h2}";
                 else
                     formula = $"{h1}*2";
 
-                if(b2 != b1) {
-                    if(exclude_topSurface)
+                if (b2 != b1) {
+                    if (exclude_topSurface)
                         formula += $"+({b1}+{b2})*0.5";
                     else
                         formula += $"+{b1}+{b2}";
                 } else {
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += $"+{b1}";
                     else
                         formula += $"+{b1}*2";
@@ -2301,14 +2305,14 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(h1 == 0) return stifProfileText;
+            if (h1 == 0) return stifProfileText;
 
             double t, b, l;
             t = s;
             b = (b1 + b2) * 0.5 - s * 2;
             l = (h1 + h2) * 0.5 - this.t * 2;
             t *= 1000; b *= 1000; l *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
                 l = Math.Truncate(l);
@@ -2329,17 +2333,17 @@ namespace SectionSteel {
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if(h1 == 0) return formula;
+            if (h1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(h2 != h1)
+                if (h2 != h1)
                     formula = $"(({(h1 + h2) * 0.5}-{t}*2)*{s}";
                 else
                     formula = $"(({h1}-{t}*2)*{s}";
 
-                if(b2 != b1)
+                if (b2 != b1)
                     formula += $"+{(b2 + b1) * 0.5}*{t})*2";
                 else
                     formula += $"+{b1}*{t})*2";
@@ -2359,7 +2363,7 @@ namespace SectionSteel {
     /// <para>冷弯空心型钢（Cold forming hollow section steel）圆管。在以下模式中尝试匹配：</para>
     /// <para><see cref="Pattern_Collection.CFH_Y_1"/></para>
     /// </summary>
-    public class SectionSteel_CFH_Y: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CFH_Y : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double d, t;
         private GBDataBase data;
@@ -2381,11 +2385,11 @@ namespace SectionSteel {
             d = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CFH_Y_1);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["d"].Value, out d);
@@ -2394,7 +2398,7 @@ namespace SectionSteel {
                 data = GBData.SearchGBData(GBData.CFH_Y, new double[] { d, t });
 
                 d *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 d = t = 0;
                 data = null;
             }
@@ -2412,9 +2416,9 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(d == 0) return formula;
+            if (d == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 formula = $"{(PIStyle == 0 ? "PI()" : "3.14")}*{d}";
@@ -2430,13 +2434,13 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(this.d == 0) return stifProfileText;
+            if (this.d == 0) return stifProfileText;
 
             double t, d;
             t = this.t;
             d = this.d - this.t * 2;
             t *= 1000; d *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 d = Math.Truncate(d);
             }
@@ -2454,15 +2458,15 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(d == 0) return formula;
+            if (d == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 formula = $"{(PIStyle == 0 ? "PI()" : "3.14")}*({d * 0.5}^2-{d * 0.5 - t}^2)*{GBData.DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}";
                 break;
             default:
@@ -2478,7 +2482,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.CIRC_2"/></para>
     /// <para><see cref="Pattern_Collection.CIRC_3"/></para>
     /// </summary>
-    public class SectionSteel_CIRC: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CIRC : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double d1, r1, d2, r2, t;
         public PIStyleEnum PIStyle { get; set; }
@@ -2498,15 +2502,15 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             d1 = r1 = d2 = r2 = t = 0;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CIRC_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CIRC_2);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CIRC_3);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["d1"].Value, out d1);
@@ -2514,13 +2518,13 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["d2"].Value, out d2);
                 double.TryParse(match.Groups["r2"].Value, out r2);
                 double.TryParse(match.Groups["t"].Value, out t);
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 d1 = r1 = d2 = r2 = t = 0;
             }
 
-            if(r1 == 0) r1 = d1;
-            if(d2 == 0) d2 = d1;
-            if(r2 == 0) r2 = d2;
+            if (r1 == 0) r1 = d1;
+            if (d2 == 0) d2 = d1;
+            if (r2 == 0) r2 = d2;
             d1 *= 0.001; r1 *= 0.001; d2 *= 0.001; r2 *= 0.001; t *= 0.001;
         }
         /// <summary>
@@ -2540,27 +2544,27 @@ namespace SectionSteel {
             string formula = string.Empty;
             string PI, c1, c2;
 
-            if(d1 == 0) return formula;
+            if (d1 == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 PI = PIStyle == 0 ? "PI()" : "3.14";
 
-                if(r1 == d1)
+                if (r1 == d1)
                     c1 = $"{PI}*{d1}";
                 else
                     c1 = EllipseCircumference(d1 * 0.5, r1 * 0.5).ToString();
 
-                if(r2 == d2)
+                if (r2 == d2)
                     c2 = $"{PI}*{d2}";
                 else
                     c2 = EllipseCircumference(d2 * 0.5, r2 * 0.5).ToString();
 
-                if(c2.Equals(c1))
+                if (c2.Equals(c1))
                     formula = $"{c1}";
                 else {
-                    if(r1 == d1 && r2 == d2)
+                    if (r1 == d1 && r2 == d2)
                         formula = $"{PI}*({c1.Remove(0, PI.Length + 1)}+{c2.Remove(0, PI.Length + 1)})*0.5";
                     else
                         formula = $"({c1}+{c2})*0.5";
@@ -2581,9 +2585,9 @@ namespace SectionSteel {
         /// <param name="b">短半轴</param>
         /// <returns>椭圆周长的估算值，保留三位小数。</returns>
         protected double EllipseCircumference(double a, double b) {
-            double h = 0, resault = 0;
+            double h, resault = 0;
 
-            if(a + b == 0) return resault;
+            if (a + b == 0) return resault;
             h = Math.Pow(a - b, 2) / Math.Pow(a + b, 2);
             resault = Math.PI * (a + b) * (1 + 3 * h / (10 + Math.Sqrt(4 - 3 * h)));
 
@@ -2592,13 +2596,13 @@ namespace SectionSteel {
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
-            if(d1 == 0) return stifProfileText;
+            if (d1 == 0) return stifProfileText;
 
             double t, d;
             t = this.t;
             d = (d1 + r1 + d2 + r2) * 0.25;
             t *= 1000; d *= 1000;
-            if(truncatedRounding) {
+            if (truncatedRounding) {
                 t = Math.Truncate(t);
                 d = Math.Truncate(d);
             }
@@ -2619,37 +2623,37 @@ namespace SectionSteel {
             string formula = string.Empty;
             string PI, s1, s2;
 
-            if(d1 == 0) return formula;
-            switch(accuracy) {
+            if (d1 == 0) return formula;
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 PI = PIStyle == 0 ? "PI()" : "3.14";
-                if(r1 == d1) {
-                    if(t == 0)
+                if (r1 == d1) {
+                    if (t == 0)
                         s1 = $"{d1 * 0.5}^2";
                     else
                         s1 = $"{d1 * 0.5}^2-{d1 * 0.5 - t}^2";
                 } else {
-                    if(t == 0)
+                    if (t == 0)
                         s1 = $"{d1 * 0.5}*{r1 * 0.5}";
                     else
                         s1 = $"{d1 * 0.5}*{r1 * 0.5}-{d1 * 0.5 - t}*{r1 * 0.5 - t}";
                 }
 
-                if(r2 == d2) {
-                    if(t == 0)
+                if (r2 == d2) {
+                    if (t == 0)
                         s2 = $"{d2 * 0.5}^2";
                     else
                         s2 = $"{d2 * 0.5}^2-{d2 * 0.5 - t}^2";
                 } else {
-                    if(t == 0)
+                    if (t == 0)
                         s2 = $"{d2 * 0.5}*{r2 * 0.5}";
                     else
                         s2 = $"{d2 * 0.5}*{r2 * 0.5}-{d2 * 0.5 - t}*{r2 * 0.5 - t}";
                 }
 
-                if(s2.Equals(s1)) {
-                    if(t == 0)
+                if (s2.Equals(s1)) {
+                    if (t == 0)
                         formula = $"{PI}*{s1}*{GBData.DENSITY}";
                     else
                         formula = $"{PI}*({s1})*{GBData.DENSITY}";
@@ -2670,7 +2674,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.CFO_CN_1"/></para>
     /// <para><see cref="Pattern_Collection.CFO_CN_2"/></para>
     /// </summary>
-    public class SectionSteel_CFO_CN: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CFO_CN : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b1, c1, b2, c2, t;
         GBDataBase data;
@@ -2692,13 +2696,13 @@ namespace SectionSteel {
             h = b1 = c1 = b2 = c2 = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_2);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["h"].Value, out h);
@@ -2708,14 +2712,14 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["c2"].Value, out c2);
                 double.TryParse(match.Groups["t"].Value, out t);
 
-                if(b2 == 0) b2 = b1;
-                if(c2 == 0) c2 = c1;
+                if (b2 == 0) b2 = b1;
+                if (c2 == 0) c2 = c1;
 
-                if(b2 == b1 && c2 == c1)
+                if (b2 == b1 && c2 == c1)
                     data = GBData.SearchGBData(GBData.CFO_CN, new double[] { h, b1, c1, t });
 
                 h *= 0.001; b1 *= 0.001; c1 *= 0.001; b2 *= 0.001; c2 *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b1 = c1 = b2 = c2 = t = 0;
                 data = null;
             }
@@ -2733,22 +2737,22 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
                 formula = $"{h}*2";
-                if(b2 != b1) {
+                if (b2 != b1) {
                     formula += $"+{b1}*2+{b2}";
-                    if(!exclude_topSurface)
+                    if (!exclude_topSurface)
                         formula += $"*2";
                 } else {
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += $"+{b1}*3";
                     else
                         formula += $"+{b1}*4";
                 }
-                if(c2 != c1)
+                if (c2 != c1)
                     formula += $"+{c1}*2+{c2}*2";
                 else
                     formula += $"+{c1}*4";
@@ -2785,18 +2789,18 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 formula = $"({h}";
-                if(b2 != b1)
+                if (b2 != b1)
                     formula += $"+{b1}+{b2}";
                 else
                     formula += $"+{b1}*2";
 
-                if(c2 != c1)
+                if (c2 != c1)
                     formula += $"+{c1}+{c2}";
                 else
                     formula += $"+{c1}*2";
@@ -2804,7 +2808,7 @@ namespace SectionSteel {
                 formula += $"-{t}*4)*{t}*{GBData.DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}";
                 break;
             default:
@@ -2819,7 +2823,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.CFO_CN_MtM_1"/></para>
     /// <para><see cref="Pattern_Collection.CFO_CN_MtM_2"/></para>
     /// </summary>
-    public class SectionSteel_CFO_CN_MtM: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CFO_CN_MtM : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b1, c1, b2, c2, t;
         private GBDataBase data;
@@ -2841,13 +2845,13 @@ namespace SectionSteel {
             h = b1 = c1 = b2 = c2 = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_MtM_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_MtM_2);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["h"].Value, out h);
@@ -2857,14 +2861,14 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["c2"].Value, out c2);
                 double.TryParse(match.Groups["t"].Value, out t);
 
-                if(b2 == 0) b2 = b1;
-                if(c2 == 0) c2 = c1;
+                if (b2 == 0) b2 = b1;
+                if (c2 == 0) c2 = c1;
 
-                if(b2 == b1 && c2 == c1)
+                if (b2 == b1 && c2 == c1)
                     data = GBData.SearchGBData(GBData.CFO_CN, new double[] { h, b1, c1, t });
 
                 h *= 0.001; b1 *= 0.001; c1 *= 0.001; b2 *= 0.001; c2 *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b1 = c1 = b2 = c2 = t = 0;
                 data = null;
             }
@@ -2882,12 +2886,12 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += $"{h}*2+{b1}+{b2}";
                 else
                     formula += $"{h}*2+{b1}*2+{b2}*2";
@@ -2920,15 +2924,15 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 formula = $"({h}+{b1}*2+{c1}*2-{t}*4)*{t}*{GBData.DENSITY}*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}*2";
                 break;
             default:
@@ -2943,7 +2947,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.CFO_CN_BtB_1"/></para>
     /// <para><see cref="Pattern_Collection.CFO_CN_BtB_2"/></para>
     /// </summary>
-    public class SectionSteel_CFO_CN_BtB: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CFO_CN_BtB : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b1, c1, b2, c2, t;
         private GBDataBase data;
@@ -2965,13 +2969,13 @@ namespace SectionSteel {
             h = b1 = c1 = b2 = c2 = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_BtB_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_BtB_2);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["h"].Value, out h);
@@ -2981,14 +2985,14 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["c2"].Value, out c2);
                 double.TryParse(match.Groups["t"].Value, out t);
 
-                if(b2 == 0) b2 = b1;
-                if(c2 == 0) c2 = c1;
+                if (b2 == 0) b2 = b1;
+                if (c2 == 0) c2 = c1;
 
-                if(b2 == b1 && c2 == c1)
+                if (b2 == b1 && c2 == c1)
                     data = GBData.SearchGBData(GBData.CFO_CN, new double[] { h, b1, c1, t });
 
                 h *= 0.001; b1 *= 0.001; c1 *= 0.001; b2 *= 0.001; c2 *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b1 = c1 = b2 = c2 = t = 0;
                 data = null;
             }
@@ -3006,25 +3010,25 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
-                if(b2 != b1) {
+                if (b2 != b1) {
                     formula = $"{h}*2+{b1}*4+{b2}";
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += "*2";
                     else
                         formula += "*4";
                 } else {
                     formula = $"{h}*2+{b1}";
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += "*6";
                     else
                         formula += "*8";
                 }
 
-                if(c2 != c1)
+                if (c2 != c1)
                     formula += $"+{c1}*4+{c2}*4";
                 else
                     formula += $"+{c1}*8";
@@ -3061,23 +3065,23 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(b2 != b1)
+                if (b2 != b1)
                     formula = $"({h}+{b1}+{b2}";
                 else
                     formula = $"({h}+{b1}*2";
 
-                if(c2 != c1)
+                if (c2 != c1)
                     formula += $"+{c1}+{c2}-{t}*4)*{t}*{GBData.DENSITY}*2";
                 else
                     formula += $"+{c1}*2-{t}*4)*{t}*{GBData.DENSITY}*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}*2";
                 break;
             default:
@@ -3092,7 +3096,7 @@ namespace SectionSteel {
     /// <para><see cref="Pattern_Collection.CFO_ZJ_1"/></para>
     /// <para><see cref="Pattern_Collection.CFO_ZJ_2"/></para>
     /// </summary>
-    public class SectionSteel_CFO_ZJ: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_CFO_ZJ : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double h, b1, c1, b2, c2, t;
         private GBDataBase data;
@@ -3114,13 +3118,13 @@ namespace SectionSteel {
             h = b1 = c1 = b2 = c2 = t = 0;
             data = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.CFO_ZJ_1);
-                if(!match.Success)
+                if (!match.Success)
                     match = Regex.Match(ProfileText, Pattern_Collection.CFO_ZJ_2);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["h"].Value, out h);
@@ -3130,14 +3134,14 @@ namespace SectionSteel {
                 double.TryParse(match.Groups["c2"].Value, out c2);
                 double.TryParse(match.Groups["t"].Value, out t);
 
-                if(b2 == 0) b2 = b1;
-                if(c2 == 0) c2 = c1;
+                if (b2 == 0) b2 = b1;
+                if (c2 == 0) c2 = c1;
 
-                if(b2 == b1 && c2 == c1)
+                if (b2 == b1 && c2 == c1)
                     data = GBData.SearchGBData(GBData.CFO_ZJ, new double[] { h, b1, c1, t });
 
                 h *= 0.001; b1 *= 0.001; c1 *= 0.001; b2 *= 0.001; c2 *= 0.001; t *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 h = b1 = c1 = b2 = c2 = t = 0;
                 data = null;
             }
@@ -3155,23 +3159,23 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
-                if(b2 != b1) {
+                if (b2 != b1) {
                     formula = $"{h}*2+{b1}*2+{b2}";
-                    if(!exclude_topSurface)
+                    if (!exclude_topSurface)
                         formula += $"*2";
                 } else {
                     formula = $"{h}*2+{b1}";
-                    if(exclude_topSurface)
+                    if (exclude_topSurface)
                         formula += "*3";
                     else
                         formula += "*4";
                 }
 
-                if(c2 != c1)
+                if (c2 != c1)
                     formula += $"+{c1}*2+{c2}*2";
                 else
                     formula += $"+{c1}*4";
@@ -3208,17 +3212,17 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(h == 0) return formula;
+            if (h == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(b2 != b1)
+                if (b2 != b1)
                     formula = $"({h}+{b1}+{b2}";
                 else
                     formula = $"({h}+{b1}*2";
 
-                if(c2 != c1)
+                if (c2 != c1)
                     formula += $"+{c1}+{c2}";
                 else
                     formula += $"+{c1}*2";
@@ -3226,7 +3230,7 @@ namespace SectionSteel {
                 formula += $"-{t}*4)*{t}*{GBData.DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                if(data != null)
+                if (data != null)
                     formula = $"{data.Weight}";
                 break;
             default:
@@ -3240,7 +3244,7 @@ namespace SectionSteel {
     /// <para>矩形板件。在以下模式中尝试匹配：</para>
     /// <para><see cref="Pattern_Collection.PL_1"/></para>
     /// </summary>
-    public class SectionSteel_PL: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_PL : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double t, b, l;
         public string ProfileText {
@@ -3260,35 +3264,74 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             t = b = l = 0;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.PL_1);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
-                double.TryParse(match.Groups["t"].Value, out t);
-                double.TryParse(match.Groups["b"].Value, out b);
-                double.TryParse(match.Groups["l"].Value, out l);
+                Match subMatch;
+                List<double> parameters = new List<double> { Capacity = 3 };
+                bool[] isVariable = new bool[3] { false, false, false };
+                double tmp1, tmp2;
 
-                List<double> parameters;
-                if(l == 0) {
-                    parameters = new List<double> { t, b };
-                    parameters.Sort();
-
-                    t = parameters[0];
-                    b = parameters[1];
+                subMatch = Regex.Match(match.Groups["t"].Value, Pattern_Collection.VariableCrossSection);
+                if (subMatch.Success) {
+                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
+                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
+                    parameters.Add((tmp1 + tmp2) * 0.5);
+                    isVariable[0] = true;
                 } else {
-                    parameters = new List<double> { t, b, l };
-                    parameters.Sort();
-
-                    t = parameters[0];
-                    b = parameters[1];
-                    l = parameters[2];
+                    double.TryParse(match.Groups["t"].Value, out tmp1);
+                    parameters.Add(tmp1);
                 }
 
+                subMatch = Regex.Match(match.Groups["b"].Value, Pattern_Collection.VariableCrossSection);
+                if (subMatch.Success) {
+                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
+                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
+                    parameters.Add((tmp1 + tmp2) * 0.5);
+                    isVariable[1] = true;
+                } else {
+                    double.TryParse(match.Groups["b"].Value, out tmp1);
+                    parameters.Add(tmp1);
+                }
+
+                subMatch = Regex.Match(match.Groups["l"].Value, Pattern_Collection.VariableCrossSection);
+                if (subMatch.Success) {
+                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
+                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
+                    parameters.Add((tmp1 + tmp2) * 0.5);
+                    isVariable[2] = true;
+                } else {
+                    double.TryParse(match.Groups["l"].Value, out tmp1);
+                    parameters.Add(tmp1);
+                }
+
+
+                //  不应全部使用"~"符号，也不应对厚度值使用"~"符号
+                //  附带完成t, b, l的赋值
+                if (isVariable[0] == true && isVariable[1] == true && isVariable[2] == true)
+                    throw new MismatchedProfileTextException();
+                int minParameterIndex;
+                if (parameters[2] == 0) {
+                    minParameterIndex = parameters.IndexOf(Math.Min(parameters[0], parameters[1]));
+
+                    t = parameters[minParameterIndex];
+                    b = minParameterIndex == 0 ? parameters[1] : parameters[0];
+                } else {
+                    minParameterIndex = parameters.IndexOf(parameters.Min());
+
+                    parameters.Sort();
+                    t = parameters[0]; b = parameters[1]; l = parameters[2];
+                }
+                if (isVariable[minParameterIndex])
+                    throw new MismatchedProfileTextException();
+
+
                 t *= 0.001; b *= 0.001; l *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 t = b = l = 0;
             }
         }
@@ -3305,17 +3348,17 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(b == 0) return formula;//实现使用中可能 t == 0
+            if (b == 0) return formula;//实现使用中可能 t == 0
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(l == 0)
+                if (l == 0)
                     formula = $"{b}";
                 else
                     formula = $"{b}*{l}";
 
-                if(!exclude_topSurface)
+                if (!exclude_topSurface)
                     formula += "*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
@@ -3345,15 +3388,15 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(b == 0) return formula;//实际使用中可能t == 0
+            if (b == 0) return formula;//实际使用中可能t == 0
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(t == 0) {
+                if (t == 0) {
                     formula = "0";
                 } else {
-                    if(l == 0)
+                    if (l == 0)
                         formula = $"{b}*{t}*{GBData.DENSITY}";
                     else
                         formula = $"{b}*{l}*{t}*{GBData.DENSITY}";
@@ -3372,7 +3415,7 @@ namespace SectionSteel {
     /// <para>（直角）三角板。在以下模式中尝试匹配：</para>
     /// <para><see cref="Pattern_Collection.PL_T_1"/></para>
     /// </summary>
-    public class SectionSteel_PL_Triangle: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_PL_Triangle : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double t, b, l;
         public string ProfileText {
@@ -3392,26 +3435,73 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             t = b = l = 0;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.PL_T_1);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
-                double.TryParse(match.Groups["t"].Value, out t);
-                double.TryParse(match.Groups["b"].Value, out b);
-                double.TryParse(match.Groups["l"].Value, out l);
+                Match subMatch;
+                List<double> parameters = new List<double> { Capacity = 3 };
+                bool[] isVariable = new bool[3] { false, false, false };
+                double tmp1, tmp2;
 
-                List<double> parameters = new List<double> { t, b, l };
-                parameters.Sort();
+                subMatch = Regex.Match(match.Groups["t"].Value, Pattern_Collection.VariableCrossSection);
+                if (subMatch.Success) {
+                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
+                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
+                    parameters.Add((tmp1 + tmp2) * 0.5);
+                    isVariable[0] = true;
+                } else {
+                    double.TryParse(match.Groups["t"].Value, out tmp1);
+                    parameters.Add(tmp1);
+                }
 
-                t = parameters[0];
-                b = parameters[1];
-                l = parameters[2];
+                subMatch = Regex.Match(match.Groups["b"].Value, Pattern_Collection.VariableCrossSection);
+                if (subMatch.Success) {
+                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
+                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
+                    parameters.Add((tmp1 + tmp2) * 0.5);
+                    isVariable[1] = true;
+                } else {
+                    double.TryParse(match.Groups["b"].Value, out tmp1);
+                    parameters.Add(tmp1);
+                }
+
+                subMatch = Regex.Match(match.Groups["l"].Value, Pattern_Collection.VariableCrossSection);
+                if (subMatch.Success) {
+                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
+                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
+                    parameters.Add((tmp1 + tmp2) * 0.5);
+                    isVariable[2] = true;
+                } else {
+                    double.TryParse(match.Groups["l"].Value, out tmp1);
+                    parameters.Add(tmp1);
+                }
+
+
+                //  不应全部使用"~"符号，也不应对厚度值使用"~"符号
+                //  附带完成t, b, l的赋值
+                if (isVariable[0] == true && isVariable[1] == true && isVariable[2] == true)
+                    throw new MismatchedProfileTextException();
+                int minParameterIndex;
+                if (parameters[2] == 0) {
+                    minParameterIndex = parameters.IndexOf(Math.Min(parameters[0], parameters[1]));
+
+                    t = parameters[minParameterIndex];
+                    b = minParameterIndex == 0 ? parameters[1] : parameters[0];
+                } else {
+                    minParameterIndex = parameters.IndexOf(parameters.Min());
+
+                    parameters.Sort();
+                    t = parameters[0]; b = parameters[1]; l = parameters[2];
+                }
+                if (isVariable[minParameterIndex])
+                    throw new MismatchedProfileTextException();
 
                 t *= 0.001; b *= 0.001; l *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 t = b = l = 0;
             }
         }
@@ -3428,13 +3518,13 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(b == 0) return formula;//实际使用中可能 t == 0
+            if (b == 0) return formula;//实际使用中可能 t == 0
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 formula = $"{b}*{l}";
-                if(exclude_topSurface)
+                if (exclude_topSurface)
                     formula += "*0.5";
                 break;
             case FormulaAccuracyEnum.GBDATA:
@@ -3465,12 +3555,12 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(b == 0) return formula;//实现使用中可能 t == 0
+            if (b == 0) return formula;//实现使用中可能 t == 0
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(t == 0)
+                if (t == 0)
                     formula = "0";
                 else
                     formula = $"{b}*{l}*0.5*{t}*{GBData.DENSITY}";
@@ -3488,7 +3578,7 @@ namespace SectionSteel {
     /// <para>圆形板。在以下模式中尝试匹配：</para>
     /// <para><see cref="Pattern_Collection.PL_O_1"/></para>
     /// </summary>
-    public class SectionSteel_PL_Circular: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_PL_Circular : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double t, d;
         public PIStyleEnum PIStyle { get; set; }
@@ -3508,24 +3598,24 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             t = d = 0;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.PL_O_1);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["t"].Value, out t);
                 double.TryParse(match.Groups["d"].Value, out d);
 
-                if(d < t) {
+                if (d < t) {
                     double temp = d;
                     d = t;
                     t = temp;
                 }
 
                 t *= 0.001; d *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 t = d = 0;
             }
         }
@@ -3542,14 +3632,14 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(d == 0) return formula;//实际使用中可能 t == 0
+            if (d == 0) return formula;//实际使用中可能 t == 0
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 var PI = PIStyle == 0 ? "PI()" : "3.14";
                 formula = $"{PI}*{d * 0.5}^2";
-                if(!exclude_topSurface)
+                if (!exclude_topSurface)
                     formula += "*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
@@ -3580,13 +3670,13 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(d == 0) return formula;//实际使用中可能 t == 0
+            if (d == 0) return formula;//实际使用中可能 t == 0
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 var PI = PIStyle == 0 ? "PI()" : "3.14";
-                if(t == 0)
+                if (t == 0)
                     formula = "0";
                 else
                     formula = $"{PI}*{d * 0.5}^2*{t}*{GBData.DENSITY}";
@@ -3604,7 +3694,7 @@ namespace SectionSteel {
     /// <para>复合板件。在以下模式中尝试匹配：</para>
     /// <para><see cref="Pattern_Collection.PL_CMP_1"/></para>
     /// </summary>
-    public class SectionSteel_PL_Composite: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_PL_Composite : SectionSteelBase, ISectionSteel {
         private string _profileText;
         protected struct SubPlate {
             public double num;//数量
@@ -3632,43 +3722,49 @@ namespace SectionSteel {
 
             subPlates.Clear();
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.PL_CMP_1);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 tempProfileText = ProfileText;
                 tempProfileText = tempProfileText.Replace("-", "+-");
                 profileTexts = tempProfileText.Split('+');
 
-                foreach(var profileText in profileTexts) {
+                foreach (var profileText in profileTexts) {
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PL);
-                    if(match.Success) {
+                    if (match.Success) {
                         var pl = new SectionSteel_PL(match.Groups["main"].Value);
                         double.TryParse(match.Groups["num"].Value, out subplate.num);
-                        if(subplate.num == 0) subplate.num = 1;
+                        if (subplate.num == 0) {
+                            subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
+                        }
                         subplate.plate = pl;
                         subPlates.Add(subplate);
 
                         continue;
                     }
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PLT);
-                    if(match.Success) {
+                    if (match.Success) {
                         var plt = new SectionSteel_PL_Triangle(match.Groups["main"].Value);
                         double.TryParse(match.Groups["num"].Value, out subplate.num);
-                        if(subplate.num == 0) subplate.num = 1;
+                        if (subplate.num == 0) {
+                            subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
+                        }
                         subplate.plate = plt;
                         subPlates.Add(subplate);
 
                         continue;
                     }
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PLO);
-                    if(match.Success) {
+                    if (match.Success) {
                         var plo = new SectionSteel_PL_Circular(match.Groups["main"].Value);
                         double.TryParse(match.Groups["num"].Value, out subplate.num);
-                        if(subplate.num == 0) subplate.num = 1;
+                        if (subplate.num == 0) {
+                            subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
+                        }
                         subplate.plate = plo;
                         subPlates.Add(subplate);
 
@@ -3678,7 +3774,7 @@ namespace SectionSteel {
                     throw new MismatchedProfileTextException();
                 }
 
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 subPlates.Clear();
             }
         }
@@ -3698,17 +3794,19 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
+            if (subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
 
-            foreach(var subplate in subPlates) {
-                if(subplate.num < 0)
+            foreach (var subplate in subPlates) {
+                if (subplate.num == -1)
+                    formula += $"-{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
+                else if (subplate.num < 0)
                     formula += $"{subplate.num}*{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
-                else if(subplate.num == 1)
-                    formula += $"{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
+                else if (subplate.num == 1)
+                    formula += $"+{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
                 else
                     formula += $"+{subplate.num}*{subplate.plate.GetAreaFormula(accuracy, exclude_topSurface)}";
             }
-            if(formula.IndexOf('+') == 0) formula = formula.Remove(0, 1);
+            if (formula[0] == '+') formula = formula.Remove(0, 1);
 
             return formula;
         }
@@ -3735,7 +3833,7 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
+            if (subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
 
             //foreach(var subplate in subPlates) {
             //    if(subplate.num < 0)
@@ -3747,10 +3845,10 @@ namespace SectionSteel {
             //}
             //if(formula.IndexOf('+') == 0) formula = formula.Remove(0, 1);
 
-            if(subPlates.Count == 1) goto NoIdenticalItems;
+            if (subPlates.Count == 1) goto NoIdenticalItems;
 
             List<string> weights = new List<string>();
-            foreach(var subplate in subPlates) {
+            foreach (var subplate in subPlates) {
                 weights.Add(subplate.plate.GetWeightFormula(accuracy));
             }
 
@@ -3759,51 +3857,55 @@ namespace SectionSteel {
             Match match = Regex.Match(weights[0], pattern1);
             string value = match.Value;
             int i;
-            for(i = 1; i < weights.Count; i++) {
-                if(!weights[i].EndsWith(value))
+            for (i = 1; i < weights.Count; i++) {
+                if (!weights[i].EndsWith(value))
                     break;
             }
-            if(i < weights.Count) {
+            if (i < weights.Count) {
                 match = Regex.Match(weights[0], pattern2);
                 value = match.Value;
-                for(i = 1; i < weights.Count; i++) {
-                    if(!weights[i].EndsWith(value))
+                for (i = 1; i < weights.Count; i++) {
+                    if (!weights[i].EndsWith(value))
                         break;
                 }
             }
             //无同类项返回
-            if(i < weights.Count) {
+            if (i < weights.Count) {
                 goto NoIdenticalItems;
             }
 
             //合并同类项返回
-            for(i = 0; i < weights.Count; i++) {
+            for (i = 0; i < weights.Count; i++) {
                 var item = weights[i];
                 weights[i] = item.Remove(item.Length - value.Length, value.Length);
             }
-            for(i = 0; i < subPlates.Count; i++) {
-                if(subPlates[i].num < 0)
+            for (i = 0; i < subPlates.Count; i++) {
+                if (subPlates[i].num == -1)
+                    formula += $"-{weights[i]}";
+                else if (subPlates[i].num < 0)
                     formula += $"{subPlates[i].num}*{weights[i]}";
-                else if(subPlates[i].num == 1)
+                else if (subPlates[i].num == 1)
                     formula += $"+{weights[i]}";
                 else
                     formula += $"+{subPlates[i].num}*{weights[i]}";
             }
-            if(formula.IndexOf('+') == 0) formula = formula.Remove(0, 1);
+            if (formula[0] == '+') formula = formula.Remove(0, 1);
             formula = $"({formula}){value}";
 
             return formula;
 
         NoIdenticalItems:
-            foreach(var subplate in subPlates) {
-                if(subplate.num < 0)
+            foreach (var subplate in subPlates) {
+                if (subplate.num == -1)
+                    formula += $"-{subplate.plate.GetWeightFormula(accuracy)}";
+                else if (subplate.num < 0)
                     formula += $"{subplate.num}*{subplate.plate.GetWeightFormula(accuracy)}";
-                else if(subplate.num == 1)
-                    formula += $"{subplate.plate.GetWeightFormula(accuracy)}";
+                else if (subplate.num == 1)
+                    formula += $"+{subplate.plate.GetWeightFormula(accuracy)}";
                 else
                     formula += $"+{subplate.num}*{subplate.plate.GetWeightFormula(accuracy)}";
             }
-            if(formula.IndexOf('+') == 0) formula = formula.Remove(0, 1);
+            if (formula[0] == '+') formula = formula.Remove(0, 1);
 
             return formula;
         }
@@ -3812,7 +3914,7 @@ namespace SectionSteel {
     /// <para>球体。在以下模式中尝试匹配：</para>
     /// <para><see cref="Pattern_Collection.SPHERE_1"/></para>
     /// </summary>
-    public class SectionSteel_SPHERE: SectionSteelBase, ISectionSteel {
+    public class SectionSteel_SPHERE : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private double d;
         public PIStyleEnum PIStyle { get; set; }
@@ -3832,17 +3934,17 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             d = 0;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.SPHERE_1);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 double.TryParse(match.Groups["d"].Value, out d);
 
                 d *= 0.001;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 d = 0;
             }
         }
@@ -3856,9 +3958,9 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if(d == 0) return formula;
+            if (d == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 var PI = PIStyle == 0 ? "PI()" : "3.14";
@@ -3890,9 +3992,9 @@ namespace SectionSteel {
         /// <returns><inheritdoc/></returns>
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if(d == 0) return formula;
+            if (d == 0) return formula;
 
-            switch(accuracy) {
+            switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
                 var PI = PIStyle == 0 ? "PI()" : "3.14";
@@ -3931,7 +4033,7 @@ namespace SectionSteel {
     /// <para><see cref="SectionSteel_PL_Circular"/></para>
     /// <para><see cref="SectionSteel_PL_Composite"/></para>
     /// </summary>
-    public class SectionSteel: SectionSteelBase, ISectionSteel {
+    public class SectionSteel : SectionSteelBase, ISectionSteel {
         private string _profileText;
         private PIStyleEnum _PIStyle;
         private ISectionSteel realSectionSteel;
@@ -3967,7 +4069,7 @@ namespace SectionSteel {
             get => _PIStyle;
             set {
                 _PIStyle = value;
-                if(realSectionSteel != null) realSectionSteel.PIStyle = value;
+                if (realSectionSteel != null) realSectionSteel.PIStyle = value;
             }
         }
         public SectionSteel() {
@@ -3979,20 +4081,20 @@ namespace SectionSteel {
         protected override void SetFieldsValue() {
             realSectionSteel = null;
             try {
-                if(string.IsNullOrEmpty(ProfileText))
+                if (string.IsNullOrEmpty(ProfileText))
                     throw new MismatchedProfileTextException();
 
                 Match match = Regex.Match(ProfileText, Pattern_Collection.Classifier);
-                if(!match.Success)
+                if (!match.Success)
                     throw new MismatchedProfileTextException();
 
                 var classifier = match.Groups["classifier"].Value;
                 //槽钢和冷弯内卷边槽钢及其双拼形式，有重复标识符，需特殊处理
                 //PL_Composite不能处理PLt*b形式，需特殊处理
-                switch(classifier) {
+                switch (classifier) {
                 case "C":
                     match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_1);
-                    if(match.Success) {
+                    if (match.Success) {
                         realSectionSteel = new SectionSteel_CFO_CN(ProfileText);
                         break;
                     }
@@ -4000,7 +4102,7 @@ namespace SectionSteel {
                     break;
                 case "2C":
                     match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_BtB_1);
-                    if(match.Success) {
+                    if (match.Success) {
                         realSectionSteel = new SectionSteel_CFO_CN_BtB(ProfileText);
                         break;
                     }
@@ -4009,7 +4111,7 @@ namespace SectionSteel {
                 case "PL":
                     var pattern = @"^PL\d+\.?\d*\*\d+\.?\d*$";
                     match = Regex.Match(ProfileText, pattern);
-                    if(match.Success) {
+                    if (match.Success) {
                         realSectionSteel = new SectionSteel_PL(ProfileText);
                         break;
                     }
@@ -4017,16 +4119,16 @@ namespace SectionSteel {
                     break;
                 default:
                     string type = string.Empty;
-                    foreach(var item in classifierTable) {
-                        foreach(var value in item.Value) {
-                            if(classifier.Equals(value)) {
+                    foreach (var item in classifierTable) {
+                        foreach (var value in item.Value) {
+                            if (classifier.Equals(value)) {
                                 type = item.Key;
                                 goto Got_it;
                             }
                         }
                     }
                 Got_it:
-                    switch(type) {
+                    switch (type) {
                     case "H":
                         realSectionSteel = new SectionSteel_H(ProfileText);
                         break;
@@ -4092,26 +4194,26 @@ namespace SectionSteel {
                 }
 
                 realSectionSteel.PIStyle = this.PIStyle;
-            } catch(MismatchedProfileTextException) {
+            } catch (MismatchedProfileTextException) {
                 realSectionSteel = null;
             }
         }
         public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
-            if(realSectionSteel == null)
+            if (realSectionSteel == null)
                 return string.Empty;
 
             return realSectionSteel.GetAreaFormula(accuracy, exclude_topSurface);
         }
 
         public string GetSiffenerProfileStr(bool truncatedRounding) {
-            if(realSectionSteel == null)
+            if (realSectionSteel == null)
                 return string.Empty;
 
             return realSectionSteel.GetSiffenerProfileStr(truncatedRounding);
         }
 
         public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
-            if(realSectionSteel == null)
+            if (realSectionSteel == null)
                 return string.Empty;
 
             return realSectionSteel.GetWeightFormula(accuracy);
