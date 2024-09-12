@@ -288,7 +288,7 @@ namespace SectionSteelCalculationTool {
             this.button_AW_Generate.TabIndex = 0;
             this.button_AW_Generate.Text = "&Generate";
             this.button_AW_Generate.UseVisualStyleBackColor = true;
-            this.button_AW_Generate.Click += new System.EventHandler(this.button_AW_Generate_Click);
+            this.button_AW_Generate.Click += new System.EventHandler(this.Button_AW_Generate_Click);
             // 
             // tabPage_Stiffener
             // 
@@ -311,7 +311,7 @@ namespace SectionSteelCalculationTool {
             this.button_STIF_Generate.TabIndex = 7;
             this.button_STIF_Generate.Text = "&Generate";
             this.button_STIF_Generate.UseVisualStyleBackColor = true;
-            this.button_STIF_Generate.Click += new System.EventHandler(this.button_STIF_Generate_Click);
+            this.button_STIF_Generate.Click += new System.EventHandler(this.Button_STIF_Generate_Click);
             // 
             // gBox_STIF_Target_Offsets
             // 
@@ -408,7 +408,7 @@ namespace SectionSteelCalculationTool {
             this.cBox_AlwaysOnTop.TabIndex = 0;
             this.cBox_AlwaysOnTop.Text = "&Always on top";
             this.cBox_AlwaysOnTop.UseVisualStyleBackColor = true;
-            this.cBox_AlwaysOnTop.CheckedChanged += new System.EventHandler(this.cBox_AlwaysOnTop_CheckedChanged);
+            this.cBox_AlwaysOnTop.CheckedChanged += new System.EventHandler(this.CBox_AlwaysOnTop_CheckedChanged);
             // 
             // Form_SSCT
             // 
@@ -420,6 +420,7 @@ namespace SectionSteelCalculationTool {
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form_SSCT";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SSCT";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.Form_SSCT_Load);
