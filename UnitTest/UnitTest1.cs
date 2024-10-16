@@ -130,6 +130,10 @@ namespace UnitTest {
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "RHSC400*300*450*320*14*350";
             ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "RECT400*500*16*14";
+            ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "RECT400*400*14*14";
+            ShowInfo(sectionSteel);
         }
         [TestMethod]
         public void Test_CFH_Y() {
@@ -285,6 +289,10 @@ namespace UnitTest {
             sectionSteel.ProfileText = "B_VAR_C400-300*12*200-200";
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "RHSC400*300*450*320*14*350";
+            ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "RECT400*500*16*14";
+            ShowInfo(sectionSteel);
+            sectionSteel.ProfileText = "RECT400*400*14*14";
             ShowInfo(sectionSteel);
             sectionSteel.ProfileText = "Y200*10";
             ShowInfo(sectionSteel);

@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SectionSteel {
+    /// <summary>
+    /// 国标型钢理论数据基类。
+    /// </summary>
     public class GBDataBase {
         public string Name { get; }
         public double[] Parameters { get; }
@@ -49,6 +52,9 @@ namespace SectionSteel {
             return this.Equals(data.Parameters);
         }
     }
+    /// <summary>
+    /// 国标型钢理论数据。
+    /// </summary>
     static class GBData {
         public static readonly int DENSITY = 7850;
         public static GBDataBase SearchGBData(List<GBDataBase> search_in, string search_by_name) {
@@ -69,6 +75,9 @@ namespace SectionSteel {
 
             return resault;
         }
+        /// <summary>
+        /// 热轧H型钢(Hot rolled H section steel) - 宽翼缘H型钢
+        /// </summary>
         public static List<GBDataBase> HW => new List<GBDataBase> {
             new GBDataBase("100*100", new double[] { 100, 100, 6,8 }, 16.9, 0.574),
             new GBDataBase("125*125", new double[] { 125, 125, 6.5,9 }, 23.6, 0.723),
@@ -100,6 +109,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 502, 465, 15,25 }, 239, 2.8),
             new GBDataBase("", new double[] { 502, 470, 20,25 }, 259, 2.81),
         };
+        /// <summary>
+        /// 热轧H型钢(Hot rolled H section steel) - 中翼缘H型钢
+        /// </summary>
         public static List<GBDataBase> HM => new List<GBDataBase> {
             new GBDataBase("150*100", new double[] { 148, 100, 6,9 }, 20.7, 0.67),
             new GBDataBase("200*150", new double[] { 194, 150, 6,9 }, 29.9, 0.962),
@@ -117,6 +129,9 @@ namespace SectionSteel {
             new GBDataBase("600*300", new double[] { 588, 300, 12,20 }, 147, 2.33),
             new GBDataBase("", new double[] { 594, 302, 14,23 }, 170, 2.35),
         };
+        /// <summary>
+        /// 热轧H型钢(Hot rolled H section steel) - 窄翼缘H型钢
+        /// </summary>
         public static List<GBDataBase> HN => new List<GBDataBase> {
             new GBDataBase("100*50", new double[] { 100, 50, 5,7 }, 9.3, 0.376),
             new GBDataBase("125*60", new double[] { 125, 60, 6,8 }, 13.1, 0.464),
@@ -178,6 +193,9 @@ namespace SectionSteel {
             new GBDataBase("1000*300", new double[] { 1000, 300, 19,36 }, 310, 3.13),
             new GBDataBase("", new double[] { 1008, 302, 21,40 }, 345, 3.15),
         };
+        /// <summary>
+        /// 热轧H型钢(Hot rolled H section steel) - 薄壁H型钢
+        /// </summary>
         public static List<GBDataBase> HT => new List<GBDataBase> {
             new GBDataBase("", new double[] { 95, 48, 3.2,4.5 }, 5.98, 0.362),
             new GBDataBase("100*50", new double[] { 97, 49, 4,5.5 }, 7.36, 0.368),
@@ -207,6 +225,9 @@ namespace SectionSteel {
             new GBDataBase("400*150", new double[] { 390, 148, 6,8 }, 37.3, 1.34),
             new GBDataBase("400*200", new double[] { 390, 198, 6,8 }, 43.6, 1.54),
         };
+        /// <summary>
+        /// 热轧剖分T型钢(Hot rolled cut T section steel) - 宽翼缘剖分T型钢
+        /// </summary>
         public static List<GBDataBase> TW => new List<GBDataBase> {
             new GBDataBase("50*100", new double[] { 50, 100, 6,8 }, 8.47, 0.293),
             new GBDataBase("62.5*125", new double[] { 62.5, 125, 6.5,9 }, 11.8, 0.368),
@@ -228,6 +249,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 207, 405, 18,28 }, 116, 1.21),
             new GBDataBase("", new double[] { 214, 407, 20,35 }, 142, 1.22),
         };
+        /// <summary>
+        /// 热轧剖分T型钢(Hot rolled cut T section steel) - 中翼缘剖分T型钢
+        /// </summary>
         public static List<GBDataBase> TM => new List<GBDataBase> {
             new GBDataBase("75*100", new double[] { 74, 100, 6,9 }, 10.3, 0.341),
             new GBDataBase("100*150", new double[] { 97, 150, 6,9 }, 15, 0.487),
@@ -245,6 +269,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 294, 300, 12,20 }, 73.5, 1.18),
             new GBDataBase("300*300", new double[] { 297, 302, 14,23 }, 85.2, 1.19),
         };
+        /// <summary>
+        /// 热轧剖分T型钢(Hot rolled cut T section steel) - 窄翼缘剖分T型钢
+        /// </summary>
         public static List<GBDataBase> TN => new List<GBDataBase> {
             new GBDataBase("50*50", new double[] { 50, 50, 5,7 }, 4.65, 0.193),
             new GBDataBase("62.5*60", new double[] { 62.5, 60, 6,8 }, 6.55, 0.238),
@@ -293,6 +320,9 @@ namespace SectionSteel {
             new GBDataBase("450*300", new double[] { 450, 300, 16,28 }, 120, 1.48),
             new GBDataBase("", new double[] { 456, 302, 18,34 }, 141, 1.5),
         };
+        /// <summary>
+        /// 热轧型钢(Hot rolled section steel) - 工字钢
+        /// </summary>
         public static List<GBDataBase> I => new List<GBDataBase> {
             new GBDataBase("10", new double[] { 100, 68, 4.5,7.6 }, 11.3, 0.432),
             new GBDataBase("12", new double[] { 120, 74, 5,8.4 }, 14, 0.493),
@@ -340,6 +370,9 @@ namespace SectionSteel {
             new GBDataBase("63b", new double[] { 630, 178, 15,22 }, 131, 1.866),
             new GBDataBase("63c", new double[] { 630, 180, 17,22 }, 141, 1.87),
         };
+        /// <summary>
+        /// 热轧型钢(Hot rolled section steel) - 槽钢
+        /// </summary>
         public static List<GBDataBase> CHAN => new List<GBDataBase> {
             new GBDataBase("5", new double[] { 50, 37, 4.5,7 }, 5.44, 0.226),
             new GBDataBase("6.3", new double[] { 63, 40, 4.8,7.5 }, 6.63, 0.262),
@@ -383,6 +416,9 @@ namespace SectionSteel {
             new GBDataBase("40b", new double[] { 400, 102, 12.5,18 }, 65.2, 1.148),
             new GBDataBase("40c", new double[] { 400, 104, 14.5,18 }, 71.5, 1.152),
         };
+        /// <summary>
+        /// 热轧型钢(Hot rolled section steel) - 角钢
+        /// </summary>
         public static List<GBDataBase> L => new List<GBDataBase> {
             new GBDataBase("2", new double[] { 20, 20, 3, }, 0.889, 0.078),
             new GBDataBase("", new double[] { 20, 20, 4, }, 1.15, 0.077),
@@ -571,6 +607,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 200, 125, 16, }, 39, 0.639),
             new GBDataBase("", new double[] { 200, 125, 18, }, 43.6, 0.639),
         };
+        /// <summary>
+        /// 冷弯开口型钢(Cold forming open section steel) - 内卷边槽钢
+        /// </summary>
         public static List<GBDataBase> CFO_CN => new List<GBDataBase> {
             new GBDataBase("", new double[] { 60, 30, 10,2.5 }, 2.363, 0),
             new GBDataBase("", new double[] { 60, 30, 10,3 }, 2.743, 0),
@@ -612,6 +651,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 600, 150, 60,14 }, 97.395, 0),
             new GBDataBase("", new double[] { 600, 150, 60,16 }, 109.025, 0),
         };
+        /// <summary>
+        /// 冷弯开口型钢(Cold forming open section steel) - 卷边Z形钢
+        /// </summary>
         public static List<GBDataBase> CFO_ZJ => new List<GBDataBase> {
             new GBDataBase("", new double[] { 100, 40, 20,2 }, 3.208, 0),
             new GBDataBase("", new double[] { 100, 40, 20,2.5 }, 3.933, 0),
@@ -635,6 +677,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 400, 120, 40,8 }, 40.789, 0),
             new GBDataBase("", new double[] { 400, 120, 40,10 }, 49.692, 0),
         };
+        /// <summary>
+        /// 冷弯空心型钢(Cold forming hollow sectional steel) - 方管和矩管
+        /// </summary>
         public static List<GBDataBase> CFH_J => new List<GBDataBase> {
             new GBDataBase("", new double[] { 20, 20, 1.2 }, 0.679, 0),
             new GBDataBase("", new double[] { 20, 20, 1.5 }, 0.826, 0),
@@ -928,6 +973,9 @@ namespace SectionSteel {
             new GBDataBase("", new double[] { 600, 400, 14 }, 207, 0),
             new GBDataBase("", new double[] { 600, 400, 16 }, 235, 0),
         };
+        /// <summary>
+        /// 冷弯空心型钢(Cold forming hollow sectional steel) - 圆管
+        /// </summary>
         public static List<GBDataBase> CFH_Y => new List<GBDataBase> {
             new GBDataBase("", new double[] { 21.3, 1.2 }, 0.59, 0),
             new GBDataBase("", new double[] { 21.3, 1.5 }, 0.73, 0),

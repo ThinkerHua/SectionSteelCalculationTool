@@ -9,22 +9,45 @@ using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 
 namespace SectionSteel {
+    /// <summary>
+    /// 不匹配的截面规格文本。
+    /// </summary>
     public class MismatchedProfileTextException : Exception {
 
     }
+    /// <summary>
+    /// 计算式精确度。
+    /// </summary>
     public enum FormulaAccuracyEnum {
+        /// <summary>
+        /// 粗略的
+        /// </summary>
         ROUGHLY,
+        /// <summary>
+        /// 稍准确的
+        /// </summary>
         PRECISELY,
+        /// <summary>
+        /// 国标理论数据
+        /// </summary>
         GBDATA,
     }
     /// <summary>
-    /// <para><b>FUNC: </b>"PI()"</para>
-    /// <para><b>NUM: </b>"3.14"</para>
+    /// 圆周率π的书写形式
     /// </summary>
     public enum PIStyleEnum {
+        /// <summary>
+        /// 函数 - PI()
+        /// </summary>
         FUNC,
+        /// <summary>
+        /// 数字 - 3.14
+        /// </summary>
         NUM,
     }
+    /// <summary>
+    /// 型钢接口。
+    /// </summary>
     public interface ISectionSteel {
         /// <summary>
         /// 型钢截面文本。
@@ -73,6 +96,9 @@ namespace SectionSteel {
         /// <returns>加劲肋截面文本。</returns>
         string GetSiffenerProfileStr(bool truncatedRounding);
     }
+    /// <summary>
+    /// 型钢基类。
+    /// </summary>
     public class SectionSteelBase {
         /// <summary>
         /// 为字段赋值。
@@ -210,9 +236,9 @@ namespace SectionSteel {
         /// </summary>
         public static string RECT_1 => @"^B_WLD_F(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 B_WLD_F 或 B_BUILT，后续参数形式为 h1*b1*s*t。
+        /// 前置标识符为 RECT 或 B_WLD_F 或 B_BUILT，后续参数形式为 h1*b1*s*t。
         /// </summary>
-        public static string RECT_2 => @"^((B_WLD_F)|(B_BUILT))(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t>\d+\.?\d*)$";
+        public static string RECT_2 => @"^((RECT)|(B_WLD_F)|(B_BUILT))(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t>\d+\.?\d*)$";
         /// <summary>
         /// 前置标识符为 R，后续参数形式为 h1~h2*b1*s*t。
         /// </summary>
@@ -254,18 +280,14 @@ namespace SectionSteel {
         /// 前置标识符为 CC，后续参数形式为 h-t-c1-b1[-c2-b2]。
         /// </summary>
         public static string CFO_CN_2 => @"^CC(?<h>\d+\.?\d*)-(?<t>\d+\.?\d*)-(?<c1>\d+\.?\d*)-(?<b1>\d+\.?\d*)(-(?<c2>\d+\.?\d*)-(?<b2>\d+\.?\d*))?$";
-
         /// <summary>
-        /// 前置标识符为 2CM，后续参数形式为 h*b1*c1*t。
-        /// <para><b>暂定</b></para>
+        /// <b>* 暂定：</b>前置标识符为 2CM，后续参数形式为 h*b1*c1*t。
         /// </summary>
         public static string CFO_CN_MtM_1 => @"^2CM(?<h>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<c1>\d+\.?\d*)\*(?<t>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 2CCM，后续参数形式为 h-t-c1-b1[-c2-b2]。
-        /// <para><b>暂定</b></para>
+        /// <b>* 暂定：</b>前置标识符为 2CCM，后续参数形式为 h-t-c1-b1[-c2-b2]。
         /// </summary>
         public static string CFO_CN_MtM_2 => @"^2CCM(?<h>\d+\.?\d*)-(?<t>\d+\.?\d*)-(?<c1>\d+\.?\d*)-(?<b1>\d+\.?\d*)(-(?<c2>\d+\.?\d*)-(?<b2>\d+\.?\d*))?$";
-
         /// <summary>
         /// 前置标识符为 2C，后续参数形式为 h*b1*c1*t。
         /// </summary>
@@ -350,7 +372,7 @@ namespace SectionSteel {
         public static string Classifier => @"^(?<classifier>"
             + @"(B_WLD_A)|(B_WLD_H)|(B_WLD_K)|(H)|(HI)|(HM)|(HN)|(HP)|(HT)|(HW)|(PHI)|(WH)|(WI)|(I_VAR_A)|"
             + @"(B_WLD_O)|(HH)|(T)|(TW)|(TM)|(TN)|(B_WLD_E)|(I)|(\[)|(C)|(\[\])|(\]\[)|(2\[)|(2C)|(∠)|(L)|(2∠)|(2L)|"
-            + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RHSC)|"
+            + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RECT)|(RHSC)|"
             + @"(Y)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
             + @"(-?(\d+\.?\d*)?PL)|(-?(\d+\.?\d*)?PLD)|(-?(\d+\.?\d*)?PLO)|(-?(\d+\.?\d*)?PLT)|(SPHERE))\d";
         /// <summary>
@@ -360,13 +382,13 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>H型钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.H_1"/></para>
-    /// <para><see cref="Pattern_Collection.H_2"/></para>
-    /// <para><see cref="Pattern_Collection.H_3"/></para>
-    /// <para><see cref="Pattern_Collection.H_4"/></para>
-    /// <para><see cref="Pattern_Collection.H_5"/></para>
-    /// <para><see cref="Pattern_Collection.H_6"/></para>
-    /// <para><see cref="Pattern_Collection.H_7"/></para>
+    /// <see cref="Pattern_Collection.H_1"/>: <inheritdoc cref="Pattern_Collection.H_1"/><para></para>
+    /// <see cref="Pattern_Collection.H_2"/>: <inheritdoc cref="Pattern_Collection.H_2"/><para></para>
+    /// <see cref="Pattern_Collection.H_3"/>: <inheritdoc cref="Pattern_Collection.H_3"/><para></para>
+    /// <see cref="Pattern_Collection.H_4"/>: <inheritdoc cref="Pattern_Collection.H_4"/><para></para>
+    /// <see cref="Pattern_Collection.H_5"/>: <inheritdoc cref="Pattern_Collection.H_5"/><para></para>
+    /// <see cref="Pattern_Collection.H_6"/>: <inheritdoc cref="Pattern_Collection.H_6"/><para></para>
+    /// <see cref="Pattern_Collection.H_7"/>: <inheritdoc cref="Pattern_Collection.H_7"/><para></para>
     /// <para>当匹配到H3模式时，在国标截面特性表格中查找，同一型号名下有多项时按以下规则进行匹配：</para>
     /// <list type="number">
     ///     <item>
@@ -719,8 +741,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>十字交叉焊接H型钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.HH_1"/></para>
-    /// <para><see cref="Pattern_Collection.HH_2"/></para>
+    /// <see cref="Pattern_Collection.HH_1"/>: <inheritdoc cref="Pattern_Collection.HH_1"/><para></para>
+    /// <see cref="Pattern_Collection.HH_2"/>: <inheritdoc cref="Pattern_Collection.HH_2"/><para></para>
     /// </summary>
     public class SectionSteel_HH : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -960,9 +982,9 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>T型钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.T_1"/></para>
-    /// <para><see cref="Pattern_Collection.T_2"/></para>
-    /// <para><see cref="Pattern_Collection.T_3"/></para>
+    /// <see cref="Pattern_Collection.T_1"/>: <inheritdoc cref="Pattern_Collection.T_1"/><para></para>
+    /// <see cref="Pattern_Collection.T_2"/>: <inheritdoc cref="Pattern_Collection.T_2"/><para></para>
+    /// <see cref="Pattern_Collection.T_3"/>: <inheritdoc cref="Pattern_Collection.T_3"/><para></para>
     /// <para>当匹配到T3模式时，在国标截面特性表格中查找，同一型号名下有多项时按最接近项匹配。</para>
     /// </summary>
     public class SectionSteel_T : SectionSteelBase, ISectionSteel {
@@ -1174,8 +1196,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>工字钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.I_1"/></para>
-    /// <para><see cref="Pattern_Collection.I_2"/></para>
+    /// <see cref="Pattern_Collection.I_1"/>: <inheritdoc cref="Pattern_Collection.I_1"/><para></para>
+    /// <see cref="Pattern_Collection.I_2"/>: <inheritdoc cref="Pattern_Collection.I_2"/><para></para>
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>I2模式下，当型号大于等于20号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
@@ -1318,8 +1340,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>槽钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CHAN_1"/></para>
-    /// <para><see cref="Pattern_Collection.CHAN_2"/></para>
+    /// <see cref="Pattern_Collection.CHAN_1"/>: <inheritdoc cref="Pattern_Collection.CHAN_1"/><para></para>
+    /// <see cref="Pattern_Collection.CHAN_2"/>: <inheritdoc cref="Pattern_Collection.CHAN_2"/><para></para>
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>CHAN_2模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
@@ -1464,8 +1486,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>槽钢，口对口双拼。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CHAN_MtM_1"/></para>
-    /// <para><see cref="Pattern_Collection.CHAN_MtM_2"/></para>
+    /// <see cref="Pattern_Collection.CHAN_MtM_1"/>: <inheritdoc cref="Pattern_Collection.CHAN_MtM_1"/><para></para>
+    /// <see cref="Pattern_Collection.CHAN_MtM_2"/>: <inheritdoc cref="Pattern_Collection.CHAN_MtM_2"/><para></para>
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>CHAN_MtM_2模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
@@ -1596,8 +1618,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>槽钢，背对背双拼。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CHAN_BtB_1"/></para>
-    /// <para><see cref="Pattern_Collection.CHAN_BtB_2"/></para>
+    /// <see cref="Pattern_Collection.CHAN_BtB_1"/>: <inheritdoc cref="Pattern_Collection.CHAN_BtB_1"/><para></para>
+    /// <see cref="Pattern_Collection.CHAN_BtB_2"/>: <inheritdoc cref="Pattern_Collection.CHAN_BtB_2"/><para></para>
     /// <para>匹配到两种模式时，均在国标截面特性表格中查找。</para>
     /// <para>CHAN_BtB_2模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。</para>
     /// </summary>
@@ -1744,8 +1766,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>角钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.L_1"/></para>
-    /// <para><see cref="Pattern_Collection.L_2"/></para>
+    /// <see cref="Pattern_Collection.L_1"/>: <inheritdoc cref="Pattern_Collection.L_1"/><para></para>
+    /// <see cref="Pattern_Collection.L_2"/>: <inheritdoc cref="Pattern_Collection.L_2"/><para></para>
     /// <para>当匹配到L2模式时，在国标截面特性表格中查找，同一型号名下按第一个进行匹配。</para>
     /// </summary>
     public class SectionSteel_L : SectionSteelBase, ISectionSteel {
@@ -1887,8 +1909,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>角钢，背对背双拼。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.L_BtB_1"/></para>
-    /// <para><see cref="Pattern_Collection.L_BtB_2"/></para>
+    /// <see cref="Pattern_Collection.L_BtB_1"/>: <inheritdoc cref="Pattern_Collection.L_BtB_1"/><para></para>
+    /// <see cref="Pattern_Collection.L_BtB_2"/>: <inheritdoc cref="Pattern_Collection.L_BtB_2"/><para></para>
     /// <para>当匹配到L_BtB_2模式时，在国标截面特性表格中查找，同一型号名下按第一个进行匹配。</para>
     /// </summary>
     public class SectionSteel_L_BtB : SectionSteelBase, ISectionSteel {
@@ -2039,9 +2061,9 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>冷弯空心型钢（Cold forming hollow section steel）方管和矩管。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CFH_J_1"/></para>
-    /// <para><see cref="Pattern_Collection.CFH_J_2"/></para>
-    /// <para><see cref="Pattern_Collection.CFH_J_3"/></para>
+    /// <see cref="Pattern_Collection.CFH_J_1"/>: <inheritdoc cref="Pattern_Collection.CFH_J_1"/><para></para>
+    /// <see cref="Pattern_Collection.CFH_J_2"/>: <inheritdoc cref="Pattern_Collection.CFH_J_2"/><para></para>
+    /// <see cref="Pattern_Collection.CFH_J_3"/>: <inheritdoc cref="Pattern_Collection.CFH_J_3"/><para></para>
     /// </summary>
     public class SectionSteel_CFH_J : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -2113,6 +2135,15 @@ namespace SectionSteel {
             switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
+                if(b1 == h1 && b2 == h2 && h2 == h1) {
+                    if (exclude_topSurface)
+                        formula = $"{h1}*3";
+                    else
+                        formula = $"{h1}*4";
+
+                    break;
+                }
+                
                 if (h2 != h1)
                     formula = $"{h1}+{h2}";
                 else
@@ -2201,12 +2232,12 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>焊接矩形管。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.RECT_1"/></para>
-    /// <para><see cref="Pattern_Collection.RECT_2"/></para>
-    /// <para><see cref="Pattern_Collection.RECT_3"/></para>
-    /// <para><see cref="Pattern_Collection.RECT_4"/></para>
-    /// <para><see cref="Pattern_Collection.RECT_5"/></para>
-    /// <para><see cref="Pattern_Collection.RECT_6"/></para>
+    /// <see cref="Pattern_Collection.RECT_1"/>: <inheritdoc cref="Pattern_Collection.RECT_1"/><para></para>
+    /// <see cref="Pattern_Collection.RECT_2"/>: <inheritdoc cref="Pattern_Collection.RECT_2"/><para></para>
+    /// <see cref="Pattern_Collection.RECT_3"/>: <inheritdoc cref="Pattern_Collection.RECT_3"/><para></para>
+    /// <see cref="Pattern_Collection.RECT_4"/>: <inheritdoc cref="Pattern_Collection.RECT_4"/><para></para>
+    /// <see cref="Pattern_Collection.RECT_5"/>: <inheritdoc cref="Pattern_Collection.RECT_5"/><para></para>
+    /// <see cref="Pattern_Collection.RECT_6"/>: <inheritdoc cref="Pattern_Collection.RECT_6"/><para></para>
     /// </summary>
     public class SectionSteel_RECT : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -2298,6 +2329,15 @@ namespace SectionSteel {
             switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
+                if(b1 == h1 && b2 == h2 && h2 == h1) {
+                    if (exclude_topSurface)
+                        formula = $"{h1}*3";
+                    else
+                        formula = $"{h1}*4";
+
+                    break;
+                }
+
                 if (h2 != h1)
                     formula = $"{h1}+{h2}";
                 else
@@ -2382,7 +2422,7 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>冷弯空心型钢（Cold forming hollow section steel）圆管。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CFH_Y_1"/></para>
+    /// <see cref="Pattern_Collection.CFH_Y_1"/>: <inheritdoc cref="Pattern_Collection.CFH_Y_1"/><para></para>
     /// </summary>
     public class SectionSteel_CFH_Y : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -2499,9 +2539,9 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>圆钢或圆管。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CIRC_1"/></para>
-    /// <para><see cref="Pattern_Collection.CIRC_2"/></para>
-    /// <para><see cref="Pattern_Collection.CIRC_3"/></para>
+    /// <see cref="Pattern_Collection.CIRC_1"/>: <inheritdoc cref="Pattern_Collection.CIRC_1"/><para></para>
+    /// <see cref="Pattern_Collection.CIRC_2"/>: <inheritdoc cref="Pattern_Collection.CIRC_2"/><para></para>
+    /// <see cref="Pattern_Collection.CIRC_3"/>: <inheritdoc cref="Pattern_Collection.CIRC_3"/><para></para>
     /// </summary>
     public class SectionSteel_CIRC : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -2692,8 +2732,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>冷弯开口型钢（Cold forming open section steel）内卷边槽钢。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CFO_CN_1"/></para>
-    /// <para><see cref="Pattern_Collection.CFO_CN_2"/></para>
+    /// <see cref="Pattern_Collection.CFO_CN_1"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_1"/><para></para>
+    /// <see cref="Pattern_Collection.CFO_CN_2"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_2"/><para></para>
     /// </summary>
     public class SectionSteel_CFO_CN : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -2841,8 +2881,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>冷弯开口型钢（Cold forming open section steel）内卷边槽钢，口对口双拼。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CFO_CN_MtM_1"/></para>
-    /// <para><see cref="Pattern_Collection.CFO_CN_MtM_2"/></para>
+    /// <see cref="Pattern_Collection.CFO_CN_MtM_1"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_MtM_1"/><para></para>
+    /// <see cref="Pattern_Collection.CFO_CN_MtM_2"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_MtM_2"/><para></para>
     /// </summary>
     public class SectionSteel_CFO_CN_MtM : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -2965,8 +3005,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>冷弯开口型钢（Cold forming open section steel）内卷边槽钢，背对背双拼。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CFO_CN_BtB_1"/></para>
-    /// <para><see cref="Pattern_Collection.CFO_CN_BtB_2"/></para>
+    /// <see cref="Pattern_Collection.CFO_CN_BtB_1"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_BtB_1"/><para></para>
+    /// <see cref="Pattern_Collection.CFO_CN_BtB_2"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_BtB_2"/><para></para>
     /// </summary>
     public class SectionSteel_CFO_CN_BtB : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -3114,8 +3154,8 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>冷弯开口型钢（Cold forming open section steel）卷边Z型钢（含斜卷边Z型钢XZ）。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.CFO_ZJ_1"/></para>
-    /// <para><see cref="Pattern_Collection.CFO_ZJ_2"/></para>
+    /// <see cref="Pattern_Collection.CFO_ZJ_1"/>: <inheritdoc cref="Pattern_Collection.CFO_ZJ_1"/><para></para>
+    /// <see cref="Pattern_Collection.CFO_ZJ_2"/>: <inheritdoc cref="Pattern_Collection.CFO_ZJ_2"/><para></para>
     /// </summary>
     public class SectionSteel_CFO_ZJ : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -3263,7 +3303,7 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>矩形板件。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.PL_1"/></para>
+    /// <see cref="Pattern_Collection.PL_1"/>: <inheritdoc cref="Pattern_Collection.PL_1"/><para></para>
     /// </summary>
     public class SectionSteel_PL : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -3441,7 +3481,7 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>（直角）三角板。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.PL_T_1"/></para>
+    /// <see cref="Pattern_Collection.PL_T_1"/>: <inheritdoc cref="Pattern_Collection.PL_T_1"/><para></para>
     /// </summary>
     public class SectionSteel_PL_Triangle : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -3611,7 +3651,7 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>圆形板。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.PL_O_1"/></para>
+    /// <see cref="Pattern_Collection.PL_O_1"/>: <inheritdoc cref="Pattern_Collection.PL_O_1"/><para></para>
     /// </summary>
     public class SectionSteel_PL_Circular : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -3723,7 +3763,7 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>复合板件。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.PL_CMP_1"/></para>
+    /// <see cref="Pattern_Collection.PL_CMP_1"/>: <inheritdoc cref="Pattern_Collection.PL_CMP_1"/><para></para>
     /// </summary>
     public class SectionSteel_PL_Composite : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -3943,7 +3983,7 @@ namespace SectionSteel {
     }
     /// <summary>
     /// <para>球体。在以下模式中尝试匹配：</para>
-    /// <para><see cref="Pattern_Collection.SPHERE_1"/></para>
+    /// <see cref="Pattern_Collection.SPHERE_1"/>: <inheritdoc cref="Pattern_Collection.SPHERE_1"/><para></para>
     /// </summary>
     public class SectionSteel_SPHERE : SectionSteelBase, ISectionSteel {
         private string _profileText;
@@ -4041,7 +4081,7 @@ namespace SectionSteel {
         }
     }
     /// <summary>
-    /// 型钢总类。根据属性<b>ProfileText</b>自动识别具体应用哪一项子类，因此本类依赖于各子类：
+    /// 型钢总类，实际应用中使用此类即可。根据属性 <b>ProfileText</b> 自动识别具体应用哪一项子类，因此本类依赖于各子类：
     /// <para><see cref="SectionSteel_H"/></para>
     /// <para><see cref="SectionSteel_HH"/></para>
     /// <para><see cref="SectionSteel_T"/></para>
@@ -4079,7 +4119,7 @@ namespace SectionSteel {
             {"L", new string[] {"∠","L"}},
             {"L_BtB", new string[] {"2∠","2L"}},
             {"CFH_J", new string[] {"CFRHS","F","J","P","RHS","SHS","TUB"}},
-            {"RECT", new string[] {"B_BUILT","B_VAR_A","B_VAR_B","B_VAR_C","B_WLD_F","B_WLD_J","R","RHSC"}},
+            {"RECT", new string[] {"B_BUILT","B_VAR_A","B_VAR_B","B_VAR_C","B_WLD_F","B_WLD_J","R","RECT","RHSC"}},
             {"CFH_Y", new string[] {"Y","φ"}},
             {"CIRC", new string[] {"CFCHS","CHS","D","ELD","EPD","O","PD","PIP","ROD","TUBE"}},
             {"CFO_CN", new string[] {"C","CC"}},
