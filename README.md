@@ -5,4 +5,4 @@
 
  详细说明参见"Help.md"文档。
  
-![使用演示](https://github.com/ThinkerHua/SectionSteelCalculationTool/blob/master/Resources/Introduction.gif)
+![使用演示](https://github.com/ThinkerHua/SectionSteelCalculationTool/blob/main/Resources/Introduction.gif)
