@@ -208,9 +208,9 @@ namespace SectionSteel {
         /// </summary>
         public static string L_1 => @"^[∠L](?<h>\d+\.?\d*)(\*(?<b>\d+\.?\d*))?\*(?<t>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 ∠ 或 L，后续参数形式为 h/b，以cm为单位。
+        /// 前置标识符为 ∠ 或 L，后续参数形式为 h[/b]，以cm为单位。
         /// </summary>
-        public static string L_2 => @"^[∠L](?<h>\d+\.?\d*)/(?<b>\d+\.?\d*)$";
+        public static string L_2 => @"^[∠L](?<h>\d+\.?\d*)(/(?<b>\d+\.?\d*))?$";
         /// <summary>
         /// 前置标识符为 2∠ 或 2L，后续参数形式为 h[*b]*t。
         /// </summary>
@@ -401,7 +401,7 @@ namespace SectionSteel {
     ///     </item>
     ///     <item>
     ///         <para>如<b>均不符合</b>，则匹配<b>第1项</b>，例如：</para>
-    ///         <para>HW500*500型号名下，有H492*465*15*20、H502*465*15*25、H502*470*20*25三种型号，均带星标，且三种参数均与型号名不致。此时匹配第1种。</para>
+    ///         <para>HW500*500型号名下，有H492*465*15*20、H502*465*15*25、H502*470*20*25三种型号，均带星标，且三种参数均与型号名不一致。此时匹配第1种。</para>
     ///     </item>
     /// </list>
     /// </summary>
@@ -1811,6 +1811,9 @@ namespace SectionSteel {
 
                     double.TryParse(match.Groups["h"].Value, out h);
                     double.TryParse(match.Groups["b"].Value, out b);
+
+                    if (b == 0)
+                        b = h;
                     h *= 10; b *= 10;
                     data = GBData.SearchGBData(GBData.L, new double[] { h, b });
                     if (data == null)
@@ -2135,7 +2138,7 @@ namespace SectionSteel {
             switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(b1 == h1 && b2 == h2 && h2 == h1) {
+                if (b1 == h1 && b2 == h2 && h2 == h1) {
                     if (exclude_topSurface)
                         formula = $"{h1}*3";
                     else
@@ -2143,7 +2146,7 @@ namespace SectionSteel {
 
                     break;
                 }
-                
+
                 if (h2 != h1)
                     formula = $"{h1}+{h2}";
                 else
@@ -2329,7 +2332,7 @@ namespace SectionSteel {
             switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
             case FormulaAccuracyEnum.PRECISELY:
-                if(b1 == h1 && b2 == h2 && h2 == h1) {
+                if (b1 == h1 && b2 == h2 && h2 == h1) {
                     if (exclude_topSurface)
                         formula = $"{h1}*3";
                     else
