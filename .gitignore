@@ -403,3 +403,4 @@ FodyWeavers.xsd
 *.sqlite
 *.sqlite
 .vs/SteelStructureCalculationTool/v17/.suo
+/.vs/SteelStructureCalculationTool/v17/.suo
