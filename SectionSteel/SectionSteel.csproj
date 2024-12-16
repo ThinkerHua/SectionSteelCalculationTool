@@ -47,9 +47,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormulaAccuracyEnum.cs" />
     <Compile Include="GBData.cs" />
+    <Compile Include="ISectionSteel.cs" />
+    <Compile Include="MismatchedProfileTextException.cs" />
+    <Compile Include="Pattern_Collection.cs" />
+    <Compile Include="PIStyleEnum.cs" />
     <Compile Include="SectionSteel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SectionSteelBase.cs" />
+    <Compile Include="SectionSteel_CFH_J.cs" />
+    <Compile Include="SectionSteel_CFH_Y.cs" />
+    <Compile Include="SectionSteel_CFO_CN.cs" />
+    <Compile Include="SectionSteel_CFO_CN_BtB.cs" />
+    <Compile Include="SectionSteel_CFO_CN_MtM.cs" />
+    <Compile Include="SectionSteel_CFO_ZJ.cs" />
+    <Compile Include="SectionSteel_CHAN.cs" />
+    <Compile Include="SectionSteel_CHAN_BtB.cs" />
+    <Compile Include="SectionSteel_CHAN_MtM.cs" />
+    <Compile Include="SectionSteel_CIRC.cs" />
+    <Compile Include="SectionSteel_H.cs" />
+    <Compile Include="SectionSteel_HH.cs" />
+    <Compile Include="SectionSteel_I.cs" />
+    <Compile Include="SectionSteel_L.cs" />
+    <Compile Include="SectionSteel_L_BtB.cs" />
+    <Compile Include="SectionSteel_PL.cs" />
+    <Compile Include="SectionSteel_PL_Circular.cs" />
+    <Compile Include="SectionSteel_PL_Composite.cs" />
+    <Compile Include="SectionSteel_PL_Triangle.cs" />
+    <Compile Include="SectionSteel_RECT.cs" />
+    <Compile Include="SectionSteel_SPHERE.cs" />
+    <Compile Include="SectionSteel_T.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

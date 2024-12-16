@@ -75,6 +75,9 @@
     <Compile Include="Form_SSCT.Designer.cs">
       <DependentUpon>Form_SSCT.cs</DependentUpon>
     </Compile>
+    <Compile Include="GenerationOption.cs" />
+    <Compile Include="GenerationTypeEnum.cs" />
+    <Compile Include="Offset{T}.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form_SSCT.resx">

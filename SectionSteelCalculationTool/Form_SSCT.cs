@@ -189,25 +189,4 @@ namespace SectionSteelCalculationTool {
             this.button_STIF_Generate.Enabled = true;
         }
     }
-    public class Offset<T> {
-        public T RowOffset { get; set; }
-        public T ColumnOffset { get; set; }
-    }
-    public enum GenerationTypeEnum {
-        UnitArea,
-        UnitWeight,
-        Stiffener,
-    }
-    public class GenerationOption {
-        public GenerationTypeEnum GenerationType { get; set; }
-        public FormulaAccuracyEnum Accuracy { get; set; }
-        public PIStyleEnum PIStyle { get; set; }
-        public bool ExcludeTopSurface { get; set; }
-        public bool TruncatedRounding { get; set; }
-        public Offset<int> TargetOffset { get; set; }
-        public bool OverwriteExistingData { get; set; }
-        public GenerationOption() {
-            TargetOffset = new Offset<int>();
-        }
-    }
 }
