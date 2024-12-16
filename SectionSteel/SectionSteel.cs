@@ -53,7 +53,7 @@ namespace SectionSteel {
         private PIStyleEnum _PIStyle;
         private ISectionSteel realSectionSteel;
         protected static Dictionary<string, string[]> classifierTable = new Dictionary<string, string[]> {
-            {"H", new string[] {"B_WLD_A","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI","I_VAR_A"}},
+            {"H", new string[] {"B_WLD_A", "BH","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI","I_VAR_A"}},
             {"HH", new string[] {"B_WLD_O","HH"}},
             {"T", new string[] {"T","TW","TM","TN","B_WLD_E"}},
             {"I", new string[] {"I"}},

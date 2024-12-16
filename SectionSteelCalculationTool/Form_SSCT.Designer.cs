@@ -293,6 +293,7 @@ namespace SectionSteelCalculationTool {
             this.rButton_Unit_Area.TabStop = true;
             this.rButton_Unit_Area.Text = "Unit &Area";
             this.rButton_Unit_Area.UseVisualStyleBackColor = true;
+            this.rButton_Unit_Area.CheckedChanged += new System.EventHandler(this.UnitArea_CheckedChanged);
             // 
             // button_AW_Generate
             // 

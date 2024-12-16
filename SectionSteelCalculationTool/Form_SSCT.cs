@@ -188,5 +188,12 @@ namespace SectionSteelCalculationTool {
             Generate(sender, e);
             this.button_STIF_Generate.Enabled = true;
         }
+
+        private void UnitArea_CheckedChanged(object sender, EventArgs e) {
+            if (rButton_Unit_Area.Checked)
+                cBox_ExcludeTopSurface.Enabled = true;
+            else
+                cBox_ExcludeTopSurface.Enabled = false;
+        }
     }
 }

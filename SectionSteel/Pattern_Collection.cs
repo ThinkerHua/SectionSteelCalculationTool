@@ -44,9 +44,9 @@ namespace SectionSteel {
         /// </summary>
         public static string H_4 => @"^B_WLD_K(?<h1>\d+\.?\d*)\*(?<h2>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t1>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 B_WLD_A，后续参数形式为 h1*b1*s*t1。
+        /// 前置标识符为 B_WLD_A 或 BH，后续参数形式为 h1*b1*s*t1。
         /// </summary>
-        public static string H_5 => @"^B_WLD_A(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t1>\d+\.?\d*)$";
+        public static string H_5 => @"^((B_WLD_A)|(BH))(?<h1>\d+\.?\d*)\*(?<b1>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<t1>\d+\.?\d*)$";
         /// <summary>
         /// 前置标识符为 B_WLD_H，后续参数形式为 h1*b1*b2*s*t1*t2。
         /// </summary>
@@ -285,7 +285,7 @@ namespace SectionSteel {
         /// 匹配任意标识符。
         /// </summary>
         public static string Classifier => @"^(?<classifier>"
-            + @"(B_WLD_A)|(B_WLD_H)|(B_WLD_K)|(H)|(HI)|(HM)|(HN)|(HP)|(HT)|(HW)|(PHI)|(WH)|(WI)|(I_VAR_A)|"
+            + @"(B_WLD_A)|(BH)|(B_WLD_H)|(B_WLD_K)|(H)|(HI)|(HM)|(HN)|(HP)|(HT)|(HW)|(PHI)|(WH)|(WI)|(I_VAR_A)|"
             + @"(B_WLD_O)|(HH)|(T)|(TW)|(TM)|(TN)|(B_WLD_E)|(I)|(\[)|(C)|(\[\])|(\]\[)|(2\[)|(2C)|(∠)|(L)|(2∠)|(2L)|"
             + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RECT)|(RHSC)|"
             + @"(Y)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
