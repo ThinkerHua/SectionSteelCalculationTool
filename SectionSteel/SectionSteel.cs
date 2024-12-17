@@ -15,13 +15,7 @@
  *==============================================================================*/
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
 
 namespace SectionSteel {
     /// <summary>
@@ -52,26 +46,26 @@ namespace SectionSteel {
         private string _profileText;
         private PIStyleEnum _PIStyle;
         private ISectionSteel realSectionSteel;
-        protected static Dictionary<string, string[]> classifierTable = new Dictionary<string, string[]> {
-            {"H", new string[] {"B_WLD_A", "BH","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI","I_VAR_A"}},
-            {"HH", new string[] {"B_WLD_O","HH"}},
-            {"T", new string[] {"T","TW","TM","TN","B_WLD_E"}},
-            {"I", new string[] {"I"}},
-            {"CHAN", new string[] {"[","C"}},
-            {"CHAN_MtM", new string[] {"[]"}},
-            {"CHAN_BtB", new string[] {"][","2[","2C"}},
-            {"L", new string[] {"∠","L"}},
-            {"L_BtB", new string[] {"2∠","2L"}},
-            {"CFH_J", new string[] {"CFRHS","F","J","P","RHS","SHS","TUB"}},
-            {"RECT", new string[] {"B_BUILT","B_VAR_A","B_VAR_B","B_VAR_C","B_WLD_F","B_WLD_J","R","RECT","RHSC"}},
-            {"CFH_Y", new string[] {"Y","φ"}},
-            {"CIRC", new string[] {"CFCHS","CHS","D","ELD","EPD","O","PD","PIP","ROD","TUBE"}},
-            {"CFO_CN", new string[] {"C","CC"}},
-            {"CFO_CN_MtM", new string[] {"2CCM","2CM"}},
-            {"CFO_CN_BtB", new string[] {"2C","2CC"}},
-            {"CFO_ZJ", new string[] {"XZ","Z","ZZ"}},
-            {"PL", new string[] {"PL","PLD","PLO","PLT"}},
-            {"SPHERE", new string[]{"SPHERE"} },
+        protected static Dictionary<Type, string[]> classifierTable = new Dictionary<Type, string[]> {
+            {typeof(SectionSteel_H), new string[] {"B_WLD_A", "BH","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI","I_VAR_A"}},
+            {typeof(SectionSteel_HH), new string[] {"B_WLD_O","HH"}},
+            {typeof(SectionSteel_T), new string[] {"T","TW","TM","TN","B_WLD_E"}},
+            {typeof(SectionSteel_I), new string[] {"I"}},
+            {typeof(SectionSteel_CHAN), new string[] {"[","C"}},
+            {typeof(SectionSteel_CHAN_MtM), new string[] {"[]"}},
+            {typeof(SectionSteel_CHAN_BtB), new string[] {"][","2[","2C"}},
+            {typeof(SectionSteel_L), new string[] {"∠","L"}},
+            {typeof(SectionSteel_L_BtB), new string[] {"2∠","2L"}},
+            {typeof(SectionSteel_CFH_J), new string[] {"CFRHS","F","J","P","RHS","SHS","TUB"}},
+            {typeof(SectionSteel_RECT), new string[] {"B_BUILT","B_VAR_A","B_VAR_B","B_VAR_C","B_WLD_F","B_WLD_J","R","RECT","RHSC"}},
+            {typeof(SectionSteel_CFH_Y), new string[] {"Y","φ"}},
+            {typeof(SectionSteel_CIRC), new string[] {"CFCHS","CHS","D","ELD","EPD","O","PD","PIP","ROD","TUBE"}},
+            {typeof(SectionSteel_CFO_CN), new string[] {"C","CC"}},
+            {typeof(SectionSteel_CFO_CN_MtM), new string[] {"2CCM","2CM"}},
+            {typeof(SectionSteel_CFO_CN_BtB), new string[] {"2C","2CC"}},
+            {typeof(SectionSteel_CFO_ZJ), new string[] {"XZ","Z","ZZ"}},
+            {typeof(SectionSteel_PL), new string[] {"PL","PLD","PLO","PLT"}},
+            {typeof(SectionSteel_SPHERE), new string[]{"SPHERE"} },
         };
         public string ProfileText {
             get => _profileText;
@@ -133,7 +127,7 @@ namespace SectionSteel {
                     realSectionSteel = new SectionSteel_PL_Composite(ProfileText);
                     break;
                 default:
-                    string type = string.Empty;
+                    Type type = null;
                     foreach (var item in classifierTable) {
                         foreach (var value in item.Value) {
                             if (classifier.Equals(value)) {
@@ -142,68 +136,11 @@ namespace SectionSteel {
                             }
                         }
                     }
+                    throw new MismatchedProfileTextException();
+
                 Got_it:
-                    switch (type) {
-                    case "H":
-                        realSectionSteel = new SectionSteel_H(ProfileText);
-                        break;
-                    case "HH":
-                        realSectionSteel = new SectionSteel_HH(ProfileText);
-                        break;
-                    case "T":
-                        realSectionSteel = new SectionSteel_T(ProfileText);
-                        break;
-                    case "I":
-                        realSectionSteel = new SectionSteel_I(ProfileText);
-                        break;
-                    case "CHAN":
-                        realSectionSteel = new SectionSteel_CHAN(ProfileText);
-                        break;
-                    case "CHAN_MtM":
-                        realSectionSteel = new SectionSteel_CHAN_MtM(ProfileText);
-                        break;
-                    case "CHAN_BtB":
-                        realSectionSteel = new SectionSteel_CHAN_BtB(ProfileText);
-                        break;
-                    case "L":
-                        realSectionSteel = new SectionSteel_L(ProfileText);
-                        break;
-                    case "L_BtB":
-                        realSectionSteel = new SectionSteel_L_BtB(ProfileText);
-                        break;
-                    case "CFH_J":
-                        realSectionSteel = new SectionSteel_CFH_J(ProfileText);
-                        break;
-                    case "RECT":
-                        realSectionSteel = new SectionSteel_RECT(ProfileText);
-                        break;
-                    case "CFH_Y":
-                        realSectionSteel = new SectionSteel_CFH_Y(ProfileText);
-                        break;
-                    case "CIRC":
-                        realSectionSteel = new SectionSteel_CIRC(ProfileText);
-                        break;
-                    case "CFO_CN":
-                        realSectionSteel = new SectionSteel_CFO_CN(ProfileText);
-                        break;
-                    case "CFO_CN_MtM":
-                        realSectionSteel = new SectionSteel_CFO_CN_MtM(ProfileText);
-                        break;
-                    case "CFO_CN_BtB":
-                        realSectionSteel = new SectionSteel_CFO_CN_BtB(ProfileText);
-                        break;
-                    case "CFO_ZJ":
-                        realSectionSteel = new SectionSteel_CFO_ZJ(ProfileText);
-                        break;
-                    case "SPHERE":
-                        realSectionSteel = new SectionSteel_SPHERE(ProfileText);
-                        break;
-                    //PL可能带前缀n，进入default分支处理
-                    case "PL":
-                    default:
-                        realSectionSteel = new SectionSteel_PL_Composite(ProfileText);
-                        break;
-                    }
+                    realSectionSteel = Activator.CreateInstance(type) as ISectionSteel;
+                    realSectionSteel.ProfileText = ProfileText;
 
                     break;
                 }
