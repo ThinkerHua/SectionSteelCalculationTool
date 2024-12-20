@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SectionSteel</RootNamespace>
     <AssemblyName>SectionSteel</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -49,13 +49,14 @@
   <ItemGroup>
     <Compile Include="FormulaAccuracyEnum.cs" />
     <Compile Include="GBData.cs" />
-    <Compile Include="ISectionSteel.cs" />
     <Compile Include="MismatchedProfileTextException.cs" />
     <Compile Include="Pattern_Collection.cs" />
     <Compile Include="PIStyleEnum.cs" />
+    <Compile Include="ProfileTextChangingEventHandler.cs" />
     <Compile Include="SectionSteel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionSteelBase.cs" />
+    <Compile Include="SectionSteelCategoryInfo.cs" />
     <Compile Include="SectionSteel_CFH_J.cs" />
     <Compile Include="SectionSteel_CFH_Y.cs" />
     <Compile Include="SectionSteel_CFO_CN.cs" />

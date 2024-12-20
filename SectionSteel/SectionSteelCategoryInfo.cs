@@ -10,20 +10,32 @@
  *  You should have received a copy of the GNU General Public License 
  *  along with this program. If not, see <http://www.gnu.org/licenses/>. 
  *==============================================================================
- *  MismatchedProfileTextException.cs: 不匹配的截面规格文本引发的异常
+ *  SectionSteelCategoryInfo.cs: 型钢分类信息
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
 using System;
 
 namespace SectionSteel {
     /// <summary>
-    /// 不匹配的截面规格文本。
+    /// 型钢分类信息。
     /// </summary>
-    public class MismatchedProfileTextException : Exception {
-        public MismatchedProfileTextException() { }
-        public MismatchedProfileTextException(string msg) : base(msg) { }
-        public override string ToString() {
-            return $"不匹配的截面规格文本：{Message}";
+    public struct SectionSteelCategoryInfo {
+        /// <summary>
+        /// 类型。
+        /// </summary>
+        public Type Type;
+        /// <summary>
+        /// 类型标签。
+        /// </summary>
+        public string Label;
+        /// <summary>
+        /// 标识符集合。
+        /// </summary>
+        public string[] Classifiers;
+        public SectionSteelCategoryInfo(Type type, string label, string[] classifiers) {
+            Type = type;
+            Label = label;
+            Classifiers = classifiers;
         }
     }
 }

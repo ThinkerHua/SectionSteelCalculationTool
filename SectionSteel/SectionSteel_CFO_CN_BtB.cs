@@ -13,49 +13,73 @@
  *  SectionSteel_CFO_CN_BtB.cs: 冷弯开口型钢（Cold forming open section steel）内卷边槽钢，背对背双拼
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SectionSteel {
     /// <summary>
     /// <para>冷弯开口型钢（Cold forming open section steel）内卷边槽钢，背对背双拼。在以下模式中尝试匹配：</para>
-    /// <see cref="Pattern_Collection.CFO_CN_BtB_1"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_BtB_1"/><para></para>
-    /// <see cref="Pattern_Collection.CFO_CN_BtB_2"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_BtB_2"/><para></para>
+    /// <see cref="Pattern_Collection.CFO_CN_BtB_1"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_BtB_1"/><br/>
+    /// <see cref="Pattern_Collection.CFO_CN_BtB_2"/>: <inheritdoc cref="Pattern_Collection.CFO_CN_BtB_2"/><br/>
     /// </summary>
-    public class SectionSteel_CFO_CN_BtB : SectionSteelBase, ISectionSteel {
-        private string _profileText;
+    public class SectionSteel_CFO_CN_BtB : SectionSteelBase {
         private double h, b1, c1, b2, c2, t;
-        private GBDataBase data;
-        public string ProfileText {
-            get => _profileText;
-            set {
-                _profileText = value;
-                SetFieldsValue();
-            }
-        }
-        public PIStyleEnum PIStyle { get; set; }
-        public SectionSteel_CFO_CN_BtB() {
-
-        }
+        private GBData data;
+        private static readonly GBData[] _gbDataSet = new GBData[] {
+            new GBData("", new double[] { 60, 30, 10,2.5 }, 2.363, 0),
+            new GBData("", new double[] { 60, 30, 10,3 }, 2.743, 0),
+            new GBData("", new double[] { 80, 40, 15,2 }, 2.72, 0),
+            new GBData("", new double[] { 100, 50, 15,2.5 }, 4.11, 0),
+            new GBData("", new double[] { 100, 50, 20,2.5 }, 4.325, 0),
+            new GBData("", new double[] { 100, 50, 20,3 }, 5.098, 0),
+            new GBData("", new double[] { 120, 50, 20,2.5 }, 4.7, 0),
+            new GBData("", new double[] { 120, 60, 20,3 }, 6.01, 0),
+            new GBData("", new double[] { 140, 50, 20,2 }, 4.14, 0),
+            new GBData("", new double[] { 140, 50, 20,2.5 }, 5.09, 0),
+            new GBData("", new double[] { 140, 60, 20,2.5 }, 5.503, 0),
+            new GBData("", new double[] { 140, 60, 20,3 }, 6.511, 0),
+            new GBData("", new double[] { 160, 60, 20,2 }, 4.76, 0),
+            new GBData("", new double[] { 160, 60, 20,2.5 }, 5.87, 0),
+            new GBData("", new double[] { 160, 70, 20,3 }, 7.42, 0),
+            new GBData("", new double[] { 180, 60, 20,3 }, 7.453, 0),
+            new GBData("", new double[] { 180, 70, 20,3 }, 7.924, 0),
+            new GBData("", new double[] { 180, 70, 20,2 }, 5.39, 0),
+            new GBData("", new double[] { 180, 70, 20,2.5 }, 6.66, 0),
+            new GBData("", new double[] { 200, 60, 20,3 }, 7.924, 0),
+            new GBData("", new double[] { 200, 70, 20,2 }, 5.71, 0),
+            new GBData("", new double[] { 200, 70, 20,2.5 }, 7.05, 0),
+            new GBData("", new double[] { 200, 70, 20,3 }, 8.395, 0),
+            new GBData("", new double[] { 220, 75, 20,2 }, 6.18, 0),
+            new GBData("", new double[] { 220, 75, 20,2.5 }, 7.64, 0),
+            new GBData("", new double[] { 250, 40, 15,3 }, 7.924, 0),
+            new GBData("", new double[] { 300, 40, 15,3 }, 9.102, 0),
+            new GBData("", new double[] { 400, 50, 15,3 }, 11.928, 0),
+            new GBData("", new double[] { 450, 70, 30,6 }, 28.092, 0),
+            new GBData("", new double[] { 450, 70, 30,8 }, 36.421, 0),
+            new GBData("", new double[] { 500, 100, 40,6 }, 34.176, 0),
+            new GBData("", new double[] { 500, 100, 40,8 }, 44.533, 0),
+            new GBData("", new double[] { 500, 100, 40,10 }, 54.372, 0),
+            new GBData("", new double[] { 550, 120, 50,8 }, 51.397, 0),
+            new GBData("", new double[] { 550, 120, 50,10 }, 62.952, 0),
+            new GBData("", new double[] { 550, 120, 50,12 }, 73.99, 0),
+            new GBData("", new double[] { 600, 150, 60,12 }, 86.158, 0),
+            new GBData("", new double[] { 600, 150, 60,14 }, 97.395, 0),
+            new GBData("", new double[] { 600, 150, 60,16 }, 109.025, 0),
+        };
+        public override GBData[] GBDataSet => _gbDataSet;
+        public SectionSteel_CFO_CN_BtB() { }
         public SectionSteel_CFO_CN_BtB(string profileText) {
             this.ProfileText = profileText;
         }
-        protected override void SetFieldsValue() {
-            h = b1 = c1 = b2 = c2 = t = 0;
-            data = null;
+        protected override void SetFieldsValue(SectionSteelBase sender, ProfileTextChangingEventArgs e) {
             try {
-                if (string.IsNullOrEmpty(ProfileText))
-                    throw new MismatchedProfileTextException();
+                if (string.IsNullOrEmpty(e.NewText))
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_BtB_1);
+                Match match = Regex.Match(e.NewText, Pattern_Collection.CFO_CN_BtB_1);
                 if (!match.Success)
-                    match = Regex.Match(ProfileText, Pattern_Collection.CFO_CN_BtB_2);
+                    match = Regex.Match(e.NewText, Pattern_Collection.CFO_CN_BtB_2);
                 if (!match.Success)
-                    throw new MismatchedProfileTextException();
+                    throw new MismatchedProfileTextException(e.NewText);
 
                 double.TryParse(match.Groups["h"].Value, out h);
                 double.TryParse(match.Groups["b1"].Value, out b1);
@@ -68,26 +92,28 @@ namespace SectionSteel {
                 if (c2 == 0) c2 = c1;
 
                 if (b2 == b1 && c2 == c1)
-                    data = GBData.SearchGBData(GBData.CFO_CN, new double[] { h, b1, c1, t });
+                    data = FindGBData(_gbDataSet, h, b1, c1, t);
+                else
+                    data = null;
 
                 h *= 0.001; b1 *= 0.001; c1 *= 0.001; b2 *= 0.001; c2 *= 0.001; t *= 0.001;
             } catch (MismatchedProfileTextException) {
-                h = b1 = c1 = b2 = c2 = t = 0;
-                data = null;
+
+                throw;
             }
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：不实现 GBDATA（国标截面特性表格中无表面积数据）</b></para>
         /// </param>
         /// <param name="exclude_topSurface">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[2]"/>
+        /// <inheritdoc path="/param[2]"/>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
+        public override string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
             if (h == 0) return formula;
 
@@ -130,7 +156,7 @@ namespace SectionSteel {
         /// </summary>
         /// <param name="truncatedRounding"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public string GetSiffenerProfileStr(bool truncatedRounding) {
+        public override string GetSiffenerProfileStr(bool truncatedRounding) {
             return string.Empty;
         }
 
@@ -138,11 +164,11 @@ namespace SectionSteel {
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetWeightFormula(FormulaAccuracyEnum)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：ROUGHLY 等效于 PRECISELY</b></para>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
+        public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
             if (h == 0) return formula;
 
@@ -155,9 +181,9 @@ namespace SectionSteel {
                     formula = $"({h}+{b1}*2";
 
                 if (c2 != c1)
-                    formula += $"+{c1}+{c2}-{t}*4)*{t}*{GBData.DENSITY}*2";
+                    formula += $"+{c1}+{c2}-{t}*4)*{t}*{DENSITY}*2";
                 else
-                    formula += $"+{c1}*2-{t}*4)*{t}*{GBData.DENSITY}*2";
+                    formula += $"+{c1}*2-{t}*4)*{t}*{DENSITY}*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
                 if (data != null)

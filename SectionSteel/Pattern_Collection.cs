@@ -10,18 +10,12 @@
  *  You should have received a copy of the GNU General Public License 
  *  along with this program. If not, see <http://www.gnu.org/licenses/>. 
  *==============================================================================
- *  Pattern_Collection.cs: 型材截面文本匹配模式的集合
+ *  Pattern_Collection.cs: 型钢截面文本匹配模式的集合
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SectionSteel {
     /// <summary>
-    /// 型材截面文本匹配模式的集合
+    /// 型钢截面文本匹配模式的集合
     /// </summary>
     static class Pattern_Collection {
         /// <summary>
@@ -87,8 +81,8 @@ namespace SectionSteel {
         /// </summary>
         public static string I_1 => @"^I(?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 I，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX为 "a" || "b" || "c"。
-        /// <para>例如：对于I20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"</para>
+        /// 前置标识符为 I，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX为 "a" 或 "b" 或 "c"。
+        /// <br/>例如：对于I20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
         public static string I_2 => @"^I(?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
         /// <summary>
@@ -96,8 +90,8 @@ namespace SectionSteel {
         /// </summary>
         public static string CHAN_1 => @"^[\[C](?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 [ 或 C，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" || "b" || "c"。
-        /// <para>例如：对于[20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"</para>
+        /// 前置标识符为 [ 或 C，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" 或 "b" 或 "c"。
+        /// <br/>例如：对于[20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
         public static string CHAN_2 => @"^[\[C](?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
         /// <summary>
@@ -105,8 +99,8 @@ namespace SectionSteel {
         /// </summary>
         public static string CHAN_MtM_1 => @"^\[\](?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 []，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" || "b" || "c"。
-        /// <para>例如：对于[]20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"</para>
+        /// 前置标识符为 []，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" 或 "b" 或 "c"。
+        /// <br/>例如：对于[]20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
         public static string CHAN_MtM_2 => @"^\[\](?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
         /// <summary>
@@ -114,8 +108,8 @@ namespace SectionSteel {
         /// </summary>
         public static string CHAN_BtB_1 => @"^((2\[)|(2C)|(\]\[))(?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 2[ 或 2C 或 ][，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" || "b" || "c"。
-        /// <para>例如：对于][20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"</para>
+        /// 前置标识符为 2[ 或 2C 或 ][，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" 或 "b" 或 "c"。
+        /// <br/>例如：对于][20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
         public static string CHAN_BtB_2 => @"^((2\[)|(2C)|(\]\[))(?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
         /// <summary>
@@ -221,35 +215,31 @@ namespace SectionSteel {
         public static string CFO_ZJ_2 => @"^ZZ(?<h>\d+\.?\d*)-(?<t>\d+\.?\d*)-(?<c1>\d+\.?\d*)-(?<b1>\d+\.?\d*)(-(?<c2>\d+\.?\d*)-(?<b2>\d+\.?\d*))?$";
         /// <summary>
         /// 前置标识符为 PL，后续参数形式为 t*b[*l]。
-        /// <para>具体实现中 t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
-        /// <para>
-        ///     可以使用 '~' 符号表示尺寸渐变（只可以使用在 b, l 其中之一上）。
-        ///     虽然此匹配模式字符串对三个参数均可匹配到 '~' 符号，但在具体实现中将对不符合规则的行为进行屏蔽。
-        /// </para>
+        /// <br/>具体实现中 t、b、l 顺序无关，以其中最小值为 t，最大值为 l。
+        /// <br/>可以使用 '~' 符号表示尺寸渐变（只可以使用在 b, l 其中之一上）。
+        /// 虽然此匹配模式对三个参数均可匹配到 '~' 符号，但在具体实现中将对不符合规则的行为进行屏蔽。
         /// </summary>
         public static string PL_1 => @"^PL(?<t>\d+\.?\d*(~\d+\.?\d*)?)\*(?<b>\d+\.?\d*(~\d+\.?\d*)?)(\*(?<l>\d+\.?\d*(~\d+\.?\d*)?))?$";
         /// <summary>
         /// 前置标识符为 PLT，后续参数形式为 t*b*l。
-        /// <para>具体实现中 t、b、l 顺序无关，以其中最小值为 t，最大值为 l。</para>
-        /// <para>
-        ///     可以使用 '~' 符号表示尺寸渐变（只可以使用在 b, l 其中之一上）。
-        ///     虽然此匹配模式字符串对三个参数均可匹配到 '~' 符号，但在具体实现中将对不符合规则的行为进行屏蔽。
-        /// </para>
+        /// <br/>具体实现中 t、b、l 顺序无关，以其中最小值为 t，最大值为 l。
+        /// <br/>可以使用 '~' 符号表示尺寸渐变（只可以使用在 b, l 其中之一上）。
+        /// 虽然此匹配模式对三个参数均可匹配到 '~' 符号，但在具体实现中将对不符合规则的行为进行屏蔽。
         /// </summary>
         public static string PL_T_1 => @"^PLT(?<t>\d+\.?\d*(~\d+\.?\d*)?)\*(?<b>\d+\.?\d*(~\d+\.?\d*)?)\*(?<l>\d+\.?\d*(~\d+\.?\d*)?)$";
         /// <summary>
         /// 前置标识符为 PLD 或 PLO，后续参数形式为 t*d。
-        /// <para>具体实现中，t、d 顺序无关，以其中较小值为 t，较大值为 d。</para>
+        /// <br/>具体实现中，t、d 顺序无关，以其中较小值为 t，较大值为 d。
         /// </summary>
         public static string PL_O_1 => @"^PL[DO](?<t>\d+\.?\d*)\*(?<d>\d+\.?\d*)";
         /// <summary>
         /// nPLt*b*l, nPLTt*b*l, nPLDt*d, nPLOt*d 的任意组合形式。n表示数量。
         /// 各项之间用 + 或 - 连接，分别表示扩展和剔除。
-        /// <para><b>PL标识符后参数应为完整形式。</b></para>
-        /// <para>实际使用中，应保持各项参数中的 t 一致。</para>
-        /// <para>例如：2PL14*400*500-1.5PLT14*100.5*115+3PLO14*250。</para>
+        /// <br/><b> PL 标识符后参数应为完整形式。</b>
+        /// <br/>实际使用中，应保持各项参数中的 t 一致。
+        /// <br/>例如：2PL14*400*500-1.5PLT14*100.5*115+3PLO14*250。
         /// </summary>
-        public static string PL_CMP_1 => @"^(\d+\.?\d*)?((PLT?(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?))"
+        public static string PL_CMP_1 => @"^-?(\d+\.?\d*)?((PLT?(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?))"
                                         + @"|(PL[DO](\d+\.?\d*)\*(\d+\.?\d*)))"
                                         + @"([+-](\d+\.?\d*)?((PLT?(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?)\*(\d+\.?\d*(~\d+\.?\d*)?))"
                                         + @"|(PL[DO](\d+\.?\d*)\*(\d+\.?\d*))))*$";
@@ -289,7 +279,7 @@ namespace SectionSteel {
             + @"(B_WLD_O)|(HH)|(T)|(TW)|(TM)|(TN)|(B_WLD_E)|(I)|(\[)|(C)|(\[\])|(\]\[)|(2\[)|(2C)|(∠)|(L)|(2∠)|(2L)|"
             + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RECT)|(RHSC)|"
             + @"(Y)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
-            + @"(-?(\d+\.?\d*)?PL)|(-?(\d+\.?\d*)?PLD)|(-?(\d+\.?\d*)?PLO)|(-?(\d+\.?\d*)?PLT)|(SPHERE))\d";
+            + @"(-?(\d+\.?\d*)?PL[DOT]?)|(SPHERE))\d";
         /// <summary>
         /// 变截面，形式为 v1~v2，表示尺寸从v1变化到v2。
         /// </summary>

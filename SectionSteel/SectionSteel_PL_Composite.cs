@@ -13,119 +13,103 @@
  *  SectionSteel_PL_Composite.cs: 复合板件
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SectionSteel {
     /// <summary>
     /// <para>复合板件。在以下模式中尝试匹配：</para>
-    /// <see cref="Pattern_Collection.PL_CMP_1"/>: <inheritdoc cref="Pattern_Collection.PL_CMP_1"/><para></para>
+    /// <see cref="Pattern_Collection.PL_CMP_1"/>: <inheritdoc cref="Pattern_Collection.PL_CMP_1"/>
     /// </summary>
-    public class SectionSteel_PL_Composite : SectionSteelBase, ISectionSteel {
-        private string _profileText;
+    public class SectionSteel_PL_Composite : SectionSteelBase {
         protected struct SubPlate {
             public double num;//数量
-            public ISectionSteel plate;//子板件
+            public SectionSteelBase plate;//子板件
         }
         private readonly List<SubPlate> subPlates = new List<SubPlate>();
-        public string ProfileText {
-            get => _profileText;
-            set {
-                _profileText = value;
-                SetFieldsValue();
-            }
-        }
-        public PIStyleEnum PIStyle { get; set; }
-        public SectionSteel_PL_Composite() {
 
-        }
+        public override GBData[] GBDataSet => throw new System.NotImplementedException();
+
+        public SectionSteel_PL_Composite() { }
         public SectionSteel_PL_Composite(string profileText) {
             this.ProfileText = profileText;
         }
-        protected override void SetFieldsValue() {
-            string tempProfileText;
-            string[] profileTexts;
-            SubPlate subplate;
-
+        protected override void SetFieldsValue(SectionSteelBase sender, ProfileTextChangingEventArgs e) {
+            var tmp = subPlates.ToArray();
             subPlates.Clear();
             try {
-                if (string.IsNullOrEmpty(ProfileText))
-                    throw new MismatchedProfileTextException();
+                if (string.IsNullOrEmpty(e.NewText))
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match match = Regex.Match(ProfileText, Pattern_Collection.PL_CMP_1);
+                Match match = Regex.Match(e.NewText, Pattern_Collection.PL_CMP_1);
                 if (!match.Success)
-                    throw new MismatchedProfileTextException();
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                tempProfileText = ProfileText;
-                tempProfileText = tempProfileText.Replace("-", "+-");
-                profileTexts = tempProfileText.Split('+');
+                var tempText = string.Copy(e.NewText).Replace("-", "+-");
+                var profileTexts = tempText.Split('+');
 
+                SubPlate subplate;
                 foreach (var profileText in profileTexts) {
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PL);
                     if (match.Success) {
-                        var pl = new SectionSteel_PL(match.Groups["main"].Value);
+                        subplate.plate = new SectionSteel_PL(match.Groups["main"].Value);
                         double.TryParse(match.Groups["num"].Value, out subplate.num);
                         if (subplate.num == 0) {
                             subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
                         }
-                        subplate.plate = pl;
                         subPlates.Add(subplate);
 
                         continue;
                     }
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PLT);
                     if (match.Success) {
-                        var plt = new SectionSteel_PL_Triangle(match.Groups["main"].Value);
+                        subplate.plate = new SectionSteel_PL_Triangle(match.Groups["main"].Value);
                         double.TryParse(match.Groups["num"].Value, out subplate.num);
                         if (subplate.num == 0) {
                             subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
                         }
-                        subplate.plate = plt;
                         subPlates.Add(subplate);
 
                         continue;
                     }
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PLO);
                     if (match.Success) {
-                        var plo = new SectionSteel_PL_Circular(match.Groups["main"].Value);
+                        subplate.plate = new SectionSteel_PL_Circular(match.Groups["main"].Value);
                         double.TryParse(match.Groups["num"].Value, out subplate.num);
                         if (subplate.num == 0) {
                             subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
                         }
-                        subplate.plate = plo;
                         subPlates.Add(subplate);
 
                         continue;
                     }
 
-                    throw new MismatchedProfileTextException();
+                    throw new MismatchedProfileTextException(profileText);
                 }
 
             } catch (MismatchedProfileTextException) {
                 subPlates.Clear();
+                subPlates.AddRange(tmp);
+                throw;
             }
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para>具体说明参见：</para>
         /// <para><see cref="SectionSteel_PL.GetAreaFormula(FormulaAccuracyEnum, bool)"/></para>
         /// <para><see cref="SectionSteel_PL_Triangle.GetAreaFormula(FormulaAccuracyEnum, bool)"/></para>
         /// <para><see cref="SectionSteel_PL_Circular.GetAreaFormula(FormulaAccuracyEnum, bool)"/></para>
         /// </param>
         /// <param name="exclude_topSurface">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[2]"/>
+        /// <inheritdoc path="/param[2]"/>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
+        public override string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
-            if (subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
+            if (subPlates.Count == 0 || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
 
             foreach (var subplate in subPlates) {
                 if (subplate.num == -1)
@@ -147,7 +131,7 @@ namespace SectionSteel {
         /// </summary>
         /// <param name="truncatedRounding"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public string GetSiffenerProfileStr(bool truncatedRounding) {
+        public override string GetSiffenerProfileStr(bool truncatedRounding) {
             return string.Empty;
         }
 
@@ -155,16 +139,16 @@ namespace SectionSteel {
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetWeightFormula(FormulaAccuracyEnum)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para>具体说明参见：</para>
         /// <para><see cref="SectionSteel_PL.GetWeightFormula(FormulaAccuracyEnum)"/></para>
         /// <para><see cref="SectionSteel_PL_Triangle.GetWeightFormula(FormulaAccuracyEnum)"/></para>
         /// <para><see cref="SectionSteel_PL_Circular.GetWeightFormula(FormulaAccuracyEnum)"/></para>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
+        public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
-            if (subPlates == null || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
+            if (subPlates.Count == 0 || accuracy == FormulaAccuracyEnum.GBDATA) return formula;
 
             //foreach(var subplate in subPlates) {
             //    if(subplate.num < 0)
@@ -183,8 +167,8 @@ namespace SectionSteel {
                 weights.Add(subplate.plate.GetWeightFormula(accuracy));
             }
 
-            string pattern1 = @"\*\d+\.?\d*\*" + GBData.DENSITY + "$";
-            string pattern2 = @"\*" + GBData.DENSITY + "$";
+            string pattern1 = @"\*\d+\.?\d*\*" + DENSITY + "$";
+            string pattern2 = @"\*" + DENSITY + "$";
             Match match = Regex.Match(weights[0], pattern1);
             string value = match.Value;
             int i;

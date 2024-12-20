@@ -13,128 +13,86 @@
  *  SectionSteel_PL.cs: 矩形板件
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SectionSteel {
     /// <summary>
     /// <para>矩形板件。在以下模式中尝试匹配：</para>
-    /// <see cref="Pattern_Collection.PL_1"/>: <inheritdoc cref="Pattern_Collection.PL_1"/><para></para>
+    /// <see cref="Pattern_Collection.PL_1"/>: <inheritdoc cref="Pattern_Collection.PL_1"/>
     /// </summary>
-    public class SectionSteel_PL : SectionSteelBase, ISectionSteel {
-        private string _profileText;
+    public class SectionSteel_PL : SectionSteelBase {
         private double t, b, l;
-        public string ProfileText {
-            get => _profileText;
-            set {
-                _profileText = value;
-                SetFieldsValue();
-            }
-        }
-        public PIStyleEnum PIStyle { get; set; }
-        public SectionSteel_PL() {
 
-        }
+        public override GBData[] GBDataSet => null;
+
+        public SectionSteel_PL() { }
         public SectionSteel_PL(string profileText) {
             this.ProfileText = profileText;
         }
-        protected override void SetFieldsValue() {
-            t = b = l = 0;
+        protected override void SetFieldsValue(SectionSteelBase sender, ProfileTextChangingEventArgs e) {
+            var tmp = (t, b, l);
             try {
-                if (string.IsNullOrEmpty(ProfileText))
-                    throw new MismatchedProfileTextException();
+                if (string.IsNullOrEmpty(e.NewText))
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match match = Regex.Match(ProfileText, Pattern_Collection.PL_1);
+                Match match = Regex.Match(e.NewText, Pattern_Collection.PL_1);
                 if (!match.Success)
-                    throw new MismatchedProfileTextException();
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match subMatch;
-                List<double> parameters = new List<double> { Capacity = 3 };
-                bool[] isVariable = new bool[3] { false, false, false };
-                double tmp1, tmp2;
+                var paramsStr = new string[3];
+                var paramsValue = new double[3];
+                var isVariable = new bool[3] { false, false, false };
 
-                subMatch = Regex.Match(match.Groups["t"].Value, Pattern_Collection.VariableCrossSection);
-                if (subMatch.Success) {
-                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
-                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
-                    parameters.Add((tmp1 + tmp2) * 0.5);
-                    isVariable[0] = true;
-                } else {
-                    double.TryParse(match.Groups["t"].Value, out tmp1);
-                    parameters.Add(tmp1);
+                paramsStr[0] = match.Groups["t"].Value;
+                paramsStr[1] = match.Groups["b"].Value;
+                paramsStr[2] = match.Groups["l"].Value;
+
+                for (int i = 0; i < 3; i++) {
+                    var subMatch = Regex.Match(paramsStr[i], Pattern_Collection.VariableCrossSection);
+                    if (subMatch.Success) {
+                        isVariable[i] = true;
+                        double.TryParse(subMatch.Groups["v1"].Value, out double tmp1);
+                        double.TryParse(subMatch.Groups["v2"].Value, out double tmp2);
+                        paramsValue[i] = (tmp1 + tmp2) * 0.5;
+                    } else {
+                        double.TryParse(paramsStr[i], out paramsValue[i]);
+                    }
                 }
 
-                subMatch = Regex.Match(match.Groups["b"].Value, Pattern_Collection.VariableCrossSection);
-                if (subMatch.Success) {
-                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
-                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
-                    parameters.Add((tmp1 + tmp2) * 0.5);
-                    isVariable[1] = true;
+                var query = paramsValue.Select((v, i) => (v, i)).OrderBy(item => item.v).ToArray();
+                if (query[0].v == 0.0) {
+                    //PLt*b情形，对t参数使用了'~'
+                    if (isVariable[query[1].i])
+                        throw new MismatchedProfileTextException(e.NewText);
+
+                    t = query[1].v; b = query[2].v; l = 0;
                 } else {
-                    double.TryParse(match.Groups["b"].Value, out tmp1);
-                    parameters.Add(tmp1);
+                    //PLt*b*l情形，对t参数使用了'~'，或同时对b、l参数使用了'~'
+                    if (isVariable[query[0].i] || isVariable[query[1].i] && isVariable[query[2].i])
+                        throw new MismatchedProfileTextException(e.NewText);
+
+                    t = query[0].v; b = query[1].v; l = query[2].v;
                 }
-
-                subMatch = Regex.Match(match.Groups["l"].Value, Pattern_Collection.VariableCrossSection);
-                if (subMatch.Success) {
-                    double.TryParse(subMatch.Groups["v1"].Value, out tmp1);
-                    double.TryParse(subMatch.Groups["v2"].Value, out tmp2);
-                    parameters.Add((tmp1 + tmp2) * 0.5);
-                    isVariable[2] = true;
-                } else {
-                    double.TryParse(match.Groups["l"].Value, out tmp1);
-                    parameters.Add(tmp1);
-                }
-
-
-                //  不应对 t 使用 '~' 符号，且 b 和 l 中只可以有一个使用 '~' 符号
-                //  虽然可以实现对全部参数使用 '~' 符号的支持，但没什么意义，禁止这样操作以免后续产生意想不到的情况
-                //  附带完成t, b, l的赋值
-                int minParameterIndex;
-                if (parameters[2] == 0) {
-                    minParameterIndex = parameters.IndexOf(Math.Min(parameters[0], parameters[1]));
-
-                    t = parameters[minParameterIndex];
-                    b = minParameterIndex == 0 ? parameters[1] : parameters[0];
-                } else {
-                    minParameterIndex = parameters.IndexOf(parameters.Min());
-
-                    parameters.Sort();
-                    t = parameters[0]; b = parameters[1]; l = parameters[2];
-                }
-
-                if (isVariable[minParameterIndex]) {
-                    //  t 使用了 '~' 符号
-                    throw new MismatchedProfileTextException();
-                } else {
-                    isVariable[minParameterIndex] = true;
-                    //  b, l 同时使用了 '~' 符号
-                    if (isVariable[0] && isVariable[1] && isVariable[2])
-                        throw new MismatchedProfileTextException();
-                }
-
 
                 t *= 0.001; b *= 0.001; l *= 0.001;
             } catch (MismatchedProfileTextException) {
-                t = b = l = 0;
+                t = tmp.t; b = tmp.b; l = tmp.l;
+                throw;
             }
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：PRECISELY 等效于 ROUGHLY，不实现 GBDATA</b></para>
         /// </param>
         /// <param name="exclude_topSurface">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[2]"/>
+        /// <inheritdoc path="/param[2]"/>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
+        public override string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
             if (b == 0) return formula;//实现使用中可能 t == 0
 
@@ -163,18 +121,18 @@ namespace SectionSteel {
         /// </summary>
         /// <param name="truncatedRounding"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public string GetSiffenerProfileStr(bool truncatedRounding) {
+        public override string GetSiffenerProfileStr(bool truncatedRounding) {
             return string.Empty;
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetWeightFormula(FormulaAccuracyEnum)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：ROUGHLY 等效于 PRECISELY，不实现 GBDATA</b></para>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
+        public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
             if (b == 0) return formula;//实际使用中可能t == 0
 
@@ -185,9 +143,9 @@ namespace SectionSteel {
                     formula = "0";
                 } else {
                     if (l == 0)
-                        formula = $"{b}*{t}*{GBData.DENSITY}";
+                        formula = $"{b}*{t}*{DENSITY}";
                     else
-                        formula = $"{b}*{l}*{t}*{GBData.DENSITY}";
+                        formula = $"{b}*{l}*{t}*{DENSITY}";
                 }
                 break;
             case FormulaAccuracyEnum.GBDATA:

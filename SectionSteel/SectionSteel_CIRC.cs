@@ -14,78 +14,66 @@
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SectionSteel {
     /// <summary>
     /// <para>圆钢或圆管。在以下模式中尝试匹配：</para>
-    /// <see cref="Pattern_Collection.CIRC_1"/>: <inheritdoc cref="Pattern_Collection.CIRC_1"/><para></para>
-    /// <see cref="Pattern_Collection.CIRC_2"/>: <inheritdoc cref="Pattern_Collection.CIRC_2"/><para></para>
-    /// <see cref="Pattern_Collection.CIRC_3"/>: <inheritdoc cref="Pattern_Collection.CIRC_3"/><para></para>
+    /// <see cref="Pattern_Collection.CIRC_1"/>: <inheritdoc cref="Pattern_Collection.CIRC_1"/><br/>
+    /// <see cref="Pattern_Collection.CIRC_2"/>: <inheritdoc cref="Pattern_Collection.CIRC_2"/><br/>
+    /// <see cref="Pattern_Collection.CIRC_3"/>: <inheritdoc cref="Pattern_Collection.CIRC_3"/><br/>
     /// </summary>
-    public class SectionSteel_CIRC : SectionSteelBase, ISectionSteel {
-        private string _profileText;
+    public class SectionSteel_CIRC : SectionSteelBase {
         private double d1, r1, d2, r2, t;
-        public PIStyleEnum PIStyle { get; set; }
-        public string ProfileText {
-            get => _profileText;
-            set {
-                _profileText = value;
-                SetFieldsValue();
-            }
-        }
-        public SectionSteel_CIRC() {
 
-        }
+        public override GBData[] GBDataSet => null;
+
+        public SectionSteel_CIRC() { }
         public SectionSteel_CIRC(string profileText) {
             this.ProfileText = profileText;
         }
-        protected override void SetFieldsValue() {
-            d1 = r1 = d2 = r2 = t = 0;
+        protected override void SetFieldsValue(SectionSteelBase sender, ProfileTextChangingEventArgs e) {
             try {
-                if (string.IsNullOrEmpty(ProfileText))
-                    throw new MismatchedProfileTextException();
+                if (string.IsNullOrEmpty(e.NewText))
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match match = Regex.Match(ProfileText, Pattern_Collection.CIRC_1);
+                Match match = Regex.Match(e.NewText, Pattern_Collection.CIRC_1);
                 if (!match.Success)
-                    match = Regex.Match(ProfileText, Pattern_Collection.CIRC_2);
+                    match = Regex.Match(e.NewText, Pattern_Collection.CIRC_2);
                 if (!match.Success)
-                    match = Regex.Match(ProfileText, Pattern_Collection.CIRC_3);
+                    match = Regex.Match(e.NewText, Pattern_Collection.CIRC_3);
                 if (!match.Success)
-                    throw new MismatchedProfileTextException();
+                    throw new MismatchedProfileTextException(e.NewText);
 
                 double.TryParse(match.Groups["d1"].Value, out d1);
                 double.TryParse(match.Groups["r1"].Value, out r1);
                 double.TryParse(match.Groups["d2"].Value, out d2);
                 double.TryParse(match.Groups["r2"].Value, out r2);
                 double.TryParse(match.Groups["t"].Value, out t);
-            } catch (MismatchedProfileTextException) {
-                d1 = r1 = d2 = r2 = t = 0;
-            }
 
-            if (r1 == 0) r1 = d1;
-            if (d2 == 0) d2 = d1;
-            if (r2 == 0) r2 = d2;
-            d1 *= 0.001; r1 *= 0.001; d2 *= 0.001; r2 *= 0.001; t *= 0.001;
+                if (r1 == 0) r1 = d1;
+                if (d2 == 0) d2 = d1;
+                if (r2 == 0) r2 = d2;
+                d1 *= 0.001; r1 *= 0.001; d2 *= 0.001; r2 *= 0.001; t *= 0.001;
+            } catch (MismatchedProfileTextException) {
+
+                throw;
+            }
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：PRECISELY 等效于 ROUGHLY，不实现GBDATA</b></para>
         /// </param>
         /// <param name="exclude_topSurface">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[2]"/>
+        /// <inheritdoc path="/param[2]"/>
         /// </param>
         /// <returns><inheritdoc/>
         /// <para>椭圆周长采用估算公式：h=(a-b)^2/(a+b)^2, p=π(a+b)(1+3h/(10+(4-3h)^0.5))</para>
         /// </returns>
-        public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
+        public override string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
             string PI, c1, c2;
 
@@ -124,7 +112,7 @@ namespace SectionSteel {
             return formula;
         }
         /// <summary>
-        /// 根据椭圆的长、短半轴估算周长，估算公式h=(a-b)^2/(a+b)^2, p=π(a+b)(1+3h/(10+(4-3h)^0.5))
+        /// 根据椭圆的长、短半轴估算周长，估算公式 h=(a-b)^2/(a+b)^2, p=π(a+b)(1+3h/(10+(4-3h)^0.5))
         /// </summary>
         /// <param name="a">长半轴</param>
         /// <param name="b">短半轴</param>
@@ -139,7 +127,7 @@ namespace SectionSteel {
             return Math.Round(resault, 3);
         }
 
-        public string GetSiffenerProfileStr(bool truncatedRounding) {
+        public override string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
             if (d1 == 0) return stifProfileText;
 
@@ -160,11 +148,11 @@ namespace SectionSteel {
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetWeightFormula(FormulaAccuracyEnum)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：ROUGHLY 等效于 PRECISELY，不实现 GBDATA</b></para>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
+        public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
             string PI, s1, s2;
 
@@ -199,11 +187,11 @@ namespace SectionSteel {
 
                 if (s2.Equals(s1)) {
                     if (t == 0)
-                        formula = $"{PI}*{s1}*{GBData.DENSITY}";
+                        formula = $"{PI}*{s1}*{DENSITY}";
                     else
-                        formula = $"{PI}*({s1})*{GBData.DENSITY}";
+                        formula = $"{PI}*({s1})*{DENSITY}";
                 } else
-                    formula = $"{PI}*({s1}+{s2})*0.5*{GBData.DENSITY}";
+                    formula = $"{PI}*({s1}+{s2})*0.5*{DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
                 break;

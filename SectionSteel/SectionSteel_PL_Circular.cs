@@ -13,44 +13,30 @@
  *  SectionSteel_PL_Circular.cs: 圆形板
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SectionSteel {
     /// <summary>
     /// <para>圆形板。在以下模式中尝试匹配：</para>
-    /// <see cref="Pattern_Collection.PL_O_1"/>: <inheritdoc cref="Pattern_Collection.PL_O_1"/><para></para>
+    /// <see cref="Pattern_Collection.PL_O_1"/>: <inheritdoc cref="Pattern_Collection.PL_O_1"/>
     /// </summary>
-    public class SectionSteel_PL_Circular : SectionSteelBase, ISectionSteel {
-        private string _profileText;
+    public class SectionSteel_PL_Circular : SectionSteelBase {
         private double t, d;
-        public PIStyleEnum PIStyle { get; set; }
-        public string ProfileText {
-            get => _profileText;
-            set {
-                _profileText = value;
-                SetFieldsValue();
-            }
-        }
-        public SectionSteel_PL_Circular() {
+        public override GBData[] GBDataSet => null;
 
-        }
+        public SectionSteel_PL_Circular() { }
         public SectionSteel_PL_Circular(string profileText) {
             this.ProfileText = profileText;
         }
-        protected override void SetFieldsValue() {
-            t = d = 0;
+        protected override void SetFieldsValue(SectionSteelBase sender, ProfileTextChangingEventArgs e) {
+            var tmp = (t, d);
             try {
-                if (string.IsNullOrEmpty(ProfileText))
-                    throw new MismatchedProfileTextException();
+                if (string.IsNullOrEmpty(e.NewText))
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match match = Regex.Match(ProfileText, Pattern_Collection.PL_O_1);
+                Match match = Regex.Match(e.NewText, Pattern_Collection.PL_O_1);
                 if (!match.Success)
-                    throw new MismatchedProfileTextException();
+                    throw new MismatchedProfileTextException(e.NewText);
 
                 double.TryParse(match.Groups["t"].Value, out t);
                 double.TryParse(match.Groups["d"].Value, out d);
@@ -59,21 +45,22 @@ namespace SectionSteel {
 
                 t *= 0.001; d *= 0.001;
             } catch (MismatchedProfileTextException) {
-                t = d = 0;
+                t = tmp.t; d = tmp.d;
+                throw;
             }
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：PRECISELY 等效于 ROUGHLY，不实现 GBDATA</b></para>
         /// </param>
         /// <param name="exclude_topSurface">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[2]"/>
+        /// <inheritdoc path="/param[2]"/>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
+        public override string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
             if (d == 0) return formula;//实际使用中可能 t == 0
 
@@ -99,7 +86,7 @@ namespace SectionSteel {
         /// </summary>
         /// <param name="truncatedRounding"><inheritdoc/></param>
         /// <returns><inheritdoc/></returns>
-        public string GetSiffenerProfileStr(bool truncatedRounding) {
+        public override string GetSiffenerProfileStr(bool truncatedRounding) {
             return string.Empty;
         }
 
@@ -107,11 +94,11 @@ namespace SectionSteel {
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetWeightFormula(FormulaAccuracyEnum)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：ROUGHLY 等效于 PRECISELY，不实现 GBDATA</b></para>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
+        public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
             if (d == 0) return formula;//实际使用中可能 t == 0
 
@@ -122,7 +109,7 @@ namespace SectionSteel {
                 if (t == 0)
                     formula = "0";
                 else
-                    formula = $"{PI}*{d * 0.5}^2*{t}*{GBData.DENSITY}";
+                    formula = $"{PI}*{d * 0.5}^2*{t}*{DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
                 break;

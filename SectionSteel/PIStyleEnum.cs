@@ -13,12 +13,6 @@
  *  PIStyleEnum.cs: 圆周率π的书写形式的枚举类型
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SectionSteel {
     /// <summary>
     /// 圆周率π的书写形式

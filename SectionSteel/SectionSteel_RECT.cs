@@ -14,52 +14,40 @@
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace SectionSteel {
     /// <summary>
     /// <para>焊接矩形管。在以下模式中尝试匹配：</para>
-    /// <see cref="Pattern_Collection.RECT_1"/>: <inheritdoc cref="Pattern_Collection.RECT_1"/><para></para>
-    /// <see cref="Pattern_Collection.RECT_2"/>: <inheritdoc cref="Pattern_Collection.RECT_2"/><para></para>
-    /// <see cref="Pattern_Collection.RECT_3"/>: <inheritdoc cref="Pattern_Collection.RECT_3"/><para></para>
-    /// <see cref="Pattern_Collection.RECT_4"/>: <inheritdoc cref="Pattern_Collection.RECT_4"/><para></para>
-    /// <see cref="Pattern_Collection.RECT_5"/>: <inheritdoc cref="Pattern_Collection.RECT_5"/><para></para>
-    /// <see cref="Pattern_Collection.RECT_6"/>: <inheritdoc cref="Pattern_Collection.RECT_6"/><para></para>
+    /// <see cref="Pattern_Collection.RECT_1"/>: <inheritdoc cref="Pattern_Collection.RECT_1"/><br/>
+    /// <see cref="Pattern_Collection.RECT_2"/>: <inheritdoc cref="Pattern_Collection.RECT_2"/><br/>
+    /// <see cref="Pattern_Collection.RECT_3"/>: <inheritdoc cref="Pattern_Collection.RECT_3"/><br/>
+    /// <see cref="Pattern_Collection.RECT_4"/>: <inheritdoc cref="Pattern_Collection.RECT_4"/><br/>
+    /// <see cref="Pattern_Collection.RECT_5"/>: <inheritdoc cref="Pattern_Collection.RECT_5"/><br/>
+    /// <see cref="Pattern_Collection.RECT_6"/>: <inheritdoc cref="Pattern_Collection.RECT_6"/><br/>
     /// </summary>
-    public class SectionSteel_RECT : SectionSteelBase, ISectionSteel {
-        private string _profileText;
+    public class SectionSteel_RECT : SectionSteelBase {
         private double h1, h2, b1, b2, s, t;
-        public string ProfileText {
-            get => _profileText;
-            set {
-                _profileText = value;
-                SetFieldsValue();
-            }
-        }
-        public PIStyleEnum PIStyle { get; set; }
-        public SectionSteel_RECT() {
 
-        }
+        public override GBData[] GBDataSet => null;
+
+        public SectionSteel_RECT() { }
         public SectionSteel_RECT(string profileText) {
             this.ProfileText = profileText;
         }
-        protected override void SetFieldsValue() {
-            h1 = h2 = b1 = b2 = s = t = 0;
+        protected override void SetFieldsValue(SectionSteelBase sender, ProfileTextChangingEventArgs e) {
+            var tmp = (h1, h2, b1, b2, s, t);
             try {
-                if (string.IsNullOrEmpty(ProfileText))
-                    throw new MismatchedProfileTextException();
+                if (string.IsNullOrEmpty(e.NewText))
+                    throw new MismatchedProfileTextException(e.NewText);
 
-                Match match = Regex.Match(ProfileText, Pattern_Collection.RECT_1);
+                Match match = Regex.Match(e.NewText, Pattern_Collection.RECT_1);
                 if (!match.Success)
-                    match = Regex.Match(ProfileText, Pattern_Collection.RECT_2);
+                    match = Regex.Match(e.NewText, Pattern_Collection.RECT_2);
                 if (!match.Success)
-                    match = Regex.Match(ProfileText, Pattern_Collection.RECT_3);
+                    match = Regex.Match(e.NewText, Pattern_Collection.RECT_3);
                 if (!match.Success)
-                    match = Regex.Match(ProfileText, Pattern_Collection.RECT_4);
+                    match = Regex.Match(e.NewText, Pattern_Collection.RECT_4);
                 if (match.Success) {
                     double.TryParse(match.Groups["h1"].Value, out h1);
                     double.TryParse(match.Groups["h2"].Value, out h2);
@@ -68,7 +56,7 @@ namespace SectionSteel {
                     double.TryParse(match.Groups["s"].Value, out s);
                     double.TryParse(match.Groups["t"].Value, out t);
                 } else {
-                    match = Regex.Match(ProfileText, Pattern_Collection.RECT_5);
+                    match = Regex.Match(e.NewText, Pattern_Collection.RECT_5);
                     if (match.Success) {
                         double.TryParse(match.Groups["h1"].Value, out h1);
                         double.TryParse(match.Groups["h2"].Value, out h2);
@@ -76,9 +64,9 @@ namespace SectionSteel {
 
                         b1 = h1; b2 = h2;
                     } else {
-                        match = Regex.Match(ProfileText, Pattern_Collection.RECT_6);
+                        match = Regex.Match(e.NewText, Pattern_Collection.RECT_6);
                         if (!match.Success)
-                            throw new MismatchedProfileTextException();
+                            throw new MismatchedProfileTextException(e.NewText);
 
                         double.TryParse(match.Groups["H1"].Value, out double H1);
                         double.TryParse(match.Groups["H2"].Value, out double H2);
@@ -99,21 +87,23 @@ namespace SectionSteel {
 
                 h1 *= 0.001; h2 *= 0.001; b1 *= 0.001; b2 *= 0.001; s *= 0.001; t *= 0.001;
             } catch (MismatchedProfileTextException) {
-                h1 = h2 = b1 = b2 = s = t = 0;
+                h1 = tmp.h1; h2 = tmp.h2; b1 = tmp.b1; b2 = tmp.b2;
+                s = tmp.s; t = tmp.t;
+                throw;
             }
         }
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：PRECISELY 等效于 ROUGHLY，不实现 GBDATA</b></para>
         /// </param>
         /// <param name="exclude_topSurface">
-        /// <inheritdoc cref="ISectionSteel.GetAreaFormula(FormulaAccuracyEnum, bool)" path="/param[2]"/>
+        /// <inheritdoc path="/param[2]"/>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
+        public override string GetAreaFormula(FormulaAccuracyEnum accuracy, bool exclude_topSurface) {
             string formula = string.Empty;
             if (h1 == 0) return formula;
 
@@ -155,7 +145,7 @@ namespace SectionSteel {
             return formula;
         }
 
-        public string GetSiffenerProfileStr(bool truncatedRounding) {
+        public override string GetSiffenerProfileStr(bool truncatedRounding) {
             string stifProfileText = string.Empty;
             if (h1 == 0) return stifProfileText;
 
@@ -178,11 +168,11 @@ namespace SectionSteel {
         /// <inheritdoc/>
         /// </summary>
         /// <param name="accuracy">
-        /// <inheritdoc cref="ISectionSteel.GetWeightFormula(FormulaAccuracyEnum)" path="/param[1]"/>
+        /// <inheritdoc path="/param[1]"/>
         /// <para><b>在本类中：ROUGHLY 等效于 PRECISELY，不实现GBDATA</b></para>
         /// </param>
         /// <returns><inheritdoc/></returns>
-        public string GetWeightFormula(FormulaAccuracyEnum accuracy) {
+        public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
             if (h1 == 0) return formula;
@@ -200,7 +190,7 @@ namespace SectionSteel {
                 else
                     formula += $"+{b1}*{t})*2";
 
-                formula += $"*{GBData.DENSITY}";
+                formula += $"*{DENSITY}";
                 break;
             case FormulaAccuracyEnum.GBDATA:
                 break;
