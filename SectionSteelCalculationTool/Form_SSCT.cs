@@ -14,105 +14,28 @@
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using Microsoft.Office.Interop.Excel;
-using Excel = Microsoft.Office.Interop.Excel;
-
 using SectionSteel;
 
 namespace SectionSteelCalculationTool {
     public partial class Form_SSCT : Form {
+        private class CategoryInfo {
+            public Type Type;
+            public CheckBox LabelCBox;
+            public List<CheckBox> ClassifierCBoxes;
+        }
+        private readonly List<CategoryInfo> categoryCBoxes = new List<CategoryInfo>();
+
         public Form_SSCT() {
             InitializeComponent();
+            LoadCategoryControl();
         }
 
-        private void Generate(object sender, EventArgs e) {
-            Excel.Application xlApp;
-            Excel.Workbook xlWorkbook;
-            //Excel.Worksheet xlSheet;
-            Excel.Range xlRange;
-            Excel.Range xlRange_Filtered_1 = null;
-            Excel.Range xlRange_Filtered_2 = null;
-            Excel.Range xlRange_new = null;
-            //Excel.Range xlCell;
-            Excel.Range targetCell;
-            GenerationOption option;
-            string resault = string.Empty;
-            SectionSteel.SectionSteel sectionSteel;
-
-            try {
-                //xlApp = (Excel.Application)Interaction.GetObject(null, "Excel.Application");
-                xlApp = (Excel.Application)Marshal.GetActiveObject("Excel.Application");
-            } catch (COMException) {
-                MessageBox.Show("Please open an Excel application first!", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            xlWorkbook = xlApp.ActiveWorkbook;
-            if (xlWorkbook == null) {
-                MessageBox.Show("Please open an Workbook first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            xlRange = xlApp.Selection;
-            if (xlRange.Count > 1) {
-                //只处理可见单元格且具有文本的单元格，文本为公式或常量
-                try {
-                    xlRange_Filtered_1 = xlRange.Cells.SpecialCells(XlCellType.xlCellTypeVisible).SpecialCells(XlCellType.xlCellTypeConstants, XlSpecialCellsValue.xlTextValues);
-                    xlRange_Filtered_2 = xlRange.Cells.SpecialCells(XlCellType.xlCellTypeVisible).SpecialCells(XlCellType.xlCellTypeFormulas, XlSpecialCellsValue.xlTextValues);
-                } catch {
-
-                } finally {
-                    if (xlRange_Filtered_1 != null && xlRange_Filtered_2 != null)
-                        xlRange_new = xlApp.Union(xlRange_Filtered_1, xlRange_Filtered_2);
-                    else if (xlRange_Filtered_1 != null)
-                        xlRange_new = xlRange_Filtered_1;
-                    else if (xlRange_Filtered_2 != null)
-                        xlRange_new = xlRange_Filtered_2;
-                }
-            } else {
-                xlRange_new = xlRange;
-            }
-            if (xlRange_new == null) return;
-
-            option = GatheringInformation(sender);
-            sectionSteel = new SectionSteel.SectionSteel {
-                PIStyle = option.PIStyle
-            };
-
-            xlApp.ScreenUpdating = false;
-            foreach (Range xlCell in xlRange_new) {
-                targetCell = xlCell.Offset[option.TargetOffset.RowOffset, option.TargetOffset.ColumnOffset];
-                if (!option.OverwriteExistingData && targetCell.Value != null)
-                    continue;
-
-                sectionSteel.ProfileText = xlCell.Value;
-                switch (option.GenerationType) {
-                case GenerationTypeEnum.UnitArea:
-                    resault = sectionSteel.GetAreaFormula(option.Accuracy, option.ExcludeTopSurface);
-                    if (resault != string.Empty)
-                        resault = "=" + resault;
-                    break;
-                case GenerationTypeEnum.UnitWeight:
-                    resault = sectionSteel.GetWeightFormula(option.Accuracy);
-                    if (resault != string.Empty)
-                        resault = "=" + resault;
-                    break;
-                case GenerationTypeEnum.Stiffener:
-                    resault = sectionSteel.GetSiffenerProfileStr(option.TruncatedRounding);
-                    break;
-                default:
-                    break;
-                }
-
-                //即使resault == string.Empty，也应对目标单元格赋值
-                targetCell.Value = resault;
-            }
-
-            xlApp.ScreenUpdating = true;
-        }
-        private GenerationOption GatheringInformation(object sender) {
+        private GenerationOption GetGenerationOption(object sender) {
             GenerationOption option = new GenerationOption();
-            switch (((Control)sender).Name) {
+            switch (((Control) sender).Name) {
             case "button_AW_Generate":
                 if (rButton_Unit_Area.Checked) {
                     option.GenerationType = GenerationTypeEnum.UnitArea;
@@ -136,8 +59,8 @@ namespace SectionSteelCalculationTool {
                 else if (rButton_PI_NUM.Checked)
                     option.PIStyle = PIStyleEnum.NUM;
 
-                option.TargetOffset.RowOffset = (int)numUD_AW_Rows.Value;
-                option.TargetOffset.ColumnOffset = (int)numUD_AW_Columns.Value;
+                option.TargetOffset.RowOffset = (int) numUD_AW_Rows.Value;
+                option.TargetOffset.ColumnOffset = (int) numUD_AW_Columns.Value;
 
                 option.OverwriteExistingData = cBox_AW_Overwrite.Checked;
                 break;
@@ -146,8 +69,8 @@ namespace SectionSteelCalculationTool {
 
                 option.TruncatedRounding = cBox_Trunc.Checked;
 
-                option.TargetOffset.RowOffset = (int)numUD_STIF_Rows.Value;
-                option.TargetOffset.ColumnOffset = (int)numUD_STIF_Columns.Value;
+                option.TargetOffset.RowOffset = (int) numUD_STIF_Rows.Value;
+                option.TargetOffset.ColumnOffset = (int) numUD_STIF_Columns.Value;
 
                 option.OverwriteExistingData = cBox_STIF_Overwrite.Checked;
                 break;
@@ -172,19 +95,27 @@ namespace SectionSteelCalculationTool {
         }
 
         private void Form_SSCT_Load(object sender, EventArgs e) {
-            this.Text = System.Windows.Forms.Application.ProductName + " - Ver" + System.Windows.Forms.Application.ProductVersion;
+            this.Text = Application.ProductName + " - Ver" + Application.ProductVersion;
         }
 
         private void Button_AW_Generate_Click(object sender, EventArgs e) {
-            this.button_AW_Generate.Enabled = false;
-            Generate(sender, e);
-            this.button_AW_Generate.Enabled = true;
+            var control = sender as Control;
+            var text = control.Text;
+            control.Text = "请稍候...";
+            control.Enabled = false;
+            Interaction.Generate(GetGenerationOption(sender));
+            control.Enabled = true;
+            control.Text = text;
         }
 
         private void Button_STIF_Generate_Click(object sender, EventArgs e) {
-            this.button_STIF_Generate.Enabled = false;
-            Generate(sender, e);
-            this.button_STIF_Generate.Enabled = true;
+            var control = sender as Control;
+            var text = control.Text;
+            control.Text = "请稍候...";
+            control.Enabled = false;
+            Interaction.Generate(GetGenerationOption(sender));
+            control.Enabled = true;
+            control.Text = text;
         }
 
         private void UnitArea_CheckedChanged(object sender, EventArgs e) {
@@ -192,6 +123,88 @@ namespace SectionSteelCalculationTool {
                 cBox_ExcludeTopSurface.Enabled = true;
             else
                 cBox_ExcludeTopSurface.Enabled = false;
+        }
+
+        private void TabControl1_SelectedIndexChanged(object sender, EventArgs e) {
+            switch (tabControl1.SelectedIndex) {
+            case 2:
+                this.Size = new System.Drawing.Size(330, 600);
+                break;
+            default:
+                this.Size = new System.Drawing.Size(330, 283);
+                break;
+            }
+        }
+
+        private void CategoryInfoCheckBox_CheckedChanged(object sender, EventArgs e) {
+            var cBox = sender as CheckBox;
+            var query = categoryCBoxes.Find(item => item.LabelCBox == cBox).ClassifierCBoxes;
+            foreach (var item in query) {
+                item.Checked = cBox.Checked;
+            }
+        }
+
+        private void LoadCategoryControl() {
+            foreach (var categoryInfo in SectionSteel.SectionSteel.CategoryInfoCollection) {
+                //组别
+                var labelCBox = new CheckBox {
+                    Appearance = Appearance.Button,
+                    AutoSize = true,
+                    Text = categoryInfo.Label,
+                };
+                labelCBox.CheckedChanged += CategoryInfoCheckBox_CheckedChanged;
+                flowLayoutPanel1.Controls.Add(labelCBox);
+
+                //分组内标识符
+                var classifiersCBoxes = new List<CheckBox>();
+                foreach (var classifier in categoryInfo.Classifiers) {
+                    var classifierCBox = new CheckBox {
+                        Appearance = Appearance.Button,
+                        AutoSize = true,
+                        Text = classifier,
+                    };
+                    flowLayoutPanel1.Controls.Add(classifierCBox);
+                    classifiersCBoxes.Add(classifierCBox);
+                }
+                flowLayoutPanel1.SetFlowBreak(classifiersCBoxes.Last(), true);
+
+                //分隔线
+                var split = new Label {
+                    Text = string.Empty,
+                    AutoSize = false,
+                    BorderStyle = BorderStyle.Fixed3D,
+                    Size = new System.Drawing.Size(flowLayoutPanel1.Width - 25, 1),
+                };
+                flowLayoutPanel1.Controls.Add(split);
+                flowLayoutPanel1.SetFlowBreak(split, true);
+
+                //CheckBox集合
+                categoryCBoxes.Add(new CategoryInfo {
+                    Type = categoryInfo.Type,
+                    LabelCBox = labelCBox,
+                    ClassifierCBoxes = classifiersCBoxes,
+                });
+            }
+        }
+
+        private void Button_Goto_Click(object sender, EventArgs e) {
+            var control = sender as Control;
+            var text = control.Text;
+            control.Text = "请稍候...";
+            control.Enabled = false;
+
+            var filter = new List<(int, int)>();
+            for (int i = 0; i < categoryCBoxes.Count; i++) {
+                var categoryInfo = categoryCBoxes[i];
+                for (int j = 0; j < categoryInfo.ClassifierCBoxes.Count; j++) {
+                    var cBox = categoryInfo.ClassifierCBoxes[j];
+                    if (cBox.Checked) filter.Add((i, j));
+                }
+            }
+            Interaction.Goto(filter);
+
+            control.Enabled = true;
+            control.Text = text;
         }
     }
 }

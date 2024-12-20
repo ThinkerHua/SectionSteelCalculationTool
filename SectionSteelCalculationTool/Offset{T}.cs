@@ -13,12 +13,6 @@
  *  Offset{T}.cs: 泛型偏移类型
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SectionSteelCalculationTool {
     public class Offset<T> {
         public T RowOffset { get; set; }

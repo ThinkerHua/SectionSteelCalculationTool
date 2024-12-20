@@ -68,6 +68,9 @@ namespace SectionSteelCalculationTool {
             this.numUD_STIF_Rows = new System.Windows.Forms.NumericUpDown();
             this.label_STIF_Columns = new System.Windows.Forms.Label();
             this.cBox_Trunc = new System.Windows.Forms.CheckBox();
+            this.tabPage_Goto = new System.Windows.Forms.TabPage();
+            this.btn_Goto = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPage_Option = new System.Windows.Forms.TabPage();
             this.cBox_AlwaysOnTop = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
@@ -82,6 +85,7 @@ namespace SectionSteelCalculationTool {
             this.gBox_STIF_Target_Offsets.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUD_STIF_Columns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUD_STIF_Rows)).BeginInit();
+            this.tabPage_Goto.SuspendLayout();
             this.tabPage_Option.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -89,12 +93,15 @@ namespace SectionSteelCalculationTool {
             // 
             this.tabControl1.Controls.Add(this.tabPage_Unit_Area_Weight);
             this.tabControl1.Controls.Add(this.tabPage_Stiffener);
+            this.tabControl1.Controls.Add(this.tabPage_Goto);
             this.tabControl1.Controls.Add(this.tabPage_Option);
-            this.tabControl1.Location = new System.Drawing.Point(6, 6);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(316, 238);
+            this.tabControl1.Size = new System.Drawing.Size(314, 244);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControl1_SelectedIndexChanged);
             // 
             // tabPage_Unit_Area_Weight
             // 
@@ -106,7 +113,7 @@ namespace SectionSteelCalculationTool {
             this.tabPage_Unit_Area_Weight.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Unit_Area_Weight.Name = "tabPage_Unit_Area_Weight";
             this.tabPage_Unit_Area_Weight.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Unit_Area_Weight.Size = new System.Drawing.Size(308, 212);
+            this.tabPage_Unit_Area_Weight.Size = new System.Drawing.Size(306, 218);
             this.tabPage_Unit_Area_Weight.TabIndex = 0;
             this.tabPage_Unit_Area_Weight.Text = "Unit Area/Weight";
             this.tabPage_Unit_Area_Weight.UseVisualStyleBackColor = true;
@@ -149,7 +156,7 @@ namespace SectionSteelCalculationTool {
             this.gBox_Accuracy.Controls.Add(this.rButton_GB_Data);
             this.gBox_Accuracy.Controls.Add(this.rButton_Precisely);
             this.gBox_Accuracy.Controls.Add(this.rButton_Roughly);
-            this.gBox_Accuracy.Location = new System.Drawing.Point(6, 106);
+            this.gBox_Accuracy.Location = new System.Drawing.Point(6, 112);
             this.gBox_Accuracy.Name = "gBox_Accuracy";
             this.gBox_Accuracy.Size = new System.Drawing.Size(150, 100);
             this.gBox_Accuracy.TabIndex = 1;
@@ -195,7 +202,7 @@ namespace SectionSteelCalculationTool {
             this.gBox_AW_Target_Offsets.Controls.Add(this.numUD_AW_Rows);
             this.gBox_AW_Target_Offsets.Controls.Add(this.label_AW_Columns);
             this.gBox_AW_Target_Offsets.Controls.Add(this.label_AW_Rows);
-            this.gBox_AW_Target_Offsets.Location = new System.Drawing.Point(162, 51);
+            this.gBox_AW_Target_Offsets.Location = new System.Drawing.Point(162, 57);
             this.gBox_AW_Target_Offsets.Name = "gBox_AW_Target_Offsets";
             this.gBox_AW_Target_Offsets.Size = new System.Drawing.Size(138, 105);
             this.gBox_AW_Target_Offsets.TabIndex = 0;
@@ -297,7 +304,8 @@ namespace SectionSteelCalculationTool {
             // 
             // button_AW_Generate
             // 
-            this.button_AW_Generate.Location = new System.Drawing.Point(181, 166);
+            this.button_AW_Generate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_AW_Generate.Location = new System.Drawing.Point(200, 177);
             this.button_AW_Generate.Name = "button_AW_Generate";
             this.button_AW_Generate.Size = new System.Drawing.Size(100, 35);
             this.button_AW_Generate.TabIndex = 0;
@@ -313,14 +321,15 @@ namespace SectionSteelCalculationTool {
             this.tabPage_Stiffener.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Stiffener.Name = "tabPage_Stiffener";
             this.tabPage_Stiffener.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Stiffener.Size = new System.Drawing.Size(308, 212);
+            this.tabPage_Stiffener.Size = new System.Drawing.Size(306, 218);
             this.tabPage_Stiffener.TabIndex = 1;
             this.tabPage_Stiffener.Text = "Stiffener";
             this.tabPage_Stiffener.UseVisualStyleBackColor = true;
             // 
             // button_STIF_Generate
             // 
-            this.button_STIF_Generate.Location = new System.Drawing.Point(181, 166);
+            this.button_STIF_Generate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_STIF_Generate.Location = new System.Drawing.Point(200, 177);
             this.button_STIF_Generate.Name = "button_STIF_Generate";
             this.button_STIF_Generate.Size = new System.Drawing.Size(100, 35);
             this.button_STIF_Generate.TabIndex = 7;
@@ -401,13 +410,47 @@ namespace SectionSteelCalculationTool {
             this.cBox_Trunc.Text = "&Truncate the parameters";
             this.cBox_Trunc.UseVisualStyleBackColor = true;
             // 
+            // tabPage_Goto
+            // 
+            this.tabPage_Goto.Controls.Add(this.btn_Goto);
+            this.tabPage_Goto.Controls.Add(this.flowLayoutPanel1);
+            this.tabPage_Goto.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_Goto.Name = "tabPage_Goto";
+            this.tabPage_Goto.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_Goto.Size = new System.Drawing.Size(306, 218);
+            this.tabPage_Goto.TabIndex = 3;
+            this.tabPage_Goto.Text = "Goto";
+            this.tabPage_Goto.UseVisualStyleBackColor = true;
+            // 
+            // btn_Goto
+            // 
+            this.btn_Goto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Goto.Location = new System.Drawing.Point(200, 177);
+            this.btn_Goto.Name = "btn_Goto";
+            this.btn_Goto.Size = new System.Drawing.Size(100, 35);
+            this.btn_Goto.TabIndex = 3;
+            this.btn_Goto.Text = "&Goto";
+            this.btn_Goto.UseVisualStyleBackColor = true;
+            this.btn_Goto.Click += new System.EventHandler(this.Button_Goto_Click);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(6, 6);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(294, 165);
+            this.flowLayoutPanel1.TabIndex = 2;
+            // 
             // tabPage_Option
             // 
             this.tabPage_Option.Controls.Add(this.cBox_AlwaysOnTop);
             this.tabPage_Option.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Option.Name = "tabPage_Option";
             this.tabPage_Option.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Option.Size = new System.Drawing.Size(308, 212);
+            this.tabPage_Option.Size = new System.Drawing.Size(306, 218);
             this.tabPage_Option.TabIndex = 2;
             this.tabPage_Option.Text = "Option";
             this.tabPage_Option.UseVisualStyleBackColor = true;
@@ -429,7 +472,7 @@ namespace SectionSteelCalculationTool {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(326, 249);
+            this.ClientSize = new System.Drawing.Size(314, 244);
             this.Controls.Add(this.tabControl1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -456,6 +499,7 @@ namespace SectionSteelCalculationTool {
             this.gBox_STIF_Target_Offsets.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUD_STIF_Columns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUD_STIF_Rows)).EndInit();
+            this.tabPage_Goto.ResumeLayout(false);
             this.tabPage_Option.ResumeLayout(false);
             this.tabPage_Option.PerformLayout();
             this.ResumeLayout(false);
@@ -495,6 +539,9 @@ namespace SectionSteelCalculationTool {
         private System.Windows.Forms.GroupBox gBox_STIF_Target_Offsets;
         private System.Windows.Forms.Button button_STIF_Generate;
         private System.Windows.Forms.CheckBox cBox_AlwaysOnTop;
+        private System.Windows.Forms.TabPage tabPage_Goto;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button btn_Goto;
     }
 }
 

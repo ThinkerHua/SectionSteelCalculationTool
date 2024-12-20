@@ -13,12 +13,6 @@
  *  GenerationTypeEnum.cs: 生成目标类型的枚举
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace SectionSteelCalculationTool {
     public enum GenerationTypeEnum {
         UnitArea,

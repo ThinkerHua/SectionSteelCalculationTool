@@ -13,11 +13,6 @@
  *  GenerationOption.cs: 包含生成操作所需要的选项信息
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SectionSteel;
 
 namespace SectionSteelCalculationTool {
@@ -27,10 +22,7 @@ namespace SectionSteelCalculationTool {
         public PIStyleEnum PIStyle { get; set; }
         public bool ExcludeTopSurface { get; set; }
         public bool TruncatedRounding { get; set; }
-        public Offset<int> TargetOffset { get; set; }
+        public Offset<int> TargetOffset { get; set; } = new Offset<int>();
         public bool OverwriteExistingData { get; set; }
-        public GenerationOption() {
-            TargetOffset = new Offset<int>();
-        }
     }
 }
