@@ -49,11 +49,11 @@ namespace SectionSteel {
             new SectionSteelCategoryInfo (
                 typeof(SectionSteel_H),
                 "H型钢",
-                new string[] {"B_WLD_A", "BH","B_WLD_H","B_WLD_K","H","HI","HM","HN","HP","HT","HW","PHI","WH","WI","I_VAR_A"}),
+                new string[] {"H","HW","HM","HN","HT","BH","HI","HP","PHI","WH","WI","B_WLD_A", "B_WLD_H","B_WLD_K","I_VAR_A"}),
             new SectionSteelCategoryInfo (
                 typeof(SectionSteel_HH),
                 "十字拼接H型钢",
-                new string[] {"B_WLD_O","HH"}),
+                new string[] {"HH","B_WLD_O"}),
             new SectionSteelCategoryInfo (
                 typeof(SectionSteel_T),
                 "T型钢",
@@ -85,11 +85,11 @@ namespace SectionSteel {
             new SectionSteelCategoryInfo (
                 typeof(SectionSteel_CFH_J),
                 "冷弯矩管",
-                new string[] {"CFRHS","F","J","P","RHS","SHS","TUB"}),
+                new string[] {"J","F","P","TUB","CFRHS","RHS","SHS"}),
             new SectionSteelCategoryInfo (
                 typeof(SectionSteel_RECT),
                 "焊接矩管",
-                new string[] {"B_BUILT","B_VAR_A","B_VAR_B","B_VAR_C","B_WLD_F","B_WLD_J","R","RECT","RHSC"}),
+                new string[] {"RECT","R","RHSC","B_BUILT","B_VAR_A","B_VAR_B","B_VAR_C","B_WLD_F","B_WLD_J"}),
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_CFH_Y),
                 "冷弯圆管",
@@ -97,7 +97,7 @@ namespace SectionSteel {
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_CIRC),
                 "圆钢或圆管",
-                new string[] {"CFCHS","CHS","D","ELD","EPD","O","PD","PIP","ROD","TUBE"}),
+                new string[] {"D","O","CFCHS","CHS","ELD","EPD","PD","PIP","ROD","TUBE"}),
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_CFO_CN),
                 "C型钢",
@@ -113,7 +113,7 @@ namespace SectionSteel {
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_CFO_ZJ),
                 "Z型钢",
-                new string[] { "XZ", "Z", "ZZ" }),
+                new string[] { "Z", "ZZ", "XZ" }),
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_PL),
                 "矩形板",
@@ -221,41 +221,54 @@ namespace SectionSteel {
 
             var classifier = match.Groups["classifier"].Value;
             //槽钢和冷弯内卷边槽钢及其双拼形式，有重复标识符，需特殊处理
-            //PL和PL_Composite需特殊处理
+            //PL、PLT、PLD、PLO需特殊处理
             switch (classifier) {
             case "C":
                 match = Regex.Match(profileText, Pattern_Collection.CFO_CN_1);
                 if (match.Success)
-                    return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_CFO_CN)).Type, classifier);
+                    return (typeof(SectionSteel_CFO_CN), classifier);
 
                 match = Regex.Match(profileText, Pattern_Collection.CHAN_1);
                 if (!match.Success) match = Regex.Match(profileText, Pattern_Collection.CHAN_2);
                 if (match.Success)
-                    return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_CHAN)).Type, classifier);
+                    return (typeof(SectionSteel_CHAN), classifier);
 
                 return default;
             case "2C":
                 match = Regex.Match(profileText, Pattern_Collection.CFO_CN_BtB_1);
                 if (match.Success)
-                    return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_CFO_CN_BtB)).Type, classifier);
+                    return (typeof(SectionSteel_CFO_CN_BtB), classifier);
 
                 match = Regex.Match(profileText, Pattern_Collection.CHAN_BtB_1);
                 if (!match.Success) match = Regex.Match(profileText, Pattern_Collection.CHAN_BtB_2);
                 if (match.Success)
-                    return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_CHAN_BtB)).Type, classifier);
+                    return (typeof(SectionSteel_CHAN_BtB), classifier);
 
                 return default;
             case "PL":
-                var pattern = @"^PL\d+\.?\d*\*\d+\.?\d*$";
-                match = Regex.Match(profileText, pattern);
+                match = Regex.Match(profileText, Pattern_Collection.PL_1);
                 if (match.Success)
-                    return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_PL)).Type, classifier);
+                    return (typeof(SectionSteel_PL), classifier);
 
-                match = Regex.Match(profileText, Pattern_Collection.PL_CMP_1);
+                return (typeof(SectionSteel_PL_Composite), "nPL");
+            case "PLT":
+                match = Regex.Match(profileText, Pattern_Collection.PL_T_1);
                 if (match.Success)
-                    return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_PL_Composite)).Type, "nPL");
+                    return (typeof(SectionSteel_PL_Triangle), classifier);
 
-                return default;
+                return (typeof(SectionSteel_PL_Composite), "nPLT");
+            case "PLD":
+                match = Regex.Match(profileText, Pattern_Collection.PL_O_1);
+                if (match.Success)
+                    return (typeof(SectionSteel_PL_Circular), classifier);
+
+                return (typeof(SectionSteel_PL_Composite), "nPLD");
+            case "PLO":
+                match = Regex.Match(profileText, Pattern_Collection.PL_O_1);
+                if (match.Success)
+                    return (typeof(SectionSteel_PL_Circular), classifier);
+
+                return (typeof(SectionSteel_PL_Composite), "nPLO");
             default:
                 var info = Array.Find(CategoryInfoCollection, item => item.Classifiers.Contains(classifier));
                 if (!info.Equals(default(SectionSteelCategoryInfo))) {
@@ -274,7 +287,7 @@ namespace SectionSteel {
                         else
                             classifier = "nPL";
 
-                        return (Array.Find(CategoryInfoCollection, item => item.Type == typeof(SectionSteel_PL_Composite)).Type, classifier);
+                        return (typeof(SectionSteel_PL_Composite), classifier);
                     }
 
                     return default;
