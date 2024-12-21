@@ -73,6 +73,7 @@ namespace SectionSteelCalculationTool {
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPage_Option = new System.Windows.Forms.TabPage();
             this.cBox_AlwaysOnTop = new System.Windows.Forms.CheckBox();
+            this.btn_Clear = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage_Unit_Area_Weight.SuspendLayout();
             this.gBox_PI_Style.SuspendLayout();
@@ -412,6 +413,7 @@ namespace SectionSteelCalculationTool {
             // 
             // tabPage_Goto
             // 
+            this.tabPage_Goto.Controls.Add(this.btn_Clear);
             this.tabPage_Goto.Controls.Add(this.btn_Goto);
             this.tabPage_Goto.Controls.Add(this.flowLayoutPanel1);
             this.tabPage_Goto.Location = new System.Drawing.Point(4, 22);
@@ -467,6 +469,17 @@ namespace SectionSteelCalculationTool {
             this.cBox_AlwaysOnTop.Text = "&Always on top";
             this.cBox_AlwaysOnTop.UseVisualStyleBackColor = true;
             this.cBox_AlwaysOnTop.CheckedChanged += new System.EventHandler(this.CBox_AlwaysOnTop_CheckedChanged);
+            // 
+            // btn_Clear
+            // 
+            this.btn_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Clear.Location = new System.Drawing.Point(94, 177);
+            this.btn_Clear.Name = "btn_Clear";
+            this.btn_Clear.Size = new System.Drawing.Size(100, 35);
+            this.btn_Clear.TabIndex = 3;
+            this.btn_Clear.Text = "&Clear";
+            this.btn_Clear.UseVisualStyleBackColor = true;
+            this.btn_Clear.Click += new System.EventHandler(this.Button_Clear_Click);
             // 
             // Form_SSCT
             // 
@@ -542,6 +555,7 @@ namespace SectionSteelCalculationTool {
         private System.Windows.Forms.TabPage tabPage_Goto;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button btn_Goto;
+        private System.Windows.Forms.Button btn_Clear;
     }
 }
 

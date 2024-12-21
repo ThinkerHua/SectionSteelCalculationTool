@@ -206,5 +206,14 @@ namespace SectionSteelCalculationTool {
             control.Enabled = true;
             control.Text = text;
         }
+
+        private void Button_Clear_Click(object sender, EventArgs e) {
+            foreach (var info in categoryCBoxes) {
+                info.LabelCBox.Checked = false;
+                foreach (var cbox in info.ClassifierCBoxes) {
+                    cbox.Checked = false;
+                }
+            }
+        }
     }
 }
