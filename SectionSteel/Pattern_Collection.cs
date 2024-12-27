@@ -165,9 +165,9 @@ namespace SectionSteel {
         /// </summary>
         public static string RECT_6 => @"^RHSC(?<H1>\d+\.?\d*)\*(?<h1>\d+\.?\d*)\*(?<H2>\d+\.?\d*)\*(?<h2>\d+\.?\d*)\*(?<s>\d+\.?\d*)\*(?<b1>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 Y 或 φ，后续参数形式为 d*t。
+        /// 前置标识符为 Y 或 Φ 或 φ，后续参数形式为 d*t。
         /// </summary>
-        public static string CFH_Y_1 => @"^[Yφ](?<d>\d+\.?\d*)\*(?<t>\d+\.?\d*)$";
+        public static string CFH_Y_1 => @"^[YΦφ](?<d>\d+\.?\d*)\*(?<t>\d+\.?\d*)$";
         /// <summary>
         /// 前置标识符为 D 或 ELD 或 ROD，后续参数形式为 d1[*r1*d2*r2]。
         /// </summary>
@@ -278,7 +278,7 @@ namespace SectionSteel {
             + @"(B_WLD_A)|(BH)|(B_WLD_H)|(B_WLD_K)|(H)|(HI)|(HM)|(HN)|(HP)|(HT)|(HW)|(PHI)|(WH)|(WI)|(I_VAR_A)|"
             + @"(B_WLD_O)|(HH)|(T)|(TW)|(TM)|(TN)|(B_WLD_E)|(I)|(\[)|(C)|(\[\])|(\]\[)|(2\[)|(2C)|(∠)|(L)|(2∠)|(2L)|"
             + @"(CFRHS)|(F)|(J)|(P)|(RHS)|(SHS)|(TUB)|(B_BUILT)|(B_VAR_A)|(B_VAR_B)|(B_VAR_C)|(B_WLD_F)|(B_WLD_J)|(R)|(RECT)|(RHSC)|"
-            + @"(Y)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
+            + @"(Y)|(Φ)|(φ)|(CFCHS)|(CHS)|(D)|(ELD)|(EPD)|(O)|(PD)|(PIP)|(ROD)|(TUBE)|(CC)|(2CCM)|(2CM)|(2CC)|(XZ)|(Z)|(ZZ)|"
             + @"(-?(\d+\.?\d*)?PL[DOT]?)|(SPHERE))\d";
         /// <summary>
         /// 变截面，形式为 v1~v2，表示尺寸从v1变化到v2。

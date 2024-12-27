@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SectionSteelCalculationTool", "SectionSteelCalculationTool\SectionSteelCalculationTool.csproj", "{FF75C01D-34F3-4990-98A1-CD09EF629FAD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainWindow", "MainWindow\MainWindow.csproj", "{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{FF75C01D-34F3-4990-98A1-CD09EF629FAD}.Release|x64.Build.0 = Release|Any CPU
 		{FF75C01D-34F3-4990-98A1-CD09EF629FAD}.Release|x86.ActiveCfg = Release|Any CPU
 		{FF75C01D-34F3-4990-98A1-CD09EF629FAD}.Release|x86.Build.0 = Release|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Debug|x64.Build.0 = Debug|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Debug|x86.Build.0 = Debug|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Release|x64.ActiveCfg = Release|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Release|x64.Build.0 = Release|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Release|x86.ActiveCfg = Release|Any CPU
+		{17A49C3B-B9E5-433D-B9E2-9582B3A858EE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

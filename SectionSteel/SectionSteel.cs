@@ -93,7 +93,7 @@ namespace SectionSteel {
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_CFH_Y),
                 "冷弯圆管",
-                new string[] {"Y","φ"}),
+                new string[] {"Y","Φ","φ"}),
             new SectionSteelCategoryInfo(
                 typeof(SectionSteel_CIRC),
                 "圆钢或圆管",
