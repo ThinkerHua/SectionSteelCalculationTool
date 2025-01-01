@@ -21,7 +21,7 @@ namespace SectionSteel {
     /// </summary>
     public class MismatchedProfileTextException : Exception {
         public MismatchedProfileTextException() { }
-        public MismatchedProfileTextException(string msg) : base(msg) { }
+        public MismatchedProfileTextException(string profileText) : base(profileText) { }
         public override string ToString() {
             return $"不匹配的截面规格文本：{Message}";
         }
