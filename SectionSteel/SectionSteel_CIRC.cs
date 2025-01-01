@@ -118,13 +118,13 @@ namespace SectionSteel {
         /// <param name="b">短半轴</param>
         /// <returns>椭圆周长的估算值，保留三位小数。</returns>
         protected double EllipseCircumference(double a, double b) {
-            double h, resault = 0;
+            double h, result = 0;
 
-            if (a + b == 0) return resault;
+            if (a + b == 0) return result;
             h = Math.Pow(a - b, 2) / Math.Pow(a + b, 2);
-            resault = Math.PI * (a + b) * (1 + 3 * h / (10 + Math.Sqrt(4 - 3 * h)));
+            result = Math.PI * (a + b) * (1 + 3 * h / (10 + Math.Sqrt(4 - 3 * h)));
 
-            return Math.Round(resault, 3);
+            return Math.Round(result, 3);
         }
 
         public override string GetSiffenerProfileStr(bool truncatedRounding) {

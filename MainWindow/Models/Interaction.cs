@@ -83,7 +83,7 @@ namespace SectionSteelCalculationTool {
             var range = GetUsefulRange(xlApp);
             if (range == null) return;
 
-            string resault = string.Empty;
+            string result = string.Empty;
             var sectionSteel = new SectionSteel.SectionSteel {
                 PIStyle = option.PIStyle
             };
@@ -100,23 +100,23 @@ namespace SectionSteelCalculationTool {
                 }
                 switch (option.GenerationType) {
                 case GenerationTypeEnum.UnitArea:
-                    resault = sectionSteel.GetAreaFormula(option.Accuracy, option.ExcludeTopSurface);
-                    if (resault != string.Empty)
-                        resault = "=" + resault;
+                    result = sectionSteel.GetAreaFormula(option.Accuracy, option.ExcludeTopSurface);
+                    if (result != string.Empty)
+                        result = "=" + result;
                     break;
                 case GenerationTypeEnum.UnitWeight:
-                    resault = sectionSteel.GetWeightFormula(option.Accuracy);
-                    if (resault != string.Empty)
-                        resault = "=" + resault;
+                    result = sectionSteel.GetWeightFormula(option.Accuracy);
+                    if (result != string.Empty)
+                        result = "=" + result;
                     break;
                 case GenerationTypeEnum.Stiffener:
-                    resault = sectionSteel.GetSiffenerProfileStr(option.TruncatedRounding);
+                    result = sectionSteel.GetSiffenerProfileStr(option.TruncatedRounding);
                     break;
                 default:
                     break;
                 }
 
-                targetCell.Value = resault;
+                targetCell.Value = result;
             }
 
             xlApp.ScreenUpdating = true;
