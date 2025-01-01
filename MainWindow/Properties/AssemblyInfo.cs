@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SSCT")]
-[assembly: AssemblyCopyright("Copyright ©  2024 Thinke Hua")]
+[assembly: AssemblyCopyright("Copyright ©  2022-2024 Thinke Hua")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
