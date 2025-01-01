@@ -1,4 +1,4 @@
-﻿ <!--==============================================================================
+﻿<!--==============================================================================
  *  SectionSteelCalculationTool - A tool that assists Excel in calculating 
  *  quantities of steel structures
  *
@@ -21,10 +21,10 @@
         xmlns:local="clr-namespace:SectionSteelCalculationTool"
         xmlns:controls="clr-namespace:SectionSteelCalculationTool.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Width="370" Height="250" SizeToContent="Height"
+        Title="MainWindow" Width="370" Height="250" SizeToContent="Height" MaxHeight="370"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" Icon="/Resources/Logo.ico" 
         Topmost="{Binding ElementName=cBoxTopMost, Path=IsChecked}"
-        d:Width="370" d:Height="300">
+        d:Width="370" d:Height="370">
     <TabControl>
         <TabItem Header="Unit Area/Weight">
             <Grid>
@@ -68,7 +68,7 @@
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <Label Content="_Rows" Grid.Column="0" Margin="3" Target="{Binding ElementName=awNUDRow}"></Label>
-                                <controls:NumericUpDown x:Name="awRowOffset" Grid.Column="1" Margin="6" 
+                                <controls:NumericUpDown x:Name="awRowOffset" Grid.Column="1" Margin="6"
                                                         Minimum="-100" Maximum="100"/>
                             </Grid>
                             <Grid>
@@ -79,7 +79,7 @@
                                 <Label Content="_Columns" Grid.Column="0" Margin="3" Target="{Binding ElementName=awNUDCol}"></Label>
                                 <controls:NumericUpDown x:Name="awColOffset" Grid.Column="1" Margin="6" 
                                                         Minimum="-100" Maximum="100" Value="1">
-                                    
+
                                 </controls:NumericUpDown>
                             </Grid>
                             <CheckBox x:Name="cBoxAWOverwrite" Content="Overwrite _existing data" Margin="3"></CheckBox>
@@ -112,7 +112,7 @@
                                 <Label Grid.Column="0" Content="_Rows" Margin="3" Target="{Binding ElementName=stifNUDRow}"></Label>
                                 <controls:NumericUpDown x:Name="stifRowOffset" Grid.Column="1" Margin="6" Width="70" 
                                                         Minimum="-100" Maximum="100" Value="1">
-                                    
+
                                 </controls:NumericUpDown>
                             </Grid>
                             <Grid>
@@ -123,7 +123,7 @@
                                 <Label Grid.Column="0" Content="_Columns" Margin="3" Target="{Binding ElementName=stifNUDCol}"></Label>
                                 <controls:NumericUpDown x:Name="stifColOffset" Grid.Column="1" Margin="6" Width="70"
                                                         Minimum="-100" Maximum="100">
-                                    
+
                                 </controls:NumericUpDown>
                             </Grid>
                             <CheckBox x:Name="cBoxStifOverwrite" Content="Overwrite _existing data" Margin="3"></CheckBox>
