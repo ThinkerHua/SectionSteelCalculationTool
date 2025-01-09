@@ -133,7 +133,7 @@ namespace SectionSteel {
 
             double t, d;
             t = this.t;
-            d = (d1 + r1 + d2 + r2) * 0.25;
+            d = (d1 + r1 + d2 + r2) * 0.25 - t * 2;
             t *= 1000; d *= 1000;
             if (truncatedRounding) {
                 t = Math.Truncate(t);
