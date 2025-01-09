@@ -19,7 +19,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:SectionSteelCalculationTool.Controls" 
-             mc:Ignorable="d" 
+             mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             Focusable="True" FocusManager.FocusedElement="{Binding ElementName=tBox}"
              d:DesignHeight="16" d:DesignWidth="64">
     <Grid Margin="0">
         <Grid.RowDefinitions>
@@ -31,21 +32,20 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <TextBox Name="tBox" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Padding="2" Margin="0,0,1,0"
-                 TextAlignment="{Binding ElementName=userControl, Path=TextAlign}"
+                 TextAlignment="{Binding ElementName=userControl, Path=TextHorizontalAlignment}"
+                 VerticalContentAlignment="{Binding ElementName=userControl, Path=TextVerticalAlignment}"
                  Foreground="{Binding ElementName=userControl, Path=Foreground}"
-                 Text="{Binding RelativeSource={RelativeSource FindAncestor, 
-                                AncestorType={x:Type local:NumericUpDown}}, 
-                                Path=Value}">
+                 Text="{Binding ElementName=userControl, Path=Value, UpdateSourceTrigger=PropertyChanged}">
             
         </TextBox>
         
-        <RepeatButton Name="upButton" Grid.Column="1" Grid.Row="0" Padding="1" Margin="0,0,0,0.5"
+        <RepeatButton Name="upButton" Grid.Column="1" Grid.Row="0" Padding="1" Margin="0,0,0,0.5" Focusable="False"
                       Width="{Binding ElementName=userControl, Path=ActualHeight}"
                       Click="Increase">
             <Path Fill="{Binding ElementName=userControl, Path=Foreground}" Data="M 0 4 H 10 L 5 0 Z" Stretch="Fill"></Path>
         </RepeatButton>
 
-        <RepeatButton Name="downButton" Grid.Column="1" Grid.Row="1" Padding="1" Margin="0,0.5,0,0"
+        <RepeatButton Name="downButton" Grid.Column="1" Grid.Row="1" Padding="1" Margin="0,0.5,0,0" Focusable="False"
                       Width="{Binding ElementName=userControl, Path=ActualHeight}"
                       Click="Decrease">
             <Path Fill="{Binding ElementName=userControl, Path=Foreground}" Data="M 0 0 H 10 L 5 4 Z" Stretch="Fill"></Path>

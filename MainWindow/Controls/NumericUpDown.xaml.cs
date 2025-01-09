@@ -29,8 +29,8 @@ namespace SectionSteelCalculationTool.Controls {
         /// </summary>
         public NumericUpDown() {
             InitializeComponent();
-            this.DataContext = this;
             MouseWheel += WhenMouseWheel;
+            tBox.PreviewKeyDown += WhenArrowKeyDown;
         }
 
         [Category("Data"), Description("控件的最大值。")]
@@ -67,15 +67,25 @@ namespace SectionSteelCalculationTool.Controls {
         public static readonly DependencyProperty IncrementProperty =
             DependencyProperty.Register("Increment", typeof(decimal), typeof(NumericUpDown), new PropertyMetadata(1m));
 
-        [Category("Appearance"), Description("文本中编辑框中的对齐方式。")]
-        public TextAlignment TextAlign {
-            get { return (TextAlignment) GetValue(TextAlignProperty); }
-            set { SetValue(TextAlignProperty, value); }
+        [Category("Appearance"), Description("文本在编辑框中的水平对齐方式。")]
+        public TextAlignment TextHorizontalAlignment {
+            get { return (TextAlignment) GetValue(TextHorizontalAlignmentProperty); }
+            set { SetValue(TextHorizontalAlignmentProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for TextAlign.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TextAlignProperty =
-            DependencyProperty.Register("TextAlign", typeof(TextAlignment), typeof(NumericUpDown), new PropertyMetadata(TextAlignment.Right));
+        public static readonly DependencyProperty TextHorizontalAlignmentProperty =
+            DependencyProperty.Register("TextHorizontalAlignment", typeof(TextAlignment), typeof(NumericUpDown), new PropertyMetadata(TextAlignment.Right));
+
+        [Category("Appearance"), Description("文本在编辑框中的垂直对齐方式。")]
+        public VerticalAlignment TextVerticalAlignment {
+            get { return (VerticalAlignment) GetValue(TextVerticalAlignmentProperty); }
+            set { SetValue(TextVerticalAlignmentProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TextVerticalAlignment.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TextVerticalAlignmentProperty =
+            DependencyProperty.Register("TextVerticalAlignment", typeof(VerticalAlignment), typeof(NumericUpDown), new PropertyMetadata(VerticalAlignment.Center));
 
         /// <summary>
         /// 控件当前的值
@@ -145,8 +155,14 @@ namespace SectionSteelCalculationTool.Controls {
         private void WhenMouseWheel(object sender, MouseWheelEventArgs e) {
             if (e.Delta > 0)
                 Increase(sender, e);
+            else if (e.Delta < 0)
+                Decrease(sender, e);
+        }
 
-            if (e.Delta < 0)
+        private void WhenArrowKeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Up)
+                Increase(sender, e);
+            else if (e.Key == Key.Down)
                 Decrease(sender, e);
         }
     }
