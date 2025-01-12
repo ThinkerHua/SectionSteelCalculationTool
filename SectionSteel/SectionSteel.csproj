@@ -56,7 +56,7 @@
     <Compile Include="SectionSteel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionSteelBase.cs" />
-    <Compile Include="SectionSteelCategoryInfo.cs" />
+    <Compile Include="SectionSteelClassification.cs" />
     <Compile Include="SectionSteel_CFH_J.cs" />
     <Compile Include="SectionSteel_CFH_Y.cs" />
     <Compile Include="SectionSteel_CFO_CN.cs" />

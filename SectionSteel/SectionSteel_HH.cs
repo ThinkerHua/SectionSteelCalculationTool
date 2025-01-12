@@ -248,7 +248,7 @@ namespace SectionSteel {
                     if (exclude_topSurface) {
                         formula += b1 + "*3+" + b2 + "*4";
                     } else {
-                        formula += "(" + b1 + b2 + ")*4";
+                        formula += "(" + b1 + "+" + b2 + ")*4";
                     }
                 } else {
                     if (exclude_topSurface) {

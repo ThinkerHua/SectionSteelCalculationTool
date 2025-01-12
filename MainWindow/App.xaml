@@ -1,7 +1,15 @@
-﻿<Application x:Class="SectionSteelCalculationTool.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SectionSteelCalculationTool"
+﻿<Application x:Class="SectionSteelCalculationTool.App" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:local="clr-namespace:SectionSteelCalculationTool" 
+             xmlns:Controls="clr-namespace:SectionSteelCalculationTool.Controls"
+             xmlns:vc="clr-namespace:SectionSteelCalculationTool.ValueConverters" 
              StartupUri="MainWindow.xaml">
-    
+    <Application.Resources>
+        <ResourceDictionary>
+            <vc:EnumBoolConverter x:Key="enumVC" />
+            <vc:BooleanReverseConverter x:Key="boolReverseVC" />
+            <vc:BooleanMultiConverter x:Key="boolMultiVC" />
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>

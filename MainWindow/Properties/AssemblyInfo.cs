@@ -9,8 +9,8 @@ using System.Windows;
 [assembly: AssemblyDescription("Programming by ThinkerHua@hotmail.com")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SSCT")]
-[assembly: AssemblyCopyright("Copyright ©  2022-2024 Thinke Hua")]
+[assembly: AssemblyProduct("Section Steel Calculation Tool")]
+[assembly: AssemblyCopyright("Copyright ©  2022-2024 Thinker Hua")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -46,6 +46,6 @@ using System.Windows;
 //      生成号
 //      修订号
 //
-[assembly: AssemblyVersion("2.6.0.0")]
-[assembly: AssemblyFileVersion("2.6.0.0")]
+[assembly: AssemblyVersion("2.7.0.0")]
+[assembly: AssemblyFileVersion("2.7.0.0")]
 [assembly: Guid("17A49C3B-B9E5-433D-B9E2-9582B3A858EE")]

@@ -13,7 +13,7 @@
  *  GenerationTypeEnum.cs: 生成目标类型的枚举
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-namespace SectionSteelCalculationTool {
+namespace SectionSteelCalculationTool.Models {
     public enum GenerationTypeEnum {
         UnitArea,
         UnitWeight,
