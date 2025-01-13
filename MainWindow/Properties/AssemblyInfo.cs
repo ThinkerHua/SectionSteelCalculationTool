@@ -46,6 +46,6 @@ using System.Windows;
 //      生成号
 //      修订号
 //
-[assembly: AssemblyVersion("2.7.0.0")]
-[assembly: AssemblyFileVersion("2.7.0.0")]
+[assembly: AssemblyVersion("2.7.1.0")]
+[assembly: AssemblyFileVersion("2.7.1.0")]
 [assembly: Guid("17A49C3B-B9E5-433D-B9E2-9582B3A858EE")]

@@ -166,9 +166,11 @@ namespace SectionSteelCalculationTool.ViewModels {
             if (xlApp == null) return;
 
             xlApp.ScreenUpdating = false;
+
+            var range = GetUsefulRange(xlApp);
+
             await Task.Run(() => {
 
-                var range = GetUsefulRange(xlApp);
                 if (range == null) goto Finish;
 
                 string result = string.Empty;
@@ -218,12 +220,14 @@ namespace SectionSteelCalculationTool.ViewModels {
             //  异步方法，避免执行过程中参数被修改
             var isSelectedCollection = ClassificationCollection.Select(item => item.IsSelected).ToArray();
 
-            await Task.Run(() => {
-                var xlApp = GetExcelApplication();
-                if (xlApp == null) return;
+            var xlApp = GetExcelApplication();
+            if (xlApp == null) return;
 
-                var range = GetUsefulRange(xlApp);
-                if (range == null) goto NoValidCells;
+            var range = GetUsefulRange(xlApp);
+            var noValidCells = true;
+
+            await Task.Run(() => {
+                if (range == null) return;
 
                 Range newRange = null;
                 foreach (Range cell in range) {
@@ -237,21 +241,20 @@ namespace SectionSteelCalculationTool.ViewModels {
                     newRange = xlApp.Union(newRange, cell);
                 }
 
-                if (newRange != null) {
-                    xlApp.Goto(newRange);
-                    SetForegroundWindow(new IntPtr(xlApp.Hwnd));
-                    return;
-                }
+                if (newRange == null) return;
+                noValidCells = false;
 
-            NoValidCells:
-                MessageBox.Show(
-                    "No valid cells found!",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error,
-                    MessageBoxResult.OK,
-                    MessageBoxOptions.DefaultDesktopOnly);
+                xlApp.Goto(newRange);
+                SetForegroundWindow(new IntPtr(xlApp.Hwnd));
             });
+
+            if (noValidCells) MessageBox.Show(
+                "No valid cells found!",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error,
+                MessageBoxResult.OK,
+                MessageBoxOptions.DefaultDesktopOnly);
         }
 
         [RelayCommand]
