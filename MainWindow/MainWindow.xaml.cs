@@ -55,7 +55,7 @@ namespace SectionSteelCalculationTool {
                 border.Child = wrapPanel;
 
                 var categoryTogBtn = new ToggleButton {
-                    Content = category.Category,
+                    Content = new TextBlock { Text = category.Category },
                     Padding = new Thickness(2, 1, 2, 1),
                     Margin = new Thickness(3, 3, 9, 3)
                 };
@@ -68,14 +68,14 @@ namespace SectionSteelCalculationTool {
                 wrapPanel.Children.Add(categoryTogBtn);
 
                 //分组内标识符
-                var classificationViewModels = 
+                var classificationViewModels =
                     from item in dataContext.ClassificationCollection
                     where item.Classification.Category == category.Category
                     select item;
                 var classifierTogBtns = new List<ToggleButton>();
                 foreach (var classificationViewModel in classificationViewModels) {
                     var classifierTogBtn = new ToggleButton {
-                        Content = classificationViewModel.Classification.Classifier,
+                        Content = new TextBlock { Text = classificationViewModel.Classification.Classifier },
                         Padding = new Thickness(2, 1, 2, 1),
                         Margin = new Thickness(3)
                     };
