@@ -29,7 +29,7 @@ namespace SectionSteel {
     public class SectionSteel_RECT : SectionSteelBase {
         private double h1, h2, b1, b2, s, t;
 
-        public override GBData[] GBDataSet => null;
+        public override GBData[]? GBDataSet => null;
 
         public SectionSteel_RECT() { }
         public SectionSteel_RECT(string profileText) {
@@ -49,18 +49,18 @@ namespace SectionSteel {
                 if (!match.Success)
                     match = Regex.Match(e.NewText, Pattern_Collection.RECT_4);
                 if (match.Success) {
-                    double.TryParse(match.Groups["h1"].Value, out h1);
-                    double.TryParse(match.Groups["h2"].Value, out h2);
-                    double.TryParse(match.Groups["b1"].Value, out b1);
-                    double.TryParse(match.Groups["b2"].Value, out b2);
-                    double.TryParse(match.Groups["s"].Value, out s);
-                    double.TryParse(match.Groups["t"].Value, out t);
+                    _ = double.TryParse(match.Groups["h1"].Value, out h1);
+                    _ = double.TryParse(match.Groups["h2"].Value, out h2);
+                    _ = double.TryParse(match.Groups["b1"].Value, out b1);
+                    _ = double.TryParse(match.Groups["b2"].Value, out b2);
+                    _ = double.TryParse(match.Groups["s"].Value, out s);
+                    _ = double.TryParse(match.Groups["t"].Value, out t);
                 } else {
                     match = Regex.Match(e.NewText, Pattern_Collection.RECT_5);
                     if (match.Success) {
-                        double.TryParse(match.Groups["h1"].Value, out h1);
-                        double.TryParse(match.Groups["h2"].Value, out h2);
-                        double.TryParse(match.Groups["s"].Value, out s);
+                        _ = double.TryParse(match.Groups["h1"].Value, out h1);
+                        _ = double.TryParse(match.Groups["h2"].Value, out h2);
+                        _ = double.TryParse(match.Groups["s"].Value, out s);
 
                         b1 = h1; b2 = h2;
                     } else {
@@ -68,12 +68,12 @@ namespace SectionSteel {
                         if (!match.Success)
                             throw new MismatchedProfileTextException(e.NewText);
 
-                        double.TryParse(match.Groups["H1"].Value, out double H1);
-                        double.TryParse(match.Groups["H2"].Value, out double H2);
-                        double.TryParse(match.Groups["h1"].Value, out h1);
-                        double.TryParse(match.Groups["h2"].Value, out h2);
-                        double.TryParse(match.Groups["b1"].Value, out b1);
-                        double.TryParse(match.Groups["s"].Value, out s);
+                        _ = double.TryParse(match.Groups["H1"].Value, out double H1);
+                        _ = double.TryParse(match.Groups["H2"].Value, out double H2);
+                        _ = double.TryParse(match.Groups["h1"].Value, out h1);
+                        _ = double.TryParse(match.Groups["h2"].Value, out h2);
+                        _ = double.TryParse(match.Groups["b1"].Value, out b1);
+                        _ = double.TryParse(match.Groups["s"].Value, out s);
 
                         h1 = (H1 + h1) * 0.5;
                         h2 = (H2 + h2) * 0.5;

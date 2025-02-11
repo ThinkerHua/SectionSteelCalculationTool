@@ -1,20 +1,22 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SectionSteel;
+﻿using SectionSteel;
+using Xunit.Abstractions;
 
-namespace UnitTest {
-    [TestClass]
+namespace xUnitTest {
     public class UnitTest1 {
-        public void ShowInfo(SectionSteelBase sectionSteel) {
-            Console.WriteLine($"{"Profile = ",20}{sectionSteel.ProfileText}");
-            Console.WriteLine($"{"Area Precisely = ",20}{sectionSteel.GetAreaFormula(FormulaAccuracyEnum.PRECISELY, true)}");
-            Console.WriteLine($"{"Area GBData = ",20}{sectionSteel.GetAreaFormula(FormulaAccuracyEnum.GBDATA, true)}");
-            Console.WriteLine($"{"Weight Precisely = ",20}{sectionSteel.GetWeightFormula(FormulaAccuracyEnum.PRECISELY)}");
-            Console.WriteLine($"{"Weight GBData = ",20}{sectionSteel.GetWeightFormula(FormulaAccuracyEnum.GBDATA)}");
-            Console.WriteLine($"{"Stiffener Profile = ",20}{sectionSteel.GetSiffenerProfileStr(true)}");
-            Console.WriteLine("============================================================");
+        private readonly ITestOutputHelper _output;
+        public UnitTest1(ITestOutputHelper output) {
+            _output = output;
         }
-        [TestMethod]
+        private void ShowInfo(SectionSteelBase sectionSteel) {
+            _output.WriteLine($"{"Profile = ",20}{sectionSteel.ProfileText}");
+            _output.WriteLine($"{"Area Precisely = ",20}{sectionSteel.GetAreaFormula(FormulaAccuracyEnum.PRECISELY, true)}");
+            _output.WriteLine($"{"Area GBData = ",20}{sectionSteel.GetAreaFormula(FormulaAccuracyEnum.GBDATA, true)}");
+            _output.WriteLine($"{"Weight Precisely = ",20}{sectionSteel.GetWeightFormula(FormulaAccuracyEnum.PRECISELY)}");
+            _output.WriteLine($"{"Weight GBData = ",20}{sectionSteel.GetWeightFormula(FormulaAccuracyEnum.GBDATA)}");
+            _output.WriteLine($"{"Stiffener Profile = ",20}{sectionSteel.GetSiffenerProfileStr(true)}");
+            _output.WriteLine("============================================================");
+        }
+        [Fact]
         public void Test_H() {
             var sectionSteel = new SectionSteel_H();
             ShowInfo(sectionSteel);
@@ -85,7 +87,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_HH() {
             var sectionSteel = new SectionSteel_HH();
             ShowInfo(sectionSteel);
@@ -108,7 +110,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_T() {
             var sectionSteel = new SectionSteel_T();
             ShowInfo(sectionSteel);
@@ -143,7 +145,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_I() {
             var sectionSteel = new SectionSteel_I();
             ShowInfo(sectionSteel);
@@ -160,7 +162,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CHAN() {
             var sectionSteel = new SectionSteel_CHAN();
             ShowInfo(sectionSteel);
@@ -183,7 +185,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CHAN_MtM() {
             var sectionSteel = new SectionSteel_CHAN_MtM();
             ShowInfo(sectionSteel);
@@ -200,7 +202,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CHAN_BtB() {
             var sectionSteel = new SectionSteel_CHAN_BtB();
             ShowInfo(sectionSteel);
@@ -223,7 +225,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_L() {
             var sectionSteel = new SectionSteel_L();
             ShowInfo(sectionSteel);
@@ -240,7 +242,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_L_BtB() {
             var sectionSteel = new SectionSteel_L_BtB();
             ShowInfo(sectionSteel);
@@ -257,7 +259,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CFH_J() {
             var sectionSteel = new SectionSteel_CFH_J();
             ShowInfo(sectionSteel);
@@ -286,7 +288,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_RECT() {
             var sectionSteel = new SectionSteel_RECT();
             ShowInfo(sectionSteel);
@@ -333,7 +335,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CFH_Y() {
             var sectionSteel = new SectionSteel_CFH_Y();
             ShowInfo(sectionSteel);
@@ -350,7 +352,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CIRC() {
             var sectionSteel = new SectionSteel_CIRC();
             ShowInfo(sectionSteel);
@@ -379,7 +381,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CFO_CN() {
             var sectionSteel = new SectionSteel_CFO_CN();
             ShowInfo(sectionSteel);
@@ -396,7 +398,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CFO_CN_MtM() {
             var sectionSteel = new SectionSteel_CFO_CN_MtM();
             ShowInfo(sectionSteel);
@@ -413,7 +415,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CFO_CN_BtB() {
             var sectionSteel = new SectionSteel_CFO_CN_BtB();
             ShowInfo(sectionSteel);
@@ -430,7 +432,7 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
         public void Test_CFO_ZJ() {
             var sectionSteel = new SectionSteel_CFO_ZJ();
             ShowInfo(sectionSteel);
@@ -453,7 +455,24 @@ namespace UnitTest {
                 Console.WriteLine(e.ToString());
             }
         }
-        [TestMethod]
+        [Fact]
+        public void Test_PL() {
+            var sectionSteel = new SectionSteel_PL();
+            ShowInfo(sectionSteel);
+            try {
+                sectionSteel.ProfileText = "PL377*16";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                Console.WriteLine(e.ToString());
+            }
+            try {
+                sectionSteel.ProfileText = "PL16*319";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                Console.WriteLine(e.ToString());
+            }
+        }
+        [Fact]
         public void Test_PL_Composite() {
             var sectionSteel = new SectionSteel_PL_Composite();
             ShowInfo(sectionSteel);
@@ -475,8 +494,20 @@ namespace UnitTest {
             } catch (MismatchedProfileTextException e) {
                 Console.WriteLine(e.ToString());
             }
+            try {
+                sectionSteel.ProfileText = "PL377*16";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                Console.WriteLine(e.ToString());
+            }
+            try {
+                sectionSteel.ProfileText = "PL16*319";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                Console.WriteLine(e.ToString());
+            }
         }
-        [TestMethod]
+        [Fact]
         public void Test_SectionSteel() {
             var sectionSteel = new SectionSteel.SectionSteel();
             ShowInfo(sectionSteel);
@@ -878,6 +909,18 @@ namespace UnitTest {
             }
             try {
                 sectionSteel.ProfileText = "PL14*400*500";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                Console.WriteLine(e.ToString());
+            }
+            try {
+                sectionSteel.ProfileText = "PL377*16";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                Console.WriteLine(e.ToString());
+            }
+            try {
+                sectionSteel.ProfileText = "PL16*319";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
                 Console.WriteLine(e.ToString());

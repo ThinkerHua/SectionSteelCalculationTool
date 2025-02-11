@@ -33,16 +33,9 @@ namespace SectionSteel {
         /// </summary>
         /// <param name="currentText">当前截面文本</param>
         /// <param name="newText">新截面文本</param>
-        public ProfileTextChangingEventArgs(string currentText, string newText) {
-            if (currentText == null)
-                CurrentText = string.Empty;
-            else
-                CurrentText = string.Copy(currentText);
-
-            if (newText == null)
-                NewText = string.Empty;
-            else
-                NewText = string.Copy(newText);
+        public ProfileTextChangingEventArgs(string? currentText, string? newText) {
+            CurrentText = currentText ?? string.Empty;
+            NewText = newText ?? string.Empty;
         }
     }
     /// <summary>

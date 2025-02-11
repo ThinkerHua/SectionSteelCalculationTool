@@ -24,7 +24,7 @@ namespace SectionSteel {
     public class SectionSteel_PL_Triangle : SectionSteelBase {
         private double t, b, l;
 
-        public override GBData[] GBDataSet => null;
+        public override GBData[]? GBDataSet => null;
 
         public SectionSteel_PL_Triangle() { }
         public SectionSteel_PL_Triangle(string profileText) {
@@ -52,11 +52,11 @@ namespace SectionSteel {
                     var subMatch = Regex.Match(paramsStr[i], Pattern_Collection.VariableCrossSection);
                     if (subMatch.Success) {
                         isVariable[i] = true;
-                        double.TryParse(subMatch.Groups["v1"].Value, out double tmp1);
-                        double.TryParse(subMatch.Groups["v2"].Value, out double tmp2);
+                        _ = double.TryParse(subMatch.Groups["v1"].Value, out double tmp1);
+                        _ = double.TryParse(subMatch.Groups["v2"].Value, out double tmp2);
                         paramsValue[i] = (tmp1 + tmp2) * 0.5;
                     } else {
-                        double.TryParse(paramsStr[i], out paramsValue[i]);
+                        _ = double.TryParse(paramsStr[i], out paramsValue[i]);
                     }
                 }
 

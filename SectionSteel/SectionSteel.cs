@@ -19,7 +19,9 @@ using System.Text.RegularExpressions;
 
 namespace SectionSteel {
     /// <summary>
-    /// 型钢总类，实际应用中使用此类即可。根据属性 <b>ProfileText</b> 自动识别具体应用哪一项子类，因此本类依赖于各子类：<br/>
+    /// 型钢总类，实际应用中使用此类即可。
+    /// 根据属性 <b>ProfileText</b> 自动识别具体应用哪一项子类，
+    /// 因此本类依赖于各子类：<br/>
     /// <see cref="SectionSteel_H"/><br/>
     /// <see cref="SectionSteel_HH"/><br/>
     /// <see cref="SectionSteel_T"/><br/>
@@ -45,7 +47,7 @@ namespace SectionSteel {
     /// </summary>
     public class SectionSteel : SectionSteelBase {
         private PIStyleEnum _PIStyle;
-        private SectionSteelBase realSectionSteel;
+        private SectionSteelBase? realSectionSteel;
 
         /// <summary>
         /// 型钢分类信息集合。
@@ -141,7 +143,7 @@ namespace SectionSteel {
             }
         }
 
-        public override GBData[] GBDataSet {
+        public override GBData[]? GBDataSet {
             get {
                 if (realSectionSteel != null)
                     return realSectionSteel.GBDataSet;
@@ -154,7 +156,7 @@ namespace SectionSteel {
         /// 仅当实际类型为 <see cref="SectionSteel_HH"/> 时有效，
         /// 返回 <see cref="SectionSteel_HH.GBDataSet2"/>。
         /// </summary>
-        public GBData[] GBDataSet2 {
+        public GBData[]? GBDataSet2 {
             get {
                 if (realSectionSteel != null && realSectionSteel is SectionSteel_HH sshh)
                     return sshh.GBDataSet2;
@@ -181,7 +183,7 @@ namespace SectionSteel {
 
                 var type = ClassificationCollection[index].Type;
                 realSectionSteel = Activator.CreateInstance(type) as SectionSteelBase;
-                realSectionSteel.ProfileText = e.NewText;
+                realSectionSteel!.ProfileText = e.NewText;
                 realSectionSteel.PIStyle = this.PIStyle;
             } catch (MismatchedProfileTextException) {
                 realSectionSteel = tmp;

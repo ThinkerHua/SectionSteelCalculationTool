@@ -30,21 +30,20 @@ namespace SectionSteelCalculationTool {
     /// </summary>
     public partial class MainWindow : Window {
         private class ClassificationControls {
-            public ToggleButton CategoryTogBtn;
-            public List<ToggleButton> ClassifierTogBtns;
+            public required ToggleButton CategoryTogBtn;
+            public required List<ToggleButton> ClassifierTogBtns;
         }
-        private readonly List<ClassificationControls> classificationTogBtns = new List<ClassificationControls>();
+        private readonly List<ClassificationControls> classificationTogBtns = [];
 
         public MainWindow() {
             InitializeComponent();
-            this.Title = Application.ResourceAssembly.GetName().Name +
-                " - Ver" + Application.ResourceAssembly.GetName().Version.ToString();
+            this.Title = "SSCT - Ver" + Application.ResourceAssembly.GetName().Version!.ToString();
             LoadClassificationControls();
         }
 
         private void LoadClassificationControls() {
             var dataContext = DataContext as MainWindowViewModel;
-            foreach (var category in dataContext.CategoryCollection) {
+            foreach (var category in dataContext!.CategoryCollection) {
                 //组别
                 var border = new Border() {
                     BorderBrush = Brushes.LightGray,
@@ -99,16 +98,16 @@ namespace SectionSteelCalculationTool {
 
         private void CategoryToggleButton_Click(object sender, RoutedEventArgs e) {
             var categoryTogBtn = sender as ToggleButton;
-            var query = classificationTogBtns.Find(item => item.CategoryTogBtn == categoryTogBtn).ClassifierTogBtns;
+            var query = classificationTogBtns.Find(item => item.CategoryTogBtn == categoryTogBtn)!.ClassifierTogBtns;
             foreach (var togBtn in query) {
-                togBtn.IsChecked = categoryTogBtn.IsChecked;
+                togBtn.IsChecked = categoryTogBtn!.IsChecked;
             }
         }
 
         private void ClassifierToggleButton_Click(object sender, RoutedEventArgs e) {
             var classifierTogBtn = sender as ToggleButton;
-            var query = classificationTogBtns.Find(item => item.ClassifierTogBtns.Contains(classifierTogBtn));
-            foreach (var togBtn in query.ClassifierTogBtns) {
+            var query = classificationTogBtns.Find(item => item.ClassifierTogBtns.Contains(classifierTogBtn!));
+            foreach (var togBtn in query!.ClassifierTogBtns) {
                 if (togBtn.IsChecked == false) {
                     query.CategoryTogBtn.IsChecked = false;
                     return;
@@ -116,6 +115,10 @@ namespace SectionSteelCalculationTool {
             }
 
             query.CategoryTogBtn.IsChecked = true;
+        }
+
+        private void RBtnStif_CheckStateChanged(object sender, RoutedEventArgs e) {
+            (rowOffset.Value, colOffset.Value) = (colOffset.Value, rowOffset.Value);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace SectionSteel {
     public class SectionSteel_SPHERE : SectionSteelBase {
         private double d;
 
-        public override GBData[] GBDataSet => null;
+        public override GBData[]? GBDataSet => null;
 
         public SectionSteel_SPHERE() { }
         public SectionSteel_SPHERE(string profileText) {
@@ -39,7 +39,7 @@ namespace SectionSteel {
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
 
-                double.TryParse(match.Groups["d"].Value, out d);
+                _ = double.TryParse(match.Groups["d"].Value, out d);
 
                 d *= 0.001;
             } catch (MismatchedProfileTextException) {

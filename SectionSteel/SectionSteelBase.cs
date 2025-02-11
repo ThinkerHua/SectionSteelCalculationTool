@@ -20,8 +20,8 @@ namespace SectionSteel {
     /// 型钢基类。
     /// </summary>
     public abstract class SectionSteelBase {
-        private string _profileText;
-        private ProfileTextChangingEventHandler _profileTextChangingEventHandler;
+        private string? _profileText;
+        private ProfileTextChangingEventHandler? _profileTextChangingEventHandler;
         /// <summary>
         /// 钢材密度。
         /// </summary>
@@ -29,7 +29,7 @@ namespace SectionSteel {
         /// <summary>
         /// 型钢截面文本。
         /// </summary>
-        public string ProfileText {
+        public string? ProfileText {
             get {
                 return _profileText;
             }
@@ -51,7 +51,7 @@ namespace SectionSteel {
         /// <summary>
         /// 国标数据集合。
         /// </summary>
-        public abstract GBData[] GBDataSet { get; }
+        public abstract GBData[]? GBDataSet { get; }
         /// <summary>
         /// 截面文本变更事件。
         /// </summary>
@@ -123,10 +123,8 @@ namespace SectionSteel {
         /// <returns>找到的符合要求的第一条数据。</returns>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"><paramref name="byName"/> 为 null 或 <see cref="string.Empty"/> 时引发。</exception>
-        protected static GBData FindGBData(GBData[] dataSet, string byName) {
-            if (dataSet is null) {
-                throw new ArgumentNullException(nameof(dataSet));
-            }
+        protected static GBData? FindGBData(GBData[] dataSet, string byName) {
+            ArgumentNullException.ThrowIfNull(dataSet);
 
             if (string.IsNullOrEmpty(byName)) {
                 throw new ArgumentException($"“{nameof(byName)}”不能为 null 或空。", nameof(byName));
@@ -141,23 +139,15 @@ namespace SectionSteel {
         /// <param name="byParams">按 <see cref="GBData.Parameters"/> 查找</param>
         /// <returns>找到的符合要求的第一条数据。</returns>
         /// <exception cref="ArgumentNullException"></exception>
-        protected static GBData FindGBData(GBData[] dataSet, params double[] byParams) {
-            if (dataSet is null) {
-                throw new ArgumentNullException(nameof(dataSet));
-            }
+        protected static GBData? FindGBData(GBData[] dataSet, params double[] byParams) {
+            ArgumentNullException.ThrowIfNull(dataSet);
 
-            if (byParams is null) {
-                throw new ArgumentNullException(nameof(byParams));
-            }
+            ArgumentNullException.ThrowIfNull(byParams);
 
-            bool Match(double[] arr1, params double[] arr2) {
-                if (arr1 is null) {
-                    throw new ArgumentNullException(nameof(arr1));
-                }
+            static bool Match(double[] arr1, params double[] arr2) {
+                ArgumentNullException.ThrowIfNull(arr1);
 
-                if (arr2 is null) {
-                    throw new ArgumentNullException(nameof(arr2));
-                }
+                ArgumentNullException.ThrowIfNull(arr2);
 
                 var length = Math.Min(arr1.Length, arr2.Length);
                 if (length == 0) return false;

@@ -26,7 +26,7 @@ namespace SectionSteel {
     public class SectionSteel_CIRC : SectionSteelBase {
         private double d1, r1, d2, r2, t;
 
-        public override GBData[] GBDataSet => null;
+        public override GBData[]? GBDataSet => null;
 
         public SectionSteel_CIRC() { }
         public SectionSteel_CIRC(string profileText) {
@@ -45,11 +45,11 @@ namespace SectionSteel {
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
 
-                double.TryParse(match.Groups["d1"].Value, out d1);
-                double.TryParse(match.Groups["r1"].Value, out r1);
-                double.TryParse(match.Groups["d2"].Value, out d2);
-                double.TryParse(match.Groups["r2"].Value, out r2);
-                double.TryParse(match.Groups["t"].Value, out t);
+                _ = double.TryParse(match.Groups["d1"].Value, out d1);
+                _ = double.TryParse(match.Groups["r1"].Value, out r1);
+                _ = double.TryParse(match.Groups["d2"].Value, out d2);
+                _ = double.TryParse(match.Groups["r2"].Value, out r2);
+                _ = double.TryParse(match.Groups["t"].Value, out t);
 
                 if (r1 == 0) r1 = d1;
                 if (d2 == 0) d2 = d1;

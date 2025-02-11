@@ -29,7 +29,7 @@ namespace SectionSteel {
     public class SectionSteel_T : SectionSteelBase {
         private string type = string.Empty;
         private double h1, h2, b, s, t;
-        private GBData data;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet_TW = new GBData[] {
             new GBData("50*100", new double[] { 50, 100, 6,8 }, 8.47, 0.293),
             new GBData("62.5*125", new double[] { 62.5, 125, 6.5,9 }, 11.8, 0.368),
@@ -117,7 +117,7 @@ namespace SectionSteel {
             new GBData("", new double[] { 456, 302, 18,34 }, 141, 1.5),
         };
 
-        public override GBData[] GBDataSet {
+        public override GBData[]? GBDataSet {
             get {
                 switch (type) {
                 case "TW":
@@ -152,11 +152,11 @@ namespace SectionSteel {
                 if (!match.Success)
                     match = Regex.Match(e.NewText, Pattern_Collection.T_4);
                 if (match.Success) {
-                    double.TryParse(match.Groups["h1"].Value, out h1);
-                    double.TryParse(match.Groups["h2"].Value, out h2);
-                    double.TryParse(match.Groups["b"].Value, out b);
-                    double.TryParse(match.Groups["s"].Value, out s);
-                    double.TryParse(match.Groups["t"].Value, out t);
+                    _ = double.TryParse(match.Groups["h1"].Value, out h1);
+                    _ = double.TryParse(match.Groups["h2"].Value, out h2);
+                    _ = double.TryParse(match.Groups["b"].Value, out b);
+                    _ = double.TryParse(match.Groups["s"].Value, out s);
+                    _ = double.TryParse(match.Groups["t"].Value, out t);
 
                     if (h2 == 0 || h2 == h1) {
                         data = FindGBData(string.Empty, h1, b, s, t);
@@ -170,8 +170,8 @@ namespace SectionSteel {
                     string name = match.Groups["H"].Value + "*" + match.Groups["B"].Value;
                     data = FindGBData(type, name);
                     if (data == null) {
-                        double.TryParse(match.Groups["H"].Value, out double H);
-                        double.TryParse(match.Groups["B"].Value, out double B);
+                        _ = double.TryParse(match.Groups["H"].Value, out double H);
+                        _ = double.TryParse(match.Groups["B"].Value, out double B);
                         data = FindGBData(type, H, B);
                     }
                     if (data == null)
@@ -279,7 +279,7 @@ namespace SectionSteel {
 
             return formula;
         }
-        private GBData FindGBData(string type, string byName) {
+        private GBData? FindGBData(string type, string byName) {
             if (type is null) {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -288,7 +288,7 @@ namespace SectionSteel {
                 throw new ArgumentException($"“{nameof(byName)}”不能为 null 或空。", nameof(byName));
             }
 
-            GBData data;
+            GBData? data;
             switch (type) {
             case "TW":
                 data = FindGBData(_gbDataSet_TW, byName);
@@ -310,7 +310,7 @@ namespace SectionSteel {
             }
             return data;
         }
-        private GBData FindGBData(string type, params double[] byParameters) {
+        private GBData? FindGBData(string type, params double[] byParameters) {
             if (type is null) {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -319,7 +319,7 @@ namespace SectionSteel {
                 throw new ArgumentNullException(nameof(byParameters));
             }
 
-            GBData data;
+            GBData? data;
             switch (type) {
             case "TW":
                 data = FindGBData(_gbDataSet_TW, byParameters);

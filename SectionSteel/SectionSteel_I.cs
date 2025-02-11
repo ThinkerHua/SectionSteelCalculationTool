@@ -27,7 +27,7 @@ namespace SectionSteel {
     /// </remarks>
     public class SectionSteel_I : SectionSteelBase {
         private double h, b, s, t;
-        private GBData data;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet = new GBData[] {
             new GBData("10", new double[] { 100, 68, 4.5,7.6 }, 11.3, 0.432),
             new GBData("12", new double[] { 120, 74, 5,8.4 }, 14, 0.493),
@@ -75,7 +75,7 @@ namespace SectionSteel {
             new GBData("63b", new double[] { 630, 178, 15,22 }, 131, 1.866),
             new GBData("63c", new double[] { 630, 180, 17,22 }, 141, 1.87),
         };
-        public override GBData[] GBDataSet => _gbDataSet;
+        public override GBData[]? GBDataSet => _gbDataSet;
 
         public SectionSteel_I() { }
         public SectionSteel_I(string profileText) {
@@ -89,9 +89,9 @@ namespace SectionSteel {
 
                 Match match = Regex.Match(e.NewText, Pattern_Collection.I_1);
                 if (match.Success) {
-                    double.TryParse(match.Groups["h"].Value, out h);
-                    double.TryParse(match.Groups["b"].Value, out b);
-                    double.TryParse(match.Groups["s"].Value, out s);
+                    _ = double.TryParse(match.Groups["h"].Value, out h);
+                    _ = double.TryParse(match.Groups["b"].Value, out b);
+                    _ = double.TryParse(match.Groups["s"].Value, out s);
                     data = FindGBData(_gbDataSet, h, b, s);
                     if (data == null)
                         throw new MismatchedProfileTextException(e.NewText);
@@ -102,7 +102,7 @@ namespace SectionSteel {
                     if (!match.Success)
                         throw new MismatchedProfileTextException(e.NewText);
 
-                    double.TryParse(match.Groups["CODE"].Value, out double code);
+                    _ = double.TryParse(match.Groups["CODE"].Value, out double code);
                     var suffix = match.Groups["SUFFIX"].Value;
                     var name = match.Groups["NAME"].Value;
                     if (code >= 20 && string.IsNullOrEmpty(suffix))
@@ -142,7 +142,7 @@ namespace SectionSteel {
                 formula += $"-{s}*2";
                 break;
             case FormulaAccuracyEnum.GBDATA:
-                //构造成功必定给data字段分配值
+                if (data == null) break;
                 formula = $"{data.Area}";
                 if (exclude_topSurface)
                     formula += $"-{b}";

@@ -86,7 +86,7 @@ namespace SectionSteelCalculationTool.ViewModels {
         [DllImport("user32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hWnd);
 
-        private static Excel.Application GetExcelApplication() {
+        private static Excel.Application? GetExcelApplication() {
             try {
                 return (Excel.Application) MockMarshal.GetActiveObject("Excel.Application");
             } catch (COMException) {
@@ -101,7 +101,7 @@ namespace SectionSteelCalculationTool.ViewModels {
             }
         }
 
-        private static Range GetUsefulRange(Excel.Application xlApp) {
+        private static Excel.Range? GetUsefulRange(Excel.Application xlApp) {
             var xlWorkbook = xlApp.ActiveWorkbook;
             if (xlWorkbook == null) {
                 MessageBox.Show(
@@ -114,19 +114,25 @@ namespace SectionSteelCalculationTool.ViewModels {
                 return null;
             }
 
-            if (!(xlApp.Selection is Range)) return null;
+            if (xlApp.Selection is not Excel.Range xlRange) return null;
 
-            Range xlRange_Filtered_1 = null;
-            Range xlRange_Filtered_2 = null;
-            Range xlRange_new = null;
-            Range xlRange = xlApp.Selection as Range;
-            if (xlRange.Count == 1) {
+            Excel.Range? xlRange_Filtered_1 = null;
+            Excel.Range? xlRange_Filtered_2 = null;
+            Excel.Range? xlRange_new = null;
+
+            int cnt;
+            try {
+                cnt = xlRange.Count;
+            } catch (COMException) {
+                cnt = int.MaxValue;
+            }
+            if (cnt == 1) {
                 if (string.IsNullOrEmpty(xlRange.Value as string))
                     xlRange_new = null;
                 else
                     xlRange_new = xlRange;
             } else {
-                //只处理可见单元格且具有文本的单元格，文本为公式或常量
+                //只处理可见且具有文本的单元格，文本为公式或常量
                 try {
                     xlRange_Filtered_1 =
                         xlRange.Cells
@@ -178,7 +184,7 @@ namespace SectionSteelCalculationTool.ViewModels {
                     PIStyle = piStyle
                 };
 
-                foreach (Range xlCell in range) {
+                foreach (Excel.Range xlCell in range) {
                     var targetCell = xlCell.Offset[targetOffset.RowOffset, targetOffset.ColumnOffset];
                     if (!overwrite && targetCell.Value != null)
                         continue;
@@ -229,8 +235,8 @@ namespace SectionSteelCalculationTool.ViewModels {
             await Task.Run(() => {
                 if (range == null) return;
 
-                Range newRange = null;
-                foreach (Range cell in range) {
+                Excel.Range? newRange = null;
+                foreach (Excel.Range cell in range) {
                     var index = SectionSteel.SectionSteel.GetClassificationIndex((string) cell.Value);
                     if (index == -1) continue;
 

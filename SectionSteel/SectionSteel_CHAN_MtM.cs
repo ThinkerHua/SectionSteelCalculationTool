@@ -26,8 +26,8 @@ namespace SectionSteel {
     /// <see cref="Pattern_Collection.CHAN_MtM_2"/> 模式下，当型号大于等于14号且无后缀时，按后缀为"a"处理。
     /// </remarks>
     public class SectionSteel_CHAN_MtM : SectionSteelBase {
-        double h, b, s, t;
-        GBData data;
+        private double h, b, s, t;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet = new GBData[] {
             new GBData("5", new double[] { 50, 37, 4.5,7 }, 5.44, 0.226),
             new GBData("6.3", new double[] { 63, 40, 4.8,7.5 }, 6.63, 0.262),
@@ -71,7 +71,7 @@ namespace SectionSteel {
             new GBData("40b", new double[] { 400, 102, 12.5,18 }, 65.2, 1.148),
             new GBData("40c", new double[] { 400, 104, 14.5,18 }, 71.5, 1.152),
         };
-        public override GBData[] GBDataSet => _gbDataSet;
+        public override GBData[]? GBDataSet => _gbDataSet;
         public SectionSteel_CHAN_MtM() { }
         public SectionSteel_CHAN_MtM(string profileText) {
             this.ProfileText = profileText;
@@ -84,9 +84,9 @@ namespace SectionSteel {
 
                 Match match = Regex.Match(e.NewText, Pattern_Collection.CHAN_MtM_1);
                 if (match.Success) {
-                    double.TryParse(match.Groups["h"].Value, out h);
-                    double.TryParse(match.Groups["b"].Value, out b);
-                    double.TryParse(match.Groups["s"].Value, out s);
+                    _ = double.TryParse(match.Groups["h"].Value, out h);
+                    _ = double.TryParse(match.Groups["b"].Value, out b);
+                    _ = double.TryParse(match.Groups["s"].Value, out s);
 
                     data = FindGBData(_gbDataSet, h, b, s);
                     if (data == null)
@@ -98,7 +98,7 @@ namespace SectionSteel {
                     if (!match.Success)
                         throw new MismatchedProfileTextException(e.NewText);
 
-                    double.TryParse(match.Groups["CODE"].Value, out double code);
+                    _ = double.TryParse(match.Groups["CODE"].Value, out double code);
                     var suffix = match.Groups["SUFFIX"].Value;
                     var name = match.Groups["NAME"].Value;
                     if (code >= 14 && string.IsNullOrEmpty(suffix))

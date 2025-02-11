@@ -13,6 +13,7 @@
  *  GBData.cs: data of chinese national standard section steel 
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
+using System;
 using System.Linq;
 
 namespace SectionSteel {
@@ -30,17 +31,31 @@ namespace SectionSteel {
             Weight = weight;
             Area = area;
         }
+
         /// <summary>
-        /// 比较当前实例与给定实例是否相等
+        /// 比较当前实例与给定实例是否相等。
         /// </summary>
-        /// <remarks>通过比较两个实例的 <see cref="GBData.Parameters"/> 属性进行判断，
-        /// 其他的属性不参与。</remarks>
-        /// <param name="data">给定实例</param>
+        /// <remarks>
+        /// 仅比较两个实例的 
+        /// <see cref="GBData.Parameters"/>、
+        /// <see cref="GBData.Area"/>、
+        /// <see cref="GBData.Weight"/> 属性，
+        /// <see cref="GBData.Name"/> 属性不参与判断。
+        /// </remarks>
+        /// <param name="obj">给定实例</param>
         /// <returns>相等返回 true，不等返回 false。</returns>
-        public bool Equals(GBData data) {
-            if (data.GetHashCode() == this.GetHashCode())
-                return true;
-            return Parameters.SequenceEqual(data.Parameters);
+        public override bool Equals(object? obj) {
+            if (obj is not GBData data || data.GetHashCode() != this.GetHashCode())
+                return false;
+            return Parameters.SequenceEqual(data.Parameters) && Area == data.Area && Weight == data.Weight;
+        }
+
+        /// <summary>
+        /// 获取当前实例的哈希码。
+        /// </summary>
+        /// <returns>当前实例的哈希码。</returns>
+        public override int GetHashCode() {
+            return HashCode.Combine(Parameters.GetHashCode(), Area.GetHashCode(), Weight.GetHashCode());
         }
     }
 }

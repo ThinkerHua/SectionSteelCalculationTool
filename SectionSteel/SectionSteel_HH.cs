@@ -24,7 +24,7 @@ namespace SectionSteel {
     /// </summary>
     public class SectionSteel_HH : SectionSteelBase {
         private double h1, h2, b1, b2, s1, s2, t1, t2;
-        private GBData data1, data2;
+        private GBData? data1, data2;
         private static readonly GBData[] _gbDataSet_HW = new GBData[] {
             new GBData("100*100", new double[] { 100, 100, 6,8 }, 16.9, 0.574),
             new GBData("125*125", new double[] { 125, 125, 6.5,9 }, 23.6, 0.723),
@@ -166,7 +166,7 @@ namespace SectionSteel {
         /// <summary>
         /// 第一个型钢对应的国标数据集合。
         /// </summary>
-        public override GBData[] GBDataSet {
+        public override GBData[]? GBDataSet {
             get {
                 if (data1 == null) return null;
                 if (FindGBData(_gbDataSet_HW, data1.Parameters) != null) return _gbDataSet_HW;
@@ -179,7 +179,7 @@ namespace SectionSteel {
         /// <summary>
         /// 第二个型钢对应的国标数据集合。
         /// </summary>
-        public GBData[] GBDataSet2 {
+        public GBData[]? GBDataSet2 {
             get {
                 if (data2 == null) return null;
                 if (FindGBData(_gbDataSet_HW, data2.Parameters) != null) return _gbDataSet_HW;
@@ -205,14 +205,14 @@ namespace SectionSteel {
                     match = Regex.Match(e.NewText, Pattern_Collection.HH_2);
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
-                double.TryParse(match.Groups["h1"].Value, out h1);
-                double.TryParse(match.Groups["b1"].Value, out b1);
-                double.TryParse(match.Groups["s1"].Value, out s1);
-                double.TryParse(match.Groups["t1"].Value, out t1);
-                double.TryParse(match.Groups["h2"].Value, out h2);
-                double.TryParse(match.Groups["b2"].Value, out b2);
-                double.TryParse(match.Groups["s2"].Value, out s2);
-                double.TryParse(match.Groups["t2"].Value, out t2);
+                _ = double.TryParse(match.Groups["h1"].Value, out h1);
+                _ = double.TryParse(match.Groups["b1"].Value, out b1);
+                _ = double.TryParse(match.Groups["s1"].Value, out s1);
+                _ = double.TryParse(match.Groups["t1"].Value, out t1);
+                _ = double.TryParse(match.Groups["h2"].Value, out h2);
+                _ = double.TryParse(match.Groups["b2"].Value, out b2);
+                _ = double.TryParse(match.Groups["s2"].Value, out s2);
+                _ = double.TryParse(match.Groups["t2"].Value, out t2);
 
                 data1 = FindGBData(h1, b1, s1, t1);
                 if (h2 == 0 && b2 == 0 && s2 == 0 && t2 == 0) {
@@ -389,8 +389,8 @@ namespace SectionSteel {
             }
             return formula;
         }
-        private GBData FindGBData(params double[] byParameters) {
-            GBData data;
+        private static GBData? FindGBData(params double[] byParameters) {
+            GBData? data;
             data = FindGBData(_gbDataSet_HW, byParameters);
             if (data == null)
                 data = FindGBData(_gbDataSet_HM, byParameters);

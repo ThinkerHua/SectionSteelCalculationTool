@@ -23,7 +23,7 @@ namespace SectionSteel {
     /// </summary>
     public class SectionSteel_CFH_Y : SectionSteelBase {
         private double d, t;
-        private GBData data;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet = new GBData[] {
             new GBData("", new double[] { 21.3, 1.2 }, 0.59, 0),
             new GBData("", new double[] { 21.3, 1.5 }, 0.73, 0),
@@ -108,7 +108,7 @@ namespace SectionSteel {
             new GBData("", new double[] { 610, 12.5 }, 184.2, 0),
             new GBData("", new double[] { 610, 16 }, 234.4, 0),
         };
-        public override GBData[] GBDataSet => _gbDataSet;
+        public override GBData[]? GBDataSet => _gbDataSet;
         public SectionSteel_CFH_Y() { }
         public SectionSteel_CFH_Y(string profileText) {
             this.ProfileText = profileText;
@@ -122,8 +122,8 @@ namespace SectionSteel {
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
 
-                double.TryParse(match.Groups["d"].Value, out d);
-                double.TryParse(match.Groups["t"].Value, out t);
+                _ = double.TryParse(match.Groups["d"].Value, out d);
+                _ = double.TryParse(match.Groups["t"].Value, out t);
 
                 data = FindGBData(_gbDataSet, d, t);
 

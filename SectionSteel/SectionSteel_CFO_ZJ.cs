@@ -23,7 +23,7 @@ namespace SectionSteel {
     /// </summary>
     public class SectionSteel_CFO_ZJ : SectionSteelBase {
         private double h, b1, c1, b2, c2, t;
-        private GBData data;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet = new GBData[] {
             new GBData("", new double[] { 100, 40, 20,2 }, 3.208, 0),
             new GBData("", new double[] { 100, 40, 20,2.5 }, 3.933, 0),
@@ -47,7 +47,7 @@ namespace SectionSteel {
             new GBData("", new double[] { 400, 120, 40,8 }, 40.789, 0),
             new GBData("", new double[] { 400, 120, 40,10 }, 49.692, 0),
         };
-        public override GBData[] GBDataSet => _gbDataSet;
+        public override GBData[]? GBDataSet => _gbDataSet;
         public SectionSteel_CFO_ZJ() { }
         public SectionSteel_CFO_ZJ(string profileText) {
             this.ProfileText = profileText;
@@ -63,12 +63,12 @@ namespace SectionSteel {
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
 
-                double.TryParse(match.Groups["h"].Value, out h);
-                double.TryParse(match.Groups["b1"].Value, out b1);
-                double.TryParse(match.Groups["c1"].Value, out c1);
-                double.TryParse(match.Groups["b2"].Value, out b2);
-                double.TryParse(match.Groups["c2"].Value, out c2);
-                double.TryParse(match.Groups["t"].Value, out t);
+                _ = double.TryParse(match.Groups["h"].Value, out h);
+                _ = double.TryParse(match.Groups["b1"].Value, out b1);
+                _ = double.TryParse(match.Groups["c1"].Value, out c1);
+                _ = double.TryParse(match.Groups["b2"].Value, out b2);
+                _ = double.TryParse(match.Groups["c2"].Value, out c2);
+                _ = double.TryParse(match.Groups["t"].Value, out t);
 
                 if (b2 == 0) b2 = b1;
                 if (c2 == 0) c2 = c1;

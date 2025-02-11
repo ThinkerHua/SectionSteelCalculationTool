@@ -27,7 +27,7 @@ namespace SectionSteel {
     /// </remarks>
     public class SectionSteel_L_BtB : SectionSteelBase {
         private double h, b, t;
-        private GBData data;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet = new GBData[] {
             new GBData("2", new double[] { 20, 20, 3, }, 0.889, 0.078),
             new GBData("", new double[] { 20, 20, 4, }, 1.15, 0.077),
@@ -216,7 +216,7 @@ namespace SectionSteel {
             new GBData("", new double[] { 200, 125, 16, }, 39, 0.639),
             new GBData("", new double[] { 200, 125, 18, }, 43.6, 0.639),
         };
-        public override GBData[] GBDataSet => _gbDataSet;
+        public override GBData[]? GBDataSet => _gbDataSet;
 
         public SectionSteel_L_BtB() { }
         public SectionSteel_L_BtB(string profileText) {
@@ -230,9 +230,9 @@ namespace SectionSteel {
 
                 Match match = Regex.Match(e.NewText, Pattern_Collection.L_BtB_1);
                 if (match.Success) {
-                    double.TryParse(match.Groups["h"].Value, out h);
-                    double.TryParse(match.Groups["b"].Value, out b);
-                    double.TryParse(match.Groups["t"].Value, out t);
+                    _ = double.TryParse(match.Groups["h"].Value, out h);
+                    _ = double.TryParse(match.Groups["b"].Value, out b);
+                    _ = double.TryParse(match.Groups["t"].Value, out t);
 
                     if (b == 0) b = h;
                     data = FindGBData(_gbDataSet, h, b, t);
@@ -241,8 +241,8 @@ namespace SectionSteel {
                     if (!match.Success)
                         throw new MismatchedProfileTextException(e.NewText);
 
-                    double.TryParse(match.Groups["h"].Value, out h);
-                    double.TryParse(match.Groups["b"].Value, out b);
+                    _ = double.TryParse(match.Groups["h"].Value, out h);
+                    _ = double.TryParse(match.Groups["b"].Value, out b);
                     if (b == 0) b = h;
                     h *= 10; b *= 10;
                     data = FindGBData(_gbDataSet, h, b);

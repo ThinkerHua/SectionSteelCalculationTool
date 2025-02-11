@@ -45,7 +45,7 @@ namespace SectionSteel {
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
 
-                var tempText = string.Copy(e.NewText).Replace("-", "+-");
+                var tempText = e.NewText.Replace("-", "+-");
                 var profileTexts = tempText.Split('+');
 
                 SubPlate subplate;
@@ -53,7 +53,7 @@ namespace SectionSteel {
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PL);
                     if (match.Success) {
                         subplate.plate = new SectionSteel_PL(match.Groups["main"].Value);
-                        double.TryParse(match.Groups["num"].Value, out subplate.num);
+                        _ = double.TryParse(match.Groups["num"].Value, out subplate.num);
                         if (subplate.num == 0) {
                             subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
                         }
@@ -64,7 +64,7 @@ namespace SectionSteel {
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PLT);
                     if (match.Success) {
                         subplate.plate = new SectionSteel_PL_Triangle(match.Groups["main"].Value);
-                        double.TryParse(match.Groups["num"].Value, out subplate.num);
+                        _ = double.TryParse(match.Groups["num"].Value, out subplate.num);
                         if (subplate.num == 0) {
                             subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
                         }
@@ -75,7 +75,7 @@ namespace SectionSteel {
                     match = Regex.Match(profileText, Pattern_Collection.PL_CMP_SUB_PLO);
                     if (match.Success) {
                         subplate.plate = new SectionSteel_PL_Circular(match.Groups["main"].Value);
-                        double.TryParse(match.Groups["num"].Value, out subplate.num);
+                        _ = double.TryParse(match.Groups["num"].Value, out subplate.num);
                         if (subplate.num == 0) {
                             subplate.num = match.Groups["num"].Value == "-" ? -1 : 1;
                         }

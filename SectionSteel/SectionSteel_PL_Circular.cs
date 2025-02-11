@@ -22,7 +22,7 @@ namespace SectionSteel {
     /// </summary>
     public class SectionSteel_PL_Circular : SectionSteelBase {
         private double t, d;
-        public override GBData[] GBDataSet => null;
+        public override GBData[]? GBDataSet => null;
 
         public SectionSteel_PL_Circular() { }
         public SectionSteel_PL_Circular(string profileText) {
@@ -38,8 +38,8 @@ namespace SectionSteel {
                 if (!match.Success)
                     throw new MismatchedProfileTextException(e.NewText);
 
-                double.TryParse(match.Groups["t"].Value, out t);
-                double.TryParse(match.Groups["d"].Value, out d);
+                _ = double.TryParse(match.Groups["t"].Value, out t);
+                _ = double.TryParse(match.Groups["d"].Value, out d);
 
                 if (d < t) { (t, d) = (d, t); }
 

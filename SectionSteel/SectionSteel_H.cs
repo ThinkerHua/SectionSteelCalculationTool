@@ -46,7 +46,7 @@ namespace SectionSteel {
     public class SectionSteel_H : SectionSteelBase {
         private string type = string.Empty;
         private double h1, h2, b1, b2, s, t1, t2;
-        private GBData data;
+        private GBData? data;
         private static readonly GBData[] _gbDataSet_HW = new GBData[] {
             new GBData("100*100", new double[] { 100, 100, 6,8 }, 16.9, 0.574),
             new GBData("125*125", new double[] { 125, 125, 6.5,9 }, 23.6, 0.723),
@@ -185,7 +185,7 @@ namespace SectionSteel {
             new GBData("400*150", new double[] { 390, 148, 6,8 }, 37.3, 1.34),
             new GBData("400*200", new double[] { 390, 198, 6,8 }, 43.6, 1.54),
         };
-        public override GBData[] GBDataSet {
+        public override GBData[]? GBDataSet {
             get {
                 switch (type) {
                 case "HW":
@@ -229,13 +229,13 @@ namespace SectionSteel {
                 if (!match.Success)
                     match = Regex.Match(e.NewText, Pattern_Collection.H_7);
                 if (match.Success) {
-                    double.TryParse(match.Groups["h1"].Value, out h1);
-                    double.TryParse(match.Groups["h2"].Value, out h2);
-                    double.TryParse(match.Groups["b1"].Value, out b1);
-                    double.TryParse(match.Groups["b2"].Value, out b2);
-                    double.TryParse(match.Groups["s"].Value, out s);
-                    double.TryParse(match.Groups["t1"].Value, out t1);
-                    double.TryParse(match.Groups["t2"].Value, out t2);
+                    _ = double.TryParse(match.Groups["h1"].Value, out h1);
+                    _ = double.TryParse(match.Groups["h2"].Value, out h2);
+                    _ = double.TryParse(match.Groups["b1"].Value, out b1);
+                    _ = double.TryParse(match.Groups["b2"].Value, out b2);
+                    _ = double.TryParse(match.Groups["s"].Value, out s);
+                    _ = double.TryParse(match.Groups["t1"].Value, out t1);
+                    _ = double.TryParse(match.Groups["t2"].Value, out t2);
 
                     type = string.Empty;
 
@@ -254,8 +254,8 @@ namespace SectionSteel {
                     var name = match.Groups["H"] + "*" + match.Groups["B"];
                     data = FindGBData(type, name);
                     if (data == null) {
-                        double.TryParse(match.Groups["H"].Value, out double H);
-                        double.TryParse(match.Groups["B"].Value, out double B);
+                        _ = double.TryParse(match.Groups["H"].Value, out double H);
+                        _ = double.TryParse(match.Groups["B"].Value, out double B);
                         data = FindGBData(type, H, B);
                     }
                     if (data == null)
@@ -463,16 +463,14 @@ namespace SectionSteel {
 
             return stifProfileText;
         }
-        private GBData FindGBData(string type, string byName) {
-            if (type is null) {
-                throw new ArgumentNullException(nameof(type));
-            }
+        private static GBData? FindGBData(string type, string byName) {
+            ArgumentNullException.ThrowIfNull(type);
 
             if (string.IsNullOrEmpty(byName)) {
                 throw new ArgumentException($"“{nameof(byName)}”不能为 null 或空。", nameof(byName));
             }
 
-            GBData data;
+            GBData? data;
             switch (type) {
             case "HW":
                 data = FindGBData(_gbDataSet_HW, byName);
@@ -499,16 +497,12 @@ namespace SectionSteel {
             }
             return data;
         }
-        private GBData FindGBData(string type, params double[] byParameters) {
-            if (type is null) {
-                throw new ArgumentNullException(nameof(type));
-            }
+        private static GBData? FindGBData(string type, params double[] byParameters) {
+            ArgumentNullException.ThrowIfNull(type);
 
-            if (byParameters is null) {
-                throw new ArgumentNullException(nameof(byParameters));
-            }
+            ArgumentNullException.ThrowIfNull(byParameters);
 
-            GBData data;
+            GBData? data;
             switch (type) {
             case "HW":
                 data = FindGBData(_gbDataSet_HW, byParameters);

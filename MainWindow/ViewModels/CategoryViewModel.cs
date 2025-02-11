@@ -21,6 +21,6 @@ namespace SectionSteelCalculationTool.ViewModels {
         [ObservableProperty]
         private bool _isSelected;
 
-        public string Category { get; set; }
+        public required string Category { get; set; }
     }
 }
