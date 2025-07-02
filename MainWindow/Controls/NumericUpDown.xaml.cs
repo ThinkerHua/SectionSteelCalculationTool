@@ -13,7 +13,6 @@
  *  NumericUpDown.xaml.cs: code behind for NumericUpDown user control
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;

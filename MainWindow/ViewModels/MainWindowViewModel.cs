@@ -13,11 +13,7 @@
  *  MainWindowViewModel.cs: 主视图模型
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

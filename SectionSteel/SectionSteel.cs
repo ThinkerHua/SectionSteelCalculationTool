@@ -14,7 +14,6 @@
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
 using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SectionSteel {
@@ -304,7 +303,7 @@ namespace SectionSteel {
                     item => item.Type == typeof(SectionSteel_PL_Composite) && item.Classifier == "nPLO");
             default:
                 var index = Array.FindIndex(
-                    ClassificationCollection, 
+                    ClassificationCollection,
                     item => item.Classifier == classifier);
 
                 if (index != -1) {

@@ -13,15 +13,11 @@
  *  MainWindow.xaml.cs: code behind for user interface
  *  written by Huang YongXing - thinkerhua@hotmail.com
  *==============================================================================*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
-using SectionSteel;
 using SectionSteelCalculationTool.ViewModels;
 
 namespace SectionSteelCalculationTool {
