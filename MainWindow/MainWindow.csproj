@@ -9,7 +9,7 @@
     <AssemblyName>Section Steel Calculation Tool</AssemblyName>
     <RootNamespace>SectionSteelCalculationTool</RootNamespace>
     <ApplicationIcon>Resources\Logo.ico</ApplicationIcon>
-    <Version>2.8.0</Version>
+    <Version>2.8.1</Version>
     <Authors>Thinker Hua</Authors>
     <Copyright>Copyright ©  2022-2024 Thinker Hua. All rights reserved.</Copyright>
   </PropertyGroup>
