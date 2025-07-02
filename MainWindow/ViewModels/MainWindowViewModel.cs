@@ -254,6 +254,9 @@ namespace SectionSteelCalculationTool.ViewModels {
                 noValidCells = false;
 
                 xlApp.Goto(newRange);
+                //当非连续单元格区域过多时，此方法定位不完整
+                //xlApp.Goto(newRange);
+                newRange.Select();
                 SetForegroundWindow(new IntPtr(xlApp.Hwnd));
             });
 
