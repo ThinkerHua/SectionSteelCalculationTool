@@ -237,6 +237,9 @@ namespace SectionSteelCalculationTool.ViewModels {
 
                 Excel.Range? newRange = null;
                 foreach (Excel.Range cell in range) {
+                    //  如果存在合并单元格，上面 GetUsefulRange 返回的单元格区域可能包含空单元格
+                    //  此处跳过以避免程序崩溃
+                    if (cell.Value == null) continue;
                     var index = SectionSteel.SectionSteel.GetClassificationIndex((string) cell.Value);
                     if (index == -1) continue;
 
