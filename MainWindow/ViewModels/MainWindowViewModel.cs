@@ -21,12 +21,18 @@ using Microsoft.Office.Interop.Excel;
 using SectionSteel;
 using SectionSteelCalculationTool.DotNetRuntime;
 using SectionSteelCalculationTool.Models;
+using Serilog.Core;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace SectionSteelCalculationTool.ViewModels {
     public partial class MainWindowViewModel : ObservableObject {
+
+        private readonly Logger logger;
+
         #region Constructor
-        public MainWindowViewModel() {
+        public MainWindowViewModel(Logger logger) {
+            this.logger = logger;
+
             Accuracy = FormulaAccuracyEnum.GBDATA;
             TruncatedRounding = true;
             TargetOffset = new Offset(0, 1);
@@ -248,8 +254,15 @@ namespace SectionSteelCalculationTool.ViewModels {
 
                 if (newRange == null) return;
                 noValidCells = false;
-
-                xlApp.Goto(newRange);
+#if DEBUG
+                logger.Information("Range.Address: {0}", newRange.Address);
+                logger.Information("Range.Areas.Count: {0}", newRange.Areas.Count);
+                var cnt = -1;
+                foreach (Excel.Range area in newRange.Areas) {
+                    cnt++;
+                    logger.Information("Area[{0}].Address: {1}", cnt, area.Address);
+                }
+#endif
                 //当非连续单元格区域过多时，此方法定位不完整
                 //xlApp.Goto(newRange);
                 newRange.Select();

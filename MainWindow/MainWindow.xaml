@@ -36,146 +36,146 @@
         ResizeMode="CanMinimize"
         SizeToContent="WidthAndHeight"
         mc:Ignorable="d">
-    <Window.DataContext>
-        <viewModels:MainWindowViewModel />
-    </Window.DataContext>
-    <TabControl>
-        <TabItem Header="Generation">
-            <StackPanel Orientation="Horizontal">
-                <DockPanel LastChildFill="False">
-                    <GroupBox Margin="3" DockPanel.Dock="Top" Header="Generation Type">
-                        <StackPanel>
+	<d:Window.DataContext>
+		<d:DesignInstance Type="viewModels:MainWindowViewModel" />
+	</d:Window.DataContext>
+	<TabControl>
+		<TabItem Header="Generation">
+			<StackPanel Orientation="Horizontal">
+				<DockPanel LastChildFill="False">
+					<GroupBox Margin="3" DockPanel.Dock="Top" Header="Generation Type">
+						<StackPanel>
 							<RadioButton x:Name="rBtnArea" Margin="3" Content="Unit _Area" IsChecked="{Binding GenerationType, Converter={StaticResource enumVC}, ConverterParameter={x:Static models:GenerationTypeEnum.UnitArea}}" />
 							<CheckBox Margin="20,3,3,3" Content="Exclude _Top Surface" IsChecked="{Binding ExcludeTopSurface}" IsEnabled="{Binding ElementName=rBtnArea, Path=IsChecked}" />
 							<RadioButton x:Name="rBtnWeight" Margin="3" Content="Unit _Weight" IsChecked="{Binding GenerationType, Converter={StaticResource enumVC}, ConverterParameter={x:Static models:GenerationTypeEnum.UnitWeight}}" />
-                            <RadioButton x:Name="rBtnStif"
-                                         Margin="3"
-                                         Content="_Stiffener"
-                                         Checked="RBtnStif_CheckStateChanged"
-                                         Unchecked="RBtnStif_CheckStateChanged"
-                                         IsChecked="{Binding GenerationType, Converter={StaticResource enumVC}, ConverterParameter={x:Static models:GenerationTypeEnum.Stiffener}}" />
-                            <CheckBox Grid.Row="0"
-                                      Margin="20,3,3,3"
-                                      Content="_Truncated Rounding"
-                                      IsChecked="{Binding TruncatedRounding}"
-                                      IsEnabled="{Binding ElementName=rBtnStif, Path=IsChecked}" />
-                        </StackPanel>
-                    </GroupBox>
-                    <GroupBox Margin="3" DockPanel.Dock="Top" Header="Accuracy">
-                        <GroupBox.IsEnabled>
-                            <MultiBinding Converter="{StaticResource boolMultiVC}">
-                                <Binding ElementName="rBtnArea" Path="IsChecked" />
-                                <Binding ElementName="rBtnWeight" Path="IsChecked" />
-                            </MultiBinding>
-                        </GroupBox.IsEnabled>
-                        <StackPanel>
-                            <RadioButton Margin="3" Content="_Roughly" IsChecked="{Binding Accuracy, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:FormulaAccuracyEnum.ROUGHLY}}" />
-                            <RadioButton Margin="3" Content="Pre_cisely" IsChecked="{Binding Accuracy, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:FormulaAccuracyEnum.PRECISELY}}" />
-                            <RadioButton Margin="3" Content="GB _Data" IsChecked="{Binding Accuracy, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:FormulaAccuracyEnum.GBDATA}}" />
-                        </StackPanel>
-                    </GroupBox>
-                </DockPanel>
-                <DockPanel LastChildFill="False">
-                    <GroupBox Margin="3" DockPanel.Dock="Top" Header="π Style">
-                        <GroupBox.IsEnabled>
-                            <MultiBinding Converter="{StaticResource boolMultiVC}">
-                                <Binding ElementName="rBtnArea" Path="IsChecked" />
-                                <Binding ElementName="rBtnWeight" Path="IsChecked" />
-                            </MultiBinding>
-                        </GroupBox.IsEnabled>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
+							<RadioButton x:Name="rBtnStif"
+							             Margin="3"
+							             Content="_Stiffener"
+							             Checked="RBtnStif_CheckStateChanged"
+							             Unchecked="RBtnStif_CheckStateChanged"
+							             IsChecked="{Binding GenerationType, Converter={StaticResource enumVC}, ConverterParameter={x:Static models:GenerationTypeEnum.Stiffener}}" />
+							<CheckBox Grid.Row="0"
+							          Margin="20,3,3,3"
+							          Content="_Truncated Rounding"
+							          IsChecked="{Binding TruncatedRounding}"
+							          IsEnabled="{Binding ElementName=rBtnStif, Path=IsChecked}" />
+						</StackPanel>
+					</GroupBox>
+					<GroupBox Margin="3" DockPanel.Dock="Top" Header="Accuracy">
+						<GroupBox.IsEnabled>
+							<MultiBinding Converter="{StaticResource boolMultiVC}">
+								<Binding ElementName="rBtnArea" Path="IsChecked" />
+								<Binding ElementName="rBtnWeight" Path="IsChecked" />
+							</MultiBinding>
+						</GroupBox.IsEnabled>
+						<StackPanel>
+							<RadioButton Margin="3" Content="_Roughly" IsChecked="{Binding Accuracy, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:FormulaAccuracyEnum.ROUGHLY}}" />
+							<RadioButton Margin="3" Content="Pre_cisely" IsChecked="{Binding Accuracy, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:FormulaAccuracyEnum.PRECISELY}}" />
+							<RadioButton Margin="3" Content="GB _Data" IsChecked="{Binding Accuracy, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:FormulaAccuracyEnum.GBDATA}}" />
+						</StackPanel>
+					</GroupBox>
+				</DockPanel>
+				<DockPanel LastChildFill="False">
+					<GroupBox Margin="3" DockPanel.Dock="Top" Header="π Style">
+						<GroupBox.IsEnabled>
+							<MultiBinding Converter="{StaticResource boolMultiVC}">
+								<Binding ElementName="rBtnArea" Path="IsChecked" />
+								<Binding ElementName="rBtnWeight" Path="IsChecked" />
+							</MultiBinding>
+						</GroupBox.IsEnabled>
+						<Grid>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition />
+								<ColumnDefinition />
+							</Grid.ColumnDefinitions>
 
 							<RadioButton Grid.Column="0" Margin="3" Content="P_I()" IsChecked="{Binding PiStyle, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:PIStyleEnum.FUNC}}" />
 							<RadioButton Grid.Column="1" Margin="3" Content="_3.14" IsChecked="{Binding PiStyle, Converter={StaticResource enumVC}, ConverterParameter={x:Static ss:PIStyleEnum.NUM}}" />
-                        </Grid>
-                    </GroupBox>
-                    <GroupBox Margin="3" DockPanel.Dock="Top" Header="Targe Offsets">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="6" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="6" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
-                            </Grid.ColumnDefinitions>
+						</Grid>
+					</GroupBox>
+					<GroupBox Margin="3" DockPanel.Dock="Top" Header="Targe Offsets">
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="6" />
+								<RowDefinition Height="auto" />
+								<RowDefinition Height="6" />
+								<RowDefinition Height="auto" />
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition />
+								<ColumnDefinition />
+							</Grid.ColumnDefinitions>
 
-                            <Label Padding="2" Content="R_ows" Target="{Binding ElementName=rowOffset}" />
-                            <controls:NumericUpDown x:Name="rowOffset"
-                                                    Grid.Column="1"
-                                                    DataContext="{Binding TargetOffset}"
-                                                    Maximum="100"
-                                                    Minimum="-100"
-                                                    Value="{Binding RowOffset, Mode=TwoWay}" />
+							<Label Padding="2" Content="R_ows" Target="{Binding ElementName=rowOffset}" />
+							<controls:NumericUpDown x:Name="rowOffset"
+							                        Grid.Column="1"
+							                        DataContext="{Binding TargetOffset}"
+							                        Maximum="100"
+							                        Minimum="-100"
+							                        Value="{Binding RowOffset, Mode=TwoWay}" />
 							<Label Grid.Row="2" Padding="2" Content="Co_lumns" Target="{Binding ElementName=colOffset}" />
-                            <controls:NumericUpDown x:Name="colOffset"
-                                                    Grid.Row="2"
-                                                    Grid.Column="1"
-                                                    DataContext="{Binding TargetOffset}"
-                                                    Maximum="100"
-                                                    Minimum="-100"
-                                                    Value="{Binding ColumnOffset, Mode=TwoWay}" />
+							<controls:NumericUpDown x:Name="colOffset"
+							                        Grid.Row="2"
+							                        Grid.Column="1"
+							                        DataContext="{Binding TargetOffset}"
+							                        Maximum="100"
+							                        Minimum="-100"
+							                        Value="{Binding ColumnOffset, Mode=TwoWay}" />
 							<CheckBox Grid.Row="4" Grid.ColumnSpan="2" Content="Overwrite _existing data" IsChecked="{Binding Overwrite}" />
-                        </Grid>
-                    </GroupBox>
-                    <Button Width="100"
-                            Height="30"
-                            Margin="3"
-                            DockPanel.Dock="Bottom"
-                            Content="_Generate"
-                            Command="{Binding GenerateCommand}" />
-                </DockPanel>
-            </StackPanel>
-        </TabItem>
-        <TabItem Header="Goto">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="auto" />
-                </Grid.ColumnDefinitions>
+						</Grid>
+					</GroupBox>
+					<Button Width="100"
+					        Height="30"
+					        Margin="3"
+					        DockPanel.Dock="Bottom"
+					        Content="_Generate"
+					        Command="{Binding GenerateCommand}" />
+				</DockPanel>
+			</StackPanel>
+		</TabItem>
+		<TabItem Header="Goto">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition Height="auto" />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition Width="auto" />
+				</Grid.ColumnDefinitions>
 
 				<ScrollViewer Grid.ColumnSpan="2" d:Background="LightBlue" d:Height="200" VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="classificationPanel" Orientation="Vertical" />
-                </ScrollViewer>
-                <Button Grid.Row="1"
-                        Width="100"
-                        Height="30"
-                        Margin="3"
-                        HorizontalAlignment="Right"
-                        Content="_Clear"
-                        Command="{Binding ClearFilterCommand}" />
-                <Button Grid.Row="1"
-                        Grid.Column="1"
-                        Width="100"
-                        Height="30"
-                        Margin="3"
-                        Content="_Goto"
-                        Command="{Binding GotoCommand}" />
-            </Grid>
-        </TabItem>
-        <TabItem Header="Option">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="100" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <CheckBox x:Name="cBoxTopMost"
-                          Grid.Row="0"
-                          Margin="3"
-                          Content="_Always on top"
-                          IsChecked="True" />
-            </Grid>
-        </TabItem>
-    </TabControl>
+					<StackPanel x:Name="classificationPanel" Orientation="Vertical" />
+				</ScrollViewer>
+				<Button Grid.Row="1"
+				        Width="100"
+				        Height="30"
+				        Margin="3"
+				        HorizontalAlignment="Right"
+				        Content="_Clear"
+				        Command="{Binding ClearFilterCommand}" />
+				<Button Grid.Row="1"
+				        Grid.Column="1"
+				        Width="100"
+				        Height="30"
+				        Margin="3"
+				        Content="_Goto"
+				        Command="{Binding GotoCommand}" />
+			</Grid>
+		</TabItem>
+		<TabItem Header="Option">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="100" />
+					<RowDefinition Height="1*" />
+				</Grid.RowDefinitions>
+				<CheckBox x:Name="cBoxTopMost"
+				          Grid.Row="0"
+				          Margin="3"
+				          Content="_Always on top"
+				          IsChecked="True" />
+			</Grid>
+		</TabItem>
+	</TabControl>
 </Window>

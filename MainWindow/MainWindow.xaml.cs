@@ -31,9 +31,12 @@ namespace SectionSteelCalculationTool {
         }
         private readonly List<ClassificationControls> classificationTogBtns = [];
 
-        public MainWindow() {
+        public MainWindow(MainWindowViewModel viewModel) {
             InitializeComponent();
             this.Title = "SSCT - Ver" + Application.ResourceAssembly.GetName().Version!.ToString();
+
+            DataContext = viewModel;
+
             LoadClassificationControls();
         }
 
