@@ -231,7 +231,7 @@ namespace SectionSteel {
         /// 前置标识符为 PLD 或 PLO，后续参数形式为 t*d。
         /// <br/>具体实现中，t、d 顺序无关，以其中较小值为 t，较大值为 d。
         /// </summary>
-        public static string PL_O_1 => @"^PL[DO](?<t>\d+\.?\d*)\*(?<d>\d+\.?\d*)";
+        public static string PL_O_1 => @"^PL[DO](?<t>\d+\.?\d*)\*(?<d>\d+\.?\d*)$";
         /// <summary>
         /// nPLt*b*l, nPLTt*b*l, nPLDt*d, nPLOt*d 的任意组合形式。n表示数量。
         /// 各项之间用 + 或 - 连接，分别表示扩展和剔除。

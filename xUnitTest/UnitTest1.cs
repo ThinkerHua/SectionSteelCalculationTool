@@ -24,67 +24,67 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "HM244*175*7*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "WI300-700-10-12*250-14*300";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "H300~700*250/300*10*12/14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HW175*175*7.5*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HW200*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HT200*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "H200*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HW200*250";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "J244*175*7*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HM244*175";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "I_VAR_A600-300*300-300*12*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -95,19 +95,19 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "HH500*300*10*12";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_WLD_O300*12*10*350*14*12*500*550";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HH244*175*7*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -118,31 +118,31 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "T150*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "T200~400*100*8*12";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "T300-8-12-100";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "TW300*300";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "TM300*300";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -153,13 +153,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "I200*100*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "I200*100*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -170,19 +170,19 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "[200*73*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "[200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "C200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -193,13 +193,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "[]200*73*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "[]200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -210,19 +210,19 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "2[200*73*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2[200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "][20b";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -233,13 +233,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "L100*120*4";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "L4.5/2.8";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -250,13 +250,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "2L100*120*4";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2L4.5/2.8";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -267,25 +267,25 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "J200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "F200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "F80*40*5";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "J80*40*5";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -296,43 +296,43 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "B_WLD_F300*200*10*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "R400~300*320*12*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_WLD_J400*300*320*12*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_VAR_C400-300*12*200-200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "RHSC400*300*450*320*14*350";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "RECT400*500*16*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "RECT400*400*14*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -343,13 +343,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "Y200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "Y219.1*8";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -360,25 +360,25 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "D200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CFCHS300*250*200*150*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CFCHS300*250*300*250*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CFCHS300*300*250*250*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -389,13 +389,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "CC200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "C180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -406,13 +406,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "2CCM200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2CM180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -423,13 +423,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "2CC200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2C180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -440,19 +440,19 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "ZZ200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "Z180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "XZ200*100*30*5.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -463,13 +463,13 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "PL377*16";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL16*319";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -480,31 +480,37 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "2PL14*400*500-1.5PLT14*100.5*115+3PLO14*250";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL14*400*500";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL18*575*560-PLT18*50*280-PL18*50~382*280";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL377*16";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL16*319";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
+            }
+            try {
+                sectionSteel.ProfileText = "PLD425*16-PLD325*16";
+                ShowInfo(sectionSteel);
+            } catch (MismatchedProfileTextException e) {
+                _output.WriteLine(e.ToString());
             }
         }
         [Fact]
@@ -515,428 +521,428 @@ namespace xUnitTest {
                 sectionSteel.ProfileText = "C180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "C200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "C20a";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2C20a";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2C180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL300*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL300*200*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PLT300*200*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2PL300*200*14-1.5PLT100*200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HM244*175*7*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "WI300-700-10-12*250-14*300";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "H300~700*250/300*10*12/14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HW175*175*7.5*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HW200*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HT200*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "H200*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HW200*250";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "J244*175*7*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HH500*300*10*12";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_WLD_O300*12*10*350*14*12*500*550";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "HH244*175*7*11";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "T150*200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "T200~400*100*8*12";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "T300-8-12-100";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "TW300*300";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "I200*100*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "I200*100*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "[200*73*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "[200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "C200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "[]200*73*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "[]200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2[200*73*8.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2[200*73*7.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "][20b";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "L100*120*4";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "L4.5/2.8";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2L100*120*4";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2L4.5/2.8";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "J200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "F200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "F80*40*5";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "J80*40*5";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_WLD_F300*200*10*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "R400~300*320*12*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_WLD_J400*300*320*12*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "B_VAR_C400-300*12*200-200";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "RHSC400*300*450*320*14*350";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "RECT400*500*16*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "RECT400*400*14*14";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "Y200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "Y219.1*8";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "D200*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CFCHS300*250*200*150*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CFCHS300*250*300*250*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CFCHS300*300*250*250*10";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "CC200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "C180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2CCM200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2CM180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2CC200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2C180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "ZZ200-5-30-100-40-150";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "Z180*70*20*3.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "XZ200*100*30*5.0";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "2PL14*400*500-1.5PLT14*100.5*115+3PLO14*250";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL14*400*500";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL377*16";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL16*319";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "PL18*575*560-PLT18*50*280-PL18*50~382*280";
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
             try {
                 sectionSteel.ProfileText = "SPHERE1000";
                 sectionSteel.PIStyle = PIStyleEnum.NUM;
                 ShowInfo(sectionSteel);
             } catch (MismatchedProfileTextException e) {
-                Console.WriteLine(e.ToString());
+                _output.WriteLine(e.ToString());
             }
         }
     }
