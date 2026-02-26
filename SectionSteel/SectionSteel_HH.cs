@@ -240,7 +240,7 @@ namespace SectionSteel {
             switch (accuracy) {
             case FormulaAccuracyEnum.ROUGHLY:
                 if (h2 != h1) {
-                    formula = h1 + "*2+" + h2 + "*2+";
+                    formula = "(" + h1 + "+" + h2 + ")*2+";
                 } else {
                     formula = h1 + "*4+";
                 }
@@ -261,7 +261,7 @@ namespace SectionSteel {
             case FormulaAccuracyEnum.PRECISELY:
                 formula = this.GetAreaFormula(FormulaAccuracyEnum.ROUGHLY, exclude_topSurface);
                 if (s2 != s1) {
-                    formula += "-" + s1 + "*4-" + s2 + "*4";
+                    formula += "-(" + s1 + "+" + s2 + ")*4";
                 } else {
                     formula += "-" + s1 + "*8";
                 }
@@ -275,7 +275,7 @@ namespace SectionSteel {
                     formula = data1.Area + "+" + data2.Area;
                 }
                 if (s2 != s1) {
-                    formula += "-" + s1 + "*2-" + s2 + "*2";
+                    formula += "-(" + s1 + "+" + s2 + ")*2";
                 } else {
                     formula += "-" + s1 + "*4";
                 }
@@ -336,18 +336,13 @@ namespace SectionSteel {
                     formula = "((" + h1;
                     if (t2 != t1) {
                         formula += "-" + t1 + "-" + t2 + ")*";
-                        if (s2 != s1) {
-                            formula += "(" + s1 + "+" + s2 + ")";
-                        } else {
-                            formula += s1 + "*2";
-                        }
                     } else {
                         formula += "-" + t1 + "*2)*";
-                        if (s2 != s1) {
-                            formula += "(" + s1 + "+" + s2 + ")";
-                        } else {
-                            formula += s1 + "*2";
-                        }
+                    }
+                    if (s2 != s1) {
+                        formula += "(" + s1 + "+" + s2 + ")";
+                    } else {
+                        formula += s1 + "*2";
                     }
                 }
                 if (s2 != s1) {
@@ -378,11 +373,7 @@ namespace SectionSteel {
                 } else {
                     formula = data1.Weight + "+" + data2.Weight;
                 }
-                if (s2 != s1) {
-                    formula += "-" + s1 + "*" + s2 + "*" + DENSITY;
-                } else {
-                    formula += "-" + s1 + "*" + s1 + "*" + DENSITY;
-                }
+                formula += "-" + s1 + "*" + s2 + "*" + DENSITY;
                 break;
             default:
                 break;
