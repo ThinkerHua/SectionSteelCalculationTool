@@ -188,21 +188,21 @@ namespace SectionSteel {
         public override GBData[]? GBDataSet {
             get {
                 switch (type) {
-                case "HW":
-                    return _gbDataSet_HW;
-                case "HM":
-                    return _gbDataSet_HM;
-                case "HN":
-                    return _gbDataSet_HN;
-                case "HT":
-                    return _gbDataSet_HT;
-                default:
-                    if (data == null) return null;
-                    if (FindGBData(_gbDataSet_HW, data.Parameters) != null) return _gbDataSet_HW;
-                    if (FindGBData(_gbDataSet_HM, data.Parameters) != null) return _gbDataSet_HM;
-                    if (FindGBData(_gbDataSet_HN, data.Parameters) != null) return _gbDataSet_HN;
-                    if (FindGBData(_gbDataSet_HT, data.Parameters) != null) return _gbDataSet_HT;
-                    return null;
+                    case "HW":
+                        return _gbDataSet_HW;
+                    case "HM":
+                        return _gbDataSet_HM;
+                    case "HN":
+                        return _gbDataSet_HN;
+                    case "HT":
+                        return _gbDataSet_HT;
+                    default:
+                        if (data == null) return null;
+                        if (FindGBData(_gbDataSet_HW, data.Parameters) != null) return _gbDataSet_HW;
+                        if (FindGBData(_gbDataSet_HM, data.Parameters) != null) return _gbDataSet_HM;
+                        if (FindGBData(_gbDataSet_HN, data.Parameters) != null) return _gbDataSet_HN;
+                        if (FindGBData(_gbDataSet_HT, data.Parameters) != null) return _gbDataSet_HT;
+                        return null;
                 }
             }
         }
@@ -284,75 +284,75 @@ namespace SectionSteel {
             if (h1 == 0) return formula;
 
             switch (accuracy) {
-            case FormulaAccuracyEnum.ROUGHLY:
-                //byte key = 0b0000;
-                //if (h2 != 0 && h2 != h1)
-                //    key |= 0b0001;
-                //if (b2 != 0 && b2 != b1)
-                //    key |= 0b0010;
-                //if (exclude_topSurface)
-                //    key |= 0b0100;
+                case FormulaAccuracyEnum.ROUGHLY:
+                    //byte key = 0b0000;
+                    //if (h2 != 0 && h2 != h1)
+                    //    key |= 0b0001;
+                    //if (b2 != 0 && b2 != b1)
+                    //    key |= 0b0010;
+                    //if (exclude_topSurface)
+                    //    key |= 0b0100;
 
-                //switch (key) {
-                //case 0b0000:
-                //    formula = $"{h1}*2+{b1}*4";
-                //    break;
-                //case 0b0100:
-                //    formula = $"{h1}*2+{b1}*3";
-                //    break;
-                //case 0b0010:
-                //    formula = $"{h1}*2+{b1}*2+{b2}*2";
-                //    break;
-                //case 0b0110:
-                //    formula = $"{h1}*2+{b1}+{b2}*2";
-                //    break;
-                //case 0b0001:
-                //    formula = $"{h1}+{h2}+{b1}*4";
-                //    break;
-                //case 0b0101:
-                //    formula = $"{h1}+{h2}+{b1}*3";
-                //    break;
-                //case 0b0011:
-                //    formula = $"{h1}+{h2}+{b1}*2+{b2}*2";
-                //    break;
-                //case 0b0111:
-                //    formula = $"{h1}+{h2}+{b1}+{b2}*2";
-                //    break;
-                //default:
-                //    break;
-                //}
-                if (h2 != h1) {
-                    formula = h1 + "+" + h2;
-                } else {
-                    formula = h1 + "*2";
-                }
-                if (b2 != b1) {
-                    if (exclude_topSurface) {
-                        formula += "+" + b1 + "+" + b2 + "*2";
+                    //switch (key) {
+                    //case 0b0000:
+                    //    formula = $"{h1}*2+{b1}*4";
+                    //    break;
+                    //case 0b0100:
+                    //    formula = $"{h1}*2+{b1}*3";
+                    //    break;
+                    //case 0b0010:
+                    //    formula = $"{h1}*2+{b1}*2+{b2}*2";
+                    //    break;
+                    //case 0b0110:
+                    //    formula = $"{h1}*2+{b1}+{b2}*2";
+                    //    break;
+                    //case 0b0001:
+                    //    formula = $"{h1}+{h2}+{b1}*4";
+                    //    break;
+                    //case 0b0101:
+                    //    formula = $"{h1}+{h2}+{b1}*3";
+                    //    break;
+                    //case 0b0011:
+                    //    formula = $"{h1}+{h2}+{b1}*2+{b2}*2";
+                    //    break;
+                    //case 0b0111:
+                    //    formula = $"{h1}+{h2}+{b1}+{b2}*2";
+                    //    break;
+                    //default:
+                    //    break;
+                    //}
+                    if (h2 != h1) {
+                        formula = h1 + "+" + h2;
                     } else {
-                        formula += "+" + b1 + "*2+" + b2 + "*2";
+                        formula = h1 + "*2";
                     }
-                } else {
-                    if (exclude_topSurface) {
-                        formula += "+" + b1 + "*3";
+                    if (b2 != b1) {
+                        if (exclude_topSurface) {
+                            formula += "+" + b1 + "+" + b2 + "*2";
+                        } else {
+                            formula += "+" + b1 + "*2+" + b2 + "*2";
+                        }
                     } else {
-                        formula += "+" + b1 + "*4";
+                        if (exclude_topSurface) {
+                            formula += "+" + b1 + "*3";
+                        } else {
+                            formula += "+" + b1 + "*4";
+                        }
                     }
-                }
-                break;
-            case FormulaAccuracyEnum.PRECISELY:
-                formula = this.GetAreaFormula(FormulaAccuracyEnum.ROUGHLY, exclude_topSurface);
-                formula += $"-{s}*2";
-                break;
-            case FormulaAccuracyEnum.GBDATA:
-                if (data == null)
                     break;
-                formula = $"{data.Area}";
-                if (exclude_topSurface)
-                    formula += $"-{b1}";
-                break;
-            default:
-                break;
+                case FormulaAccuracyEnum.PRECISELY:
+                    formula = this.GetAreaFormula(FormulaAccuracyEnum.ROUGHLY, exclude_topSurface);
+                    formula += $"-{s}*2";
+                    break;
+                case FormulaAccuracyEnum.GBDATA:
+                    if (data == null)
+                        break;
+                    formula = $"{data.Area}";
+                    if (exclude_topSurface)
+                        formula += $"-{b1}";
+                    break;
+                default:
+                    break;
             }
 
             return formula;
@@ -370,76 +370,76 @@ namespace SectionSteel {
             if (h1 == 0) return formula;
 
             switch (accuracy) {
-            case FormulaAccuracyEnum.ROUGHLY:
-            case FormulaAccuracyEnum.PRECISELY:
-                //byte key = 0b0000;
-                //if(h2 != 0 && h2 != h1)
-                //    key |= 0b0001;
-                //if(b2 != 0 && b2 != b1)
-                //    key |= 0b0010;
-                //if(t2 != 0 && t2 != t1)
-                //    key |= 0b0100;
+                case FormulaAccuracyEnum.ROUGHLY:
+                case FormulaAccuracyEnum.PRECISELY:
+                    //byte key = 0b0000;
+                    //if(h2 != 0 && h2 != h1)
+                    //    key |= 0b0001;
+                    //if(b2 != 0 && b2 != b1)
+                    //    key |= 0b0010;
+                    //if(t2 != 0 && t2 != t1)
+                    //    key |= 0b0100;
 
-                //switch(key) {
-                //case 0b0000:
-                //    formula = $"(({h1}-{t1}*2)*{s}+{b1}*{t1}*2)*{DENSITY}";
-                //    break;
-                //case 0b0001:
-                //    formula = $"(({(h1 + h2) * 0.5}-{t1}*2)*{s}+{b1}*{t1}*2)*{DENSITY}";
-                //    break;
-                //case 0b0010:
-                //    formula = $"(({h1}-{t1}*2)*{s}+({b1}+{b2})*{t1})*{DENSITY}";
-                //    break;
-                //case 0b0011:
-                //    formula = $"(({(h1 + h2) * 0.5}-{t1}*2)*{s}+({b1}+{b2})*{t1})*{DENSITY}";
-                //    break;
-                //case 0b0100:
-                //    formula = $"(({h1}-{t1}-{t2})*{s}+{b1}*({t1}+{t2}))*{DENSITY}";
-                //    break;
-                //case 0b0101:
-                //    formula = $"(({(h1 + h2) * 0.5}-{t1}-{t2})*{s}+{b1}*({t1}+{t2}))*{DENSITY}";
-                //    break;
-                //case 0b0110:
-                //    formula = $"(({h1}-{t1}-{t2})*{s}+{b1}*{t1}+{b2}*{t2})*{DENSITY}";
-                //    break;
-                //case 0b0111:
-                //    formula = $"(({(h1 + h2) * 0.5}-{t1}-{t2})*{s}+{b1}*{t1}+{b2}*{t2})*{DENSITY}";
-                //    break;
-                //default:
-                //    break;
-                //}
-                if (h2 != h1) {
-                    formula = "((" + (h1 + h2) / 2;
-                } else {
-                    formula = "((" + h1;
-                }
-                if (t2 != t1) {
-                    formula += "-" + t1 + "-" + t2;
-                } else {
-                    formula += "-" + t1 + "*2";
-                }
-                formula += ")*" + s;
-                if (b2 != b1) {
-                    if (t2 != t1) {
-                        formula += "+" + b1 + "*" + t1 + "+" + b2 + "*" + t2 + ")";
+                    //switch(key) {
+                    //case 0b0000:
+                    //    formula = $"(({h1}-{t1}*2)*{s}+{b1}*{t1}*2)*{DENSITY}";
+                    //    break;
+                    //case 0b0001:
+                    //    formula = $"(({(h1 + h2) * 0.5}-{t1}*2)*{s}+{b1}*{t1}*2)*{DENSITY}";
+                    //    break;
+                    //case 0b0010:
+                    //    formula = $"(({h1}-{t1}*2)*{s}+({b1}+{b2})*{t1})*{DENSITY}";
+                    //    break;
+                    //case 0b0011:
+                    //    formula = $"(({(h1 + h2) * 0.5}-{t1}*2)*{s}+({b1}+{b2})*{t1})*{DENSITY}";
+                    //    break;
+                    //case 0b0100:
+                    //    formula = $"(({h1}-{t1}-{t2})*{s}+{b1}*({t1}+{t2}))*{DENSITY}";
+                    //    break;
+                    //case 0b0101:
+                    //    formula = $"(({(h1 + h2) * 0.5}-{t1}-{t2})*{s}+{b1}*({t1}+{t2}))*{DENSITY}";
+                    //    break;
+                    //case 0b0110:
+                    //    formula = $"(({h1}-{t1}-{t2})*{s}+{b1}*{t1}+{b2}*{t2})*{DENSITY}";
+                    //    break;
+                    //case 0b0111:
+                    //    formula = $"(({(h1 + h2) * 0.5}-{t1}-{t2})*{s}+{b1}*{t1}+{b2}*{t2})*{DENSITY}";
+                    //    break;
+                    //default:
+                    //    break;
+                    //}
+                    if (h2 != h1) {
+                        formula = "((" + (h1 + h2) / 2;
                     } else {
-                        formula += "+(" + b1 + "+" + b2 + ")*" + t1 + ")";
+                        formula = "((" + h1;
                     }
-                } else {
                     if (t2 != t1) {
-                        formula += "+" + b1 + "*(" + t1 + "+" + t2 + "))";
+                        formula += "-" + t1 + "-" + t2;
                     } else {
-                        formula += "+" + b1 + "*" + t1 + "*2)";
+                        formula += "-" + t1 + "*2";
                     }
-                }
-                formula += "*" + DENSITY;
-                break;
-            case FormulaAccuracyEnum.GBDATA:
-                if (data != null)
-                    formula = $"{data.Weight}";
-                break;
-            default:
-                break;
+                    formula += ")*" + s;
+                    if (b2 != b1) {
+                        if (t2 != t1) {
+                            formula += "+" + b1 + "*" + t1 + "+" + b2 + "*" + t2 + ")";
+                        } else {
+                            formula += "+(" + b1 + "+" + b2 + ")*" + t1 + ")";
+                        }
+                    } else {
+                        if (t2 != t1) {
+                            formula += "+" + b1 + "*(" + t1 + "+" + t2 + "))";
+                        } else {
+                            formula += "+" + b1 + "*" + t1 + "*2)";
+                        }
+                    }
+                    formula += "*" + DENSITY;
+                    break;
+                case FormulaAccuracyEnum.GBDATA:
+                    if (data != null)
+                        formula = $"{data.Weight}";
+                    break;
+                default:
+                    break;
             }
 
             return formula;
@@ -449,17 +449,20 @@ namespace SectionSteel {
             string stifProfileText = string.Empty;
             if (h1 == 0) return stifProfileText;
 
-            double t, b, l;
+            double t, b, b_ = 0.0, l;
             t = s;
-            b = ((b1 + b2) * 0.5 - s) * 0.5;
+            b = (b1 - s) * 0.5;
+            if (b1 != b2) b_ = (b2 - s) * 0.5;
             l = (h1 + h2) * 0.5 - t1 - t2;
-            t *= 1000; b *= 1000; l *= 1000;
+            t *= 1000; b *= 1000; b_ *= 1000; l *= 1000;
             if (truncatedRounding) {
                 t = Math.Truncate(t);
                 b = Math.Truncate(b);
+                b_ = Math.Truncate(b_);
                 l = Math.Truncate(l);
             }
-            stifProfileText = $"PL{t}*{b}*{l}";
+            if (b1 == b2) stifProfileText = $"PL{t}*{b}*{l}";
+            else stifProfileText = $"PL{t}*{b}~{b_}*{l}";
 
             return stifProfileText;
         }
@@ -472,28 +475,28 @@ namespace SectionSteel {
 
             GBData? data;
             switch (type) {
-            case "HW":
-                data = FindGBData(_gbDataSet_HW, byName);
-                break;
-            case "HM":
-                data = FindGBData(_gbDataSet_HM, byName);
-                break;
-            case "HN":
-                data = FindGBData(_gbDataSet_HN, byName);
-                break;
-            case "HT":
-                data = FindGBData(_gbDataSet_HT, byName);
-                break;
-            case "H":
-            default:
-                data = FindGBData(_gbDataSet_HW, byName);
-                if (data == null)
+                case "HW":
+                    data = FindGBData(_gbDataSet_HW, byName);
+                    break;
+                case "HM":
                     data = FindGBData(_gbDataSet_HM, byName);
-                if (data == null)
+                    break;
+                case "HN":
                     data = FindGBData(_gbDataSet_HN, byName);
-                if (data == null)
+                    break;
+                case "HT":
                     data = FindGBData(_gbDataSet_HT, byName);
-                break;
+                    break;
+                case "H":
+                default:
+                    data = FindGBData(_gbDataSet_HW, byName);
+                    if (data == null)
+                        data = FindGBData(_gbDataSet_HM, byName);
+                    if (data == null)
+                        data = FindGBData(_gbDataSet_HN, byName);
+                    if (data == null)
+                        data = FindGBData(_gbDataSet_HT, byName);
+                    break;
             }
             return data;
         }
@@ -504,28 +507,28 @@ namespace SectionSteel {
 
             GBData? data;
             switch (type) {
-            case "HW":
-                data = FindGBData(_gbDataSet_HW, byParameters);
-                break;
-            case "HM":
-                data = FindGBData(_gbDataSet_HM, byParameters);
-                break;
-            case "HN":
-                data = FindGBData(_gbDataSet_HN, byParameters);
-                break;
-            case "HT":
-                data = FindGBData(_gbDataSet_HT, byParameters);
-                break;
-            case "H":
-            default:
-                data = FindGBData(_gbDataSet_HM, byParameters);
-                if (data == null)
+                case "HW":
                     data = FindGBData(_gbDataSet_HW, byParameters);
-                if (data == null)
+                    break;
+                case "HM":
+                    data = FindGBData(_gbDataSet_HM, byParameters);
+                    break;
+                case "HN":
                     data = FindGBData(_gbDataSet_HN, byParameters);
-                if (data == null)
+                    break;
+                case "HT":
                     data = FindGBData(_gbDataSet_HT, byParameters);
-                break;
+                    break;
+                case "H":
+                default:
+                    data = FindGBData(_gbDataSet_HM, byParameters);
+                    if (data == null)
+                        data = FindGBData(_gbDataSet_HW, byParameters);
+                    if (data == null)
+                        data = FindGBData(_gbDataSet_HN, byParameters);
+                    if (data == null)
+                        data = FindGBData(_gbDataSet_HT, byParameters);
+                    break;
             }
             return data;
         }
