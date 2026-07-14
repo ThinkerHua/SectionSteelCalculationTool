@@ -344,8 +344,16 @@ namespace SectionSteel {
         public override string GetWeightFormula(FormulaAccuracyEnum accuracy) {
             string formula = string.Empty;
 
-            if (data != null)
-                formula = $"{data.Weight}*2";
+            switch (accuracy) {
+                case FormulaAccuracyEnum.ROUGHLY:
+                case FormulaAccuracyEnum.PRECISELY:
+                    formula = $"({h}+{b}-{t})*{t}*2*{DENSITY}";
+                    break;
+                case FormulaAccuracyEnum.GBDATA:
+                    if (data != null)
+                        formula = $"{data.Weight}*2";
+                    break;
+            }
 
             return formula;
         }

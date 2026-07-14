@@ -100,10 +100,12 @@ namespace SectionSteel {
 
                     _ = double.TryParse(match.Groups["CODE"].Value, out double code);
                     var suffix = match.Groups["SUFFIX"].Value;
-                    var name = match.Groups["NAME"].Value;
-                    if (code >= 14 && string.IsNullOrEmpty(suffix))
-                        name += "a";
+                    
+                    if (code >= 14 && string.IsNullOrEmpty(suffix)) suffix = "a";
+                    if (!string.IsNullOrEmpty(suffix)) suffix = suffix.ToLower();
 
+                    var name = match.Groups["CODE"].Value + suffix;
+                    
                     data = FindGBData(_gbDataSet, name);
                     if (data == null)
                         throw new MismatchedProfileTextException(e.NewText);

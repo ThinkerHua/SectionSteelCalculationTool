@@ -81,37 +81,37 @@ namespace SectionSteel {
         /// </summary>
         public static string I_1 => @"^I(?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 I，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX为 "a" 或 "b" 或 "c"。
+        /// 前置标识符为 I，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX为 'A' 'B' 'C' 'a' 'b' 'c' 之一。
         /// <br/>例如：对于I20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
-        public static string I_2 => @"^I(?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
+        public static string I_2 => @"^I(?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[ABCabc]?))$";
         /// <summary>
         /// 前置标识符为 [ 或 C，后续参数形式为 h*b*s。
         /// </summary>
         public static string CHAN_1 => @"^[\[C](?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 [ 或 C，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" 或 "b" 或 "c"。
+        /// 前置标识符为 [ 或 C，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 'A' 'B' 'C' 'a' 'b' 'c' 之一。
         /// <br/>例如：对于[20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
-        public static string CHAN_2 => @"^[\[C](?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
+        public static string CHAN_2 => @"^[\[C](?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[ABCabc]?))$";
         /// <summary>
         /// 前置标识符为 []，后续参数形式为 h*b*s。
         /// </summary>
         public static string CHAN_MtM_1 => @"^\[\](?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 []，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" 或 "b" 或 "c"。
+        /// 前置标识符为 []，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 'A' 'B' 'C' 'a' 'b' 'c' 之一。
         /// <br/>例如：对于[]20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
-        public static string CHAN_MtM_2 => @"^\[\](?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
+        public static string CHAN_MtM_2 => @"^\[\](?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[ABCabc]?))$";
         /// <summary>
         /// 前置标识符为 2[ 或 2C 或 ][，后续参数形式为 h*b*s。
         /// </summary>
         public static string CHAN_BtB_1 => @"^((2\[)|(2C)|(\]\[))(?<h>\d+\.?\d*)\*(?<b>\d+\.?\d*)\*(?<s>\d+\.?\d*)$";
         /// <summary>
-        /// 前置标识符为 2[ 或 2C 或 ][，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 "a" 或 "b" 或 "c"。
+        /// 前置标识符为 2[ 或 2C 或 ][，后续参数整体用"NAME"分组接收，形式为 CODE[SUFFIX]，CODE为整数或小数，SUFFIX 为 'A' 'B' 'C' 'a' 'b' 'c' 之一。
         /// <br/>例如：对于][20a，NAME = "20a"，CODE = "20"，SUFFIX = "a"
         /// </summary>
-        public static string CHAN_BtB_2 => @"^((2\[)|(2C)|(\]\[))(?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[abc]?))$";
+        public static string CHAN_BtB_2 => @"^((2\[)|(2C)|(\]\[))(?<NAME>(?<CODE>\d+\.?\d*)(?<SUFFIX>[ABCabc]?))$";
         /// <summary>
         /// 前置标识符为 ∠ 或 L，后续参数形式为 h[*b]*t。
         /// </summary>
